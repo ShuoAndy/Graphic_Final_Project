@@ -53,7 +53,6 @@ public:
         float height = this->getHeight(), width = this->getWidth();
         float length = ((float)this->getHeight() / 2.f) / sin(angle / 2.f);
         float factor = sqrt(length*length - height*height * 0.25f - width*width * 0.25f);
-        std :: cout << height << " " << length << " " << factor << std :: endl;
         Vector3f camera_ray(point.x() - width / 2.f, height / 2.f - point.y(), factor);
         camera_ray.normalize();
         Matrix3f trans(this->horizontal.normalized(), -this->up.normalized(), this->direction.normalized(), true);
