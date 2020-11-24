@@ -14,6 +14,7 @@
 #include "plane.hpp"
 #include "triangle.hpp"
 #include "transform.hpp"
+#include "diffusematerial.hpp"
 
 #define DegreesToRadians(x) ((M_PI * x) / 180.0f)
 
@@ -229,8 +230,9 @@ void SceneParser::parseMaterials() {
     while (num_materials > count) {
         getToken(token);
         if (!strcmp(token, "Material") ||
-            !strcmp(token, "PhongMaterial")) {
-            materials[count] = parseMaterial();
+            !strcmp(token, "PhongMaterial") || !strcmp(token, "DiffuseMaterial")
+            || !strcmp(token, "MetalMaterial")) {
+            materials[count] = parseMaterial(token);
         } else {
             printf("Unknown token in parseMaterial: '%s'\n", token);
             exit(0);
@@ -242,12 +244,12 @@ void SceneParser::parseMaterials() {
 }
 
 
-Material *SceneParser::parseMaterial() {
+Material *SceneParser::parseMaterial(char type[]) {
     char token[MAX_PARSER_TOKEN_LENGTH];
     char filename[MAX_PARSER_TOKEN_LENGTH];
     filename[0] = 0;
-    Vector3f diffuseColor(1, 1, 1), specularColor(0, 0, 0);
-    float shininess = 0;
+    Vector3f diffuseColor(1, 1, 1), specularColor(0, 0, 0), attenuation(0.5, 0.5, 0.5);
+    float shininess = 0, fuzz = 0;
     getToken(token);
     assert (!strcmp(token, "{"));
     while (true) {
@@ -258,6 +260,10 @@ Material *SceneParser::parseMaterial() {
             specularColor = readVector3f();
         } else if (strcmp(token, "shininess") == 0) {
             shininess = readFloat();
+        } else if (strcmp(token, "attenuation") == 0) {
+            attenuation = readVector3f();
+        } else if (strcmp(token, "fuzz") == 0) {
+            fuzz = readFloat();
         } else if (strcmp(token, "texture") == 0) {
             // Optional: read in texture and draw it.
             getToken(filename);
@@ -266,8 +272,14 @@ Material *SceneParser::parseMaterial() {
             break;
         }
     }
-    auto *answer = new Material(diffuseColor, specularColor, shininess);
-    return answer;
+    if (strcmp(type, "DiffuseMaterial") == 0){
+        auto *answer = new DiffuseMaterial(diffuseColor, specularColor, attenuation, shininess);
+        return answer;
+    }
+    if (strcmp(type, "MetalMaterial") == 0){
+        auto *answer = new MetalMaterial(diffuseColor, specularColor, attenuation, shininess, fuzz);
+        return answer;
+    } 
 }
 
 // ====================================================================

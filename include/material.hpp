@@ -12,8 +12,8 @@
 class Material {
 public:
 
-    explicit Material(const Vector3f &d_color, const Vector3f &s_color = Vector3f::ZERO, float s = 0) :
-            diffuseColor(d_color), specularColor(s_color), shininess(s) {
+    explicit Material(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0) :
+            diffuseColor(d_color), specularColor(s_color), attenuation(atten), shininess(s) {
 
     }
 
@@ -40,11 +40,23 @@ public:
         }
         return shaded;
     }
+    virtual char* name(){
+        return "mat";
+    }
+    virtual Vector3f Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered)=0;
 
 protected:
     Vector3f diffuseColor;
     Vector3f specularColor;
+    Vector3f attenuation;
     float shininess;
+    Vector3f generateRandomPoint(){
+        Vector3f ret;
+        do {
+            ret = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
+        }   while(ret.squaredLength() >= 1.0);
+        return ret;
+    }
 };
 
 

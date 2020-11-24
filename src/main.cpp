@@ -14,29 +14,29 @@
 #include <string>
 
 using namespace std;
-
-Vector3f get_color(float x, float y, SceneParser& sceneParser, Camera* camera){
-    Ray camRay = camera->generateRay(Vector2f(x, y));
+Vector3f pathTracing(Ray& camRay, SceneParser& sceneParser, Camera* camera, int depth, int depth_limit=50){
     Group* baseGroup = sceneParser.getGroup();
     Hit hit;
-
     bool isIntersect = false;
     if (baseGroup != nullptr)
-        isIntersect = baseGroup->intersect(camRay, hit, 0);
+        isIntersect = baseGroup->intersect(camRay, hit, 0.001);
     if (isIntersect){
         Vector3f finalColor = Vector3f::ZERO;
-        int numberLights = sceneParser.getNumLights();
-        for (int li = 0; li < numberLights; li ++){
-            Light* light = sceneParser.getLight(li);
-            Vector3f L, lightColor;
-            light->getIllumination(camRay.pointAtParameter(hit.getT()), L, lightColor);
-            finalColor += hit.getMaterial()->Shade(camRay, hit, L, lightColor);
+        Ray scattered(camRay);
+        Vector3f attenuation;
+        hit.getMaterial()->Scatter(camRay, hit, attenuation, scattered);
+        if (depth < 50 && hit.getMaterial()->Scatter(camRay, hit, attenuation, scattered)){
+            return attenuation*pathTracing(scattered, sceneParser, camera, depth + 1, depth_limit);
         }
         return finalColor;
     } else {
         Vector3f bc = sceneParser.getBackgroundColor(camRay);
         return sceneParser.getBackgroundColor(camRay);
     }
+}
+Vector3f get_color(float x, float y, SceneParser& sceneParser, Camera* camera, int depth_limit=50){
+    Ray camRay = camera->generateRay(Vector2f(x, y));
+    return pathTracing(camRay, sceneParser, camera, 0, depth_limit);
 }
 
 int main(int argc, char *argv[]) {
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     // Then loop over each pixel in the image, shooting a ray
     for (int x = 0; x < width; x ++)
         for (int y = 0; y < height; y ++){
-            Vector3f finalColor(0, 0, 0);
+            Vector3f finalColor = Vector3f::ZERO;
             for (int s = 0; s < sn; s ++){
                 float u = float(x + drand48());
                 float v = float(y + drand48());

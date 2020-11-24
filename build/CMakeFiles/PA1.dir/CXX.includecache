@@ -60,6 +60,20 @@ cmath
 iostream
 -
 
+../include/diffusematerial.hpp
+cassert
+-
+vecmath.h
+-
+ray.hpp
+../include/ray.hpp
+hit.hpp
+../include/hit.hpp
+material.hpp
+../include/material.hpp
+iostream
+-
+
 ../include/group.hpp
 object3d.hpp
 ../include/object3d.hpp
@@ -253,4 +267,6 @@ triangle.hpp
 /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/triangle.hpp
 transform.hpp
 /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/transform.hpp
+diffusematerial.hpp
+/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/diffusematerial.hpp
 

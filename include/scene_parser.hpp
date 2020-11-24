@@ -71,7 +71,7 @@ private:
     Light *parsePointLight();
     Light *parseDirectionalLight();
     void parseMaterials();
-    Material *parseMaterial();
+    Material *parseMaterial(char type[]);
     Object3D *parseObject(char token[MAX_PARSER_TOKEN_LENGTH]);
     Group *parseGroup();
     Sphere *parseSphere();

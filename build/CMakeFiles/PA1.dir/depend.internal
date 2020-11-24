@@ -57,6 +57,7 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o
  ../deps/vecmath/include/Vector4f.h
  ../deps/vecmath/include/vecmath.h
  ../include/camera.hpp
+ ../include/diffusematerial.hpp
  ../include/group.hpp
  ../include/hit.hpp
  ../include/light.hpp

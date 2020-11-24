@@ -3,8 +3,8 @@ PerspectiveCamera {
     direction 0 0 -1
     up 0 1 0
     angle 48.188
-    width 200
-    height 100
+    width 2000
+    height 1000
 }
 
 Background {
@@ -14,27 +14,36 @@ Background {
 
 Materials {
     numMaterials 4
-    Material { diffuseColor 1 0 0 
-      specularColor 1 1 1
-      shininess 20
+    DiffuseMaterial { attenuation 0.8 0.3 0.3 }
+    DiffuseMaterial { attenuation 0.8 0.8 0.0 }
+    MetalMaterial { attenuation 0.8 0.6 0.2 
+                    fuzz 0.3
     }
-    Material { diffuseColor 0 1 0 }
-    Material { diffuseColor 0 0 1 }
-    Material { diffuseColor 1 1 1 
-	specularColor 1 1 1
-	shininess 20}
+    MetalMaterial { attenuation 0.8 0.8 0.8 
+                    fuzz 1.0
+    }
 }
 
 Group {
-    numObjects 2
-    MaterialIndex 1
+    numObjects 4
+    MaterialIndex 0
     Sphere {
 	center 0 0 -1
         radius 0.5 
     }
-    MaterialIndex 2
+    MaterialIndex 1
     Sphere {
 	center 0 -100.5 -1 
         radius 100
+    }
+    MaterialIndex 2
+    Sphere {
+	center 1 0 -1 
+        radius 0.5
+    }
+    MaterialIndex 3
+    Sphere {
+	center -1 0 -1 
+        radius 0.5
     }
 }
