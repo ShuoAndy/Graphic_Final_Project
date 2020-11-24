@@ -1,0 +1,13 @@
+PerspectiveCamera {
+    center 0 0 0 
+    direction 0 0 -1
+    up 0 1 0
+    angle 48.188
+    width 200
+    height 100
+}
+
+Background {
+    color 1 1 1 
+    color 0.5 0.7 1
+}

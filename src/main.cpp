@@ -37,9 +37,13 @@ int main(int argc, char *argv[]) {
     for (int x = 0; x < width; x ++)
         for (int y = 0; y < height; y ++){
             Ray camRay = camera->generateRay(Vector2f(x, y));
+            cout << camRay << endl;
             Group* baseGroup = sceneParser.getGroup();
             Hit hit;
-            bool isIntersect = baseGroup->intersect(camRay, hit, 0);
+
+            bool isIntersect = false;
+            if (baseGroup != nullptr)
+                isIntersect = baseGroup->intersect(camRay, hit, 0);
             if (isIntersect){
                 Vector3f finalColor = Vector3f::ZERO;
                 int numberLights = sceneParser.getNumLights();
@@ -51,7 +55,9 @@ int main(int argc, char *argv[]) {
                 }
                 image.SetPixel(x, y, finalColor);
             } else {
-                image.SetPixel(x, y, sceneParser.getBackgroundColor());
+                Vector3f bc = sceneParser.getBackgroundColor(camRay);
+
+                image.SetPixel(x, y, sceneParser.getBackgroundColor(camRay));
             }
         }
     // through that pixel and finding its intersection with

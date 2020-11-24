@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <vecmath.h>
+#include "ray.hpp"
 
 class Camera;
 class Light;
@@ -29,8 +30,14 @@ public:
         return camera;
     }
 
-    Vector3f getBackgroundColor() const {
-        return background_color;
+    Vector3f getBackgroundColor(Ray& camRay) const {
+        if (background_color_num <= 1){
+            return background_color;
+        }else{
+            Vector3f dir = camRay.getDirection().normalized();
+            float t = 0.5 * (dir.y() + 1.0);
+            return (1.0 - t) * background_color + t * background_color2;
+        }
     }
 
     int getNumLights() const {
@@ -83,12 +90,14 @@ private:
     FILE *file;
     Camera *camera;
     Vector3f background_color;
+    Vector3f background_color2;
     int num_lights;
     Light **lights;
     int num_materials;
     Material **materials;
     Material *current_material;
     Group *group;
+    int background_color_num;
 };
 
 #endif // SCENE_PARSER_H

@@ -23,6 +23,7 @@ SceneParser::SceneParser(const char *filename) {
     group = nullptr;
     camera = nullptr;
     background_color = Vector3f(0.5, 0.5, 0.5);
+    background_color_num = 0;
     num_lights = 0;
     lights = nullptr;
     num_materials = 0;
@@ -138,7 +139,13 @@ void SceneParser::parseBackground() {
         if (!strcmp(token, "}")) {
             break;
         } else if (!strcmp(token, "color")) {
-            background_color = readVector3f();
+            if (background_color_num == 0){
+                background_color = readVector3f();
+                background_color_num ++;
+            }else{
+                background_color2 = readVector3f();
+                background_color_num ++;
+            }
         } else {
             printf("Unknown token in parseBackground: '%s'\n", token);
             assert(0);
