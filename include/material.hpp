@@ -43,7 +43,7 @@ public:
     virtual char* name(){
         return "mat";
     }
-    virtual Vector3f Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered)=0;
+    virtual bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered)=0;
 
 protected:
     Vector3f diffuseColor;

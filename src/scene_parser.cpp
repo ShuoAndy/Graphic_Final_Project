@@ -231,7 +231,7 @@ void SceneParser::parseMaterials() {
         getToken(token);
         if (!strcmp(token, "Material") ||
             !strcmp(token, "PhongMaterial") || !strcmp(token, "DiffuseMaterial")
-            || !strcmp(token, "MetalMaterial")) {
+            || !strcmp(token, "MetalMaterial") || !strcmp(token, "DielecMaterial")) {
             materials[count] = parseMaterial(token);
         } else {
             printf("Unknown token in parseMaterial: '%s'\n", token);
@@ -249,7 +249,7 @@ Material *SceneParser::parseMaterial(char type[]) {
     char filename[MAX_PARSER_TOKEN_LENGTH];
     filename[0] = 0;
     Vector3f diffuseColor(1, 1, 1), specularColor(0, 0, 0), attenuation(0.5, 0.5, 0.5);
-    float shininess = 0, fuzz = 0;
+    float shininess = 0, fuzz = 0, refractive = 0;
     getToken(token);
     assert (!strcmp(token, "{"));
     while (true) {
@@ -264,6 +264,8 @@ Material *SceneParser::parseMaterial(char type[]) {
             attenuation = readVector3f();
         } else if (strcmp(token, "fuzz") == 0) {
             fuzz = readFloat();
+        } else if (strcmp(token, "refractive") == 0) {
+            refractive = readFloat();
         } else if (strcmp(token, "texture") == 0) {
             // Optional: read in texture and draw it.
             getToken(filename);
@@ -279,7 +281,11 @@ Material *SceneParser::parseMaterial(char type[]) {
     if (strcmp(type, "MetalMaterial") == 0){
         auto *answer = new MetalMaterial(diffuseColor, specularColor, attenuation, shininess, fuzz);
         return answer;
-    } 
+    }
+    if (strcmp(type, "DielecMaterial") == 0){
+        auto *answer = new DielecMaterial(diffuseColor, specularColor, attenuation, shininess, refractive);
+        return answer;
+    }  
 }
 
 // ====================================================================
