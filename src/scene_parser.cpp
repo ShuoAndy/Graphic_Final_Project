@@ -120,6 +120,12 @@ void SceneParser::parsePerspectiveCamera() {
     float angle_degrees = readFloat();
     float angle_radians = DegreesToRadians(angle_degrees);
     getToken(token);
+    assert (!strcmp(token, "lens_radius"));
+    float lens_radius = readFloat();
+    getToken(token);
+    assert (!strcmp(token, "focus_distance"));
+    float focus_distance = readFloat();
+    getToken(token);
     assert (!strcmp(token, "width"));
     int width = readInt();
     getToken(token);
@@ -127,7 +133,7 @@ void SceneParser::parsePerspectiveCamera() {
     int height = readInt();
     getToken(token);
     assert (!strcmp(token, "}"));
-    camera = new PerspectiveCamera(center, direction, up, width, height, angle_radians);
+    camera = new PerspectiveCamera(center, direction, up, width, height, angle_radians, lens_radius, focus_distance);
 }
 
 void SceneParser::parseBackground() {

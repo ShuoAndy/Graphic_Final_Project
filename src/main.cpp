@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     Camera* camera = sceneParser.getCamera();
     int height = camera->getHeight(), width = camera->getWidth();
     Image image(width, height);
-    int sn = 100; //for anti-aliasing
+    int sn = 10; //for anti-aliasing
     // Then loop over each pixel in the image, shooting a ray
     //progress bar
     char progress_bar[102];

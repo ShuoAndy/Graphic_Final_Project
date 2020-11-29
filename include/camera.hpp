@@ -43,26 +43,38 @@ class PerspectiveCamera : public Camera {
 
 public:
     PerspectiveCamera(const Vector3f &center, const Vector3f &direction,
-            const Vector3f &up, int imgW, int imgH, float angle) : Camera(center, direction, up, imgW, imgH) {
+            const Vector3f &up, int imgW, int imgH, float angle, float lens_radius, float focus_distance) : Camera(center, direction, up, imgW, imgH) {
         // angle is in radian.
         this->angle = angle;    
+        this->lens_radius = lens_radius;
+        float h = tan(angle / 2.0);
+        float w = h * (float(imgW) / float(imgH));
+        this->focus_plain_corner = this->center - h * focus_distance * this->up.normalized() - w * focus_distance * this->horizontal.normalized() + focus_distance * this->direction.normalized();
+        this->plain_width = 2 * w * focus_distance * this->horizontal;
+        this->plain_height = 2 * h * focus_distance * this->up;
     }
 
     Ray generateRay(const Vector2f &point) override {
-        // 
-        float height = this->getHeight(), width = this->getWidth();
-        float length = ((float)this->getHeight() / 2.f) / sin(angle / 2.f);
-        float factor = sqrt(length*length - height*height * 0.25f - width*width * 0.25f);
-        Vector3f camera_ray(point.x() - width / 2.f, height / 2.f - point.y(), factor);
-        camera_ray.normalize();
-        Matrix3f trans(this->horizontal.normalized(), -this->up.normalized(), this->direction.normalized(), true);
-        Vector3f dir = trans * camera_ray;
-        dir.normalize();
-        return Ray(this->center, dir);
+        Vector3f random = lens_radius * generateRandomPoint();
+        Vector3f offset = horizontal * random.x() + up * random.y();
+        return Ray(this->center + offset, this->focus_plain_corner + float(point.x())/float(this->width) * this->plain_width + float(point.y())/float(this->height) * this->plain_height - this->center - offset);
     }
 
 protected:
     float angle;
+
+    //for depth of field
+    float lens_radius;
+    Vector3f focus_plain_corner;
+    Vector3f plain_width;
+    Vector3f plain_height;
+    Vector3f generateRandomPoint(){
+        Vector3f p;
+        do {
+            p = 2.0 * Vector3f(drand48(), drand48(), 0) - Vector3f(1,1,0);
+        } while (Vector3f::dot(p, p) >= 1.0);
+        return p;
+    }
 };
 
 #endif //CAMERA_H

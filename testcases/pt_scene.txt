@@ -1,8 +1,10 @@
 PerspectiveCamera {
-    center -2 2 1 
-    direction 2 -2 -2
+    center 3 3 2
+    direction -3 -3 -3
     up 0 1 0
-    angle 25
+    angle 15
+    lens_radius 1.0
+    focus_distance 5.1961524
     width 2000
     height 1000
 }
