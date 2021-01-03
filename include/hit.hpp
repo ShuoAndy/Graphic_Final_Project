@@ -34,6 +34,14 @@ public:
         return t;
     }
 
+    float getU() const {
+        return u;
+    }
+
+    float getV() const {
+        return v;
+    }
+    
     Material *getMaterial() const {
         return material;
     }
@@ -42,14 +50,17 @@ public:
         return normal;
     }
 
-    void set(float _t, Material *m, const Vector3f &n) {
+    void set(float _t, float _u, float _v, Material *m, const Vector3f &n) {
         t = _t;
+        u = _u;
+        v = _v;
         material = m;
         normal = n;
     }
 
 private:
     float t;
+    float u, v;
     Material *material;
     Vector3f normal;
 

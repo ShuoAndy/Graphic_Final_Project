@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/PA1.dir/src/main.cpp.o"
   "CMakeFiles/PA1.dir/src/mesh.cpp.o"
   "CMakeFiles/PA1.dir/src/scene_parser.cpp.o"
+  "CMakeFiles/PA1.dir/src/texture.cpp.o"
   "../bin/PA1.pdb"
   "../bin/PA1"
 )

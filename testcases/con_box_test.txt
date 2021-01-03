@@ -1,0 +1,92 @@
+
+PerspectiveCamera {
+    center 0 1.2 5
+    direction 0 0 -5
+    up 0 1 0
+    angle 30
+    lens_radius 0
+    focus_distance 1
+    width 400
+    height 400
+}
+
+Lights {
+    numLights 2
+    DirectionalLight {
+        direction -0.5 -0.5 -1
+        color 0.5 0.5 0.5 
+    }
+    PointLight {
+      position 0 5 5
+      color 0.8 0.8 0.4
+    }
+}
+
+
+Background {
+    color 0.1 0.2 0.7
+}
+
+Materials {
+    numMaterials 6
+    DielecMaterial { 
+      refractive 1.5
+	}
+    DiffuseMaterial { 
+        attenuation 0.7 0.7 0.7 
+    }
+    LightMaterial { 
+        specularColor 1 1 1
+    }
+    DiffuseMaterial { 
+        attenuation 0.75 0.25 0.25 
+    }
+    DiffuseMaterial { 
+        attenuation 0.25 0.75 0.25 
+    }
+    DiffuseMaterial { 
+        attenuation 0.25 0.25 0.75 
+    }
+}
+
+Group {
+    numObjects 8
+    MaterialIndex 1
+    Plane {
+	    normal 0 0 -1
+        offset -6
+    }
+    Plane {
+	    normal 0 -1 0
+        offset -4
+    }
+    Plane {
+	    normal 0 1 0
+        offset 0
+    }
+    MaterialIndex 2
+    Sphere {
+	    center 1.5 5 -2 
+        radius 2 
+    }
+    Sphere {
+	    center 1.5 0 6 
+        radius 2
+    }
+    MaterialIndex 3
+    Plane {
+	    normal 1 0 0
+        offset -1.5
+    }
+    MaterialIndex 4
+    Plane {
+	    normal 0 0 1
+        offset -2
+    }
+    MaterialIndex 5
+    Plane {
+	    normal -1 0 0
+        offset -1.5
+    }
+}
+

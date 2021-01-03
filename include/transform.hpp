@@ -32,9 +32,18 @@ public:
         Ray tr(trSource, trDirection);
         bool inter = o->intersect(tr, h, tmin);
         if (inter) {
-            h.set(h.getT(), h.getMaterial(), transformDirection(transform.transposed(), h.getNormal()).normalized());
+            h.set(h.getT(), h.getU(), h.getV(), h.getMaterial(), transformDirection(transform.transposed(), h.getNormal()).normalized());
         }
         return inter;
+    }
+    virtual bool getBox(Box& box) override {
+        Box objBox;
+        if(!o->getBox(objBox))
+            return false;
+        Vector3f min_point = transformPoint(transform, objBox.min());
+        Vector3f max_point = transformPoint(transform, objBox.max());
+        box = Box(min_point, max_point);
+        return true;
     }
 
 protected:

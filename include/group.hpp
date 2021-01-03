@@ -5,6 +5,7 @@
 #include "object3d.hpp"
 #include "ray.hpp"
 #include "hit.hpp"
+#include "box.hpp"
 #include <iostream>
 #include <vector>
 
@@ -33,6 +34,21 @@ public:
                 flag = true;
         }
         return flag;
+    }
+
+    bool getBox(Box &box) override {
+        bool flag = true;
+        Box temp;
+        for (auto obj: objects) {
+            if (!obj->getBox(temp)) return false;
+            if (flag) {
+                box = temp;
+            } else {
+                flag = false;
+                box = mergeBox(box, temp);
+            }
+        }
+        return true;
     }
 
     void addObject(int index, Object3D *obj) {

@@ -4,10 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/image.cpp" "/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build/CMakeFiles/PA1.dir/src/image.cpp.o"
-  "/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/main.cpp" "/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build/CMakeFiles/PA1.dir/src/main.cpp.o"
-  "/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/mesh.cpp" "/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build/CMakeFiles/PA1.dir/src/mesh.cpp.o"
-  "/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/scene_parser.cpp" "/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build/CMakeFiles/PA1.dir/src/scene_parser.cpp.o"
+  "/home/yxc/graph/ComputerGraphics-THU-2020/src/image.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles/PA1.dir/src/image.cpp.o"
+  "/home/yxc/graph/ComputerGraphics-THU-2020/src/main.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles/PA1.dir/src/main.cpp.o"
+  "/home/yxc/graph/ComputerGraphics-THU-2020/src/mesh.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles/PA1.dir/src/mesh.cpp.o"
+  "/home/yxc/graph/ComputerGraphics-THU-2020/src/scene_parser.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles/PA1.dir/src/scene_parser.cpp.o"
+  "/home/yxc/graph/ComputerGraphics-THU-2020/src/texture.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles/PA1.dir/src/texture.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -19,7 +20,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/vecmath.dir/DependInfo.cmake"
+  "/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/vecmath.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

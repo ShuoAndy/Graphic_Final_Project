@@ -237,7 +237,9 @@ void SceneParser::parseMaterials() {
         getToken(token);
         if (!strcmp(token, "Material") ||
             !strcmp(token, "PhongMaterial") || !strcmp(token, "DiffuseMaterial")
-            || !strcmp(token, "MetalMaterial") || !strcmp(token, "DielecMaterial")) {
+            || !strcmp(token, "MetalMaterial") || !strcmp(token, "DielecMaterial") || 
+            !strcmp(token, "LightMaterial")) 
+        {
             materials[count] = parseMaterial(token);
         } else {
             printf("Unknown token in parseMaterial: '%s'\n", token);
@@ -281,15 +283,19 @@ Material *SceneParser::parseMaterial(char type[]) {
         }
     }
     if (strcmp(type, "DiffuseMaterial") == 0){
-        auto *answer = new DiffuseMaterial(diffuseColor, specularColor, attenuation, shininess);
+        auto *answer = new DiffuseMaterial(diffuseColor, specularColor, attenuation, shininess, filename);
+        return answer;
+    }
+    if (strcmp(type, "LightMaterial") == 0){
+        auto *answer = new DiffuseLight(diffuseColor, specularColor, attenuation, shininess, filename);
         return answer;
     }
     if (strcmp(type, "MetalMaterial") == 0){
-        auto *answer = new MetalMaterial(diffuseColor, specularColor, attenuation, shininess, fuzz);
+        auto *answer = new MetalMaterial(diffuseColor, specularColor, attenuation, shininess, filename, fuzz);
         return answer;
     }
     if (strcmp(type, "DielecMaterial") == 0){
-        auto *answer = new DielecMaterial(diffuseColor, specularColor, attenuation, shininess, refractive);
+        auto *answer = new DielecMaterial(diffuseColor, specularColor, attenuation, shininess, filename, refractive);
         return answer;
     }  
 }

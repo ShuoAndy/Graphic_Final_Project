@@ -4,6 +4,7 @@
 #include "object3d.hpp"
 #include <vecmath.h>
 #include <cmath>
+#include <limits>
 
 // TODO: Implement Plane representing an infinite plane
 // function: ax+by+cz=d
@@ -30,9 +31,14 @@ public:
         if (t < tmin || t > h.getT())
             return false;
         if (Vector3f::dot(r.getDirection(), this->normal) > 0)
-            h.set(t, this->material, -this->normal.normalized());
+            h.set(t, 0, 0, this->material, -this->normal.normalized());
         else
-            h.set(t, this->material, this->normal.normalized());
+            h.set(t, 0, 0, this->material, this->normal.normalized());
+        return true;
+    }
+
+    bool getBox(Box& box) override {
+        box = Box(Vector3f(-1.0f*numeric_limits<float>::max()), Vector3f(numeric_limits<float>::max()));
         return true;
     }
 

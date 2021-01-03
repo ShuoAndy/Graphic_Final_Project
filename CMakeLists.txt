@@ -1,6 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(PA1 CXX)
-
+SET(CMAKE_BUILD_TYPE "Release")
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb -fopenmp")
+SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall -fopenmp")
 IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Release)
 ENDIF()
@@ -11,7 +13,8 @@ SET(PA1_SOURCES
         src/image.cpp
         src/main.cpp
         src/mesh.cpp
-        src/scene_parser.cpp)
+        src/scene_parser.cpp
+        src/texture.cpp)
 
 SET(PA1_INCLUDES
         include/camera.hpp
@@ -28,6 +31,8 @@ SET(PA1_INCLUDES
         include/sphere.hpp
         include/transform.hpp
         include/triangle.hpp
+        include/box.hpp
+        include/texture.h
         )
 
 SET(CMAKE_CXX_STANDARD 11)

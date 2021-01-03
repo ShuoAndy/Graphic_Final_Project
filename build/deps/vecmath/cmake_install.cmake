@@ -1,4 +1,4 @@
-# Install script for directory: /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath
+# Install script for directory: /home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

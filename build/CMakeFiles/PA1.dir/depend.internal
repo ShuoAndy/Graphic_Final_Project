@@ -11,7 +11,7 @@ CMakeFiles/PA1.dir/src/image.cpp.o
  ../deps/vecmath/include/Vector4f.h
  ../deps/vecmath/include/vecmath.h
  ../include/image.hpp
- /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/image.cpp
+ /home/yxc/graph/ComputerGraphics-THU-2020/src/image.cpp
 CMakeFiles/PA1.dir/src/main.cpp.o
  ../deps/vecmath/include/Matrix2f.h
  ../deps/vecmath/include/Matrix3f.h
@@ -21,16 +21,19 @@ CMakeFiles/PA1.dir/src/main.cpp.o
  ../deps/vecmath/include/Vector3f.h
  ../deps/vecmath/include/Vector4f.h
  ../deps/vecmath/include/vecmath.h
+ ../include/box.hpp
  ../include/camera.hpp
  ../include/group.hpp
  ../include/hit.hpp
  ../include/image.hpp
+ ../include/integrator.hpp
  ../include/light.hpp
  ../include/material.hpp
  ../include/object3d.hpp
  ../include/ray.hpp
  ../include/scene_parser.hpp
- /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/main.cpp
+ ../include/texture.h
+ /home/yxc/graph/ComputerGraphics-THU-2020/src/main.cpp
 CMakeFiles/PA1.dir/src/mesh.cpp.o
  ../deps/vecmath/include/Matrix2f.h
  ../deps/vecmath/include/Matrix3f.h
@@ -40,13 +43,15 @@ CMakeFiles/PA1.dir/src/mesh.cpp.o
  ../deps/vecmath/include/Vector3f.h
  ../deps/vecmath/include/Vector4f.h
  ../deps/vecmath/include/vecmath.h
+ ../include/box.hpp
  ../include/hit.hpp
  ../include/material.hpp
  ../include/mesh.hpp
  ../include/object3d.hpp
  ../include/ray.hpp
+ ../include/texture.h
  ../include/triangle.hpp
- /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/mesh.cpp
+ /home/yxc/graph/ComputerGraphics-THU-2020/src/mesh.cpp
 CMakeFiles/PA1.dir/src/scene_parser.cpp.o
  ../deps/vecmath/include/Matrix2f.h
  ../deps/vecmath/include/Matrix3f.h
@@ -56,6 +61,7 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o
  ../deps/vecmath/include/Vector3f.h
  ../deps/vecmath/include/Vector4f.h
  ../deps/vecmath/include/vecmath.h
+ ../include/box.hpp
  ../include/camera.hpp
  ../include/diffusematerial.hpp
  ../include/group.hpp
@@ -68,6 +74,19 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o
  ../include/ray.hpp
  ../include/scene_parser.hpp
  ../include/sphere.hpp
+ ../include/texture.h
  ../include/transform.hpp
  ../include/triangle.hpp
- /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/src/scene_parser.cpp
+ /home/yxc/graph/ComputerGraphics-THU-2020/src/scene_parser.cpp
+CMakeFiles/PA1.dir/src/texture.cpp.o
+ ../deps/vecmath/include/Matrix2f.h
+ ../deps/vecmath/include/Matrix3f.h
+ ../deps/vecmath/include/Matrix4f.h
+ ../deps/vecmath/include/Quat4f.h
+ ../deps/vecmath/include/Vector2f.h
+ ../deps/vecmath/include/Vector3f.h
+ ../deps/vecmath/include/Vector4f.h
+ ../deps/vecmath/include/vecmath.h
+ ../include/stb_image.h
+ ../include/texture.h
+ /home/yxc/graph/ComputerGraphics-THU-2020/src/texture.cpp

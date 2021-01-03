@@ -1,4 +1,4 @@
-# Install script for directory: /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020
+# Install script for directory: /home/yxc/graph/ComputerGraphics-THU-2020
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build/deps/vecmath/cmake_install.cmake")
+  include("/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/cmake_install.cmake")
 
 endif()
 
@@ -51,5 +51,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/yxc/graph/ComputerGraphics-THU-2020/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

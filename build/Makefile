@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020
+CMAKE_SOURCE_DIR = /home/yxc/graph/ComputerGraphics-THU-2020
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build
+CMAKE_BINARY_DIR = /home/yxc/graph/ComputerGraphics-THU-2020/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build/CMakeFiles /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles /home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -244,6 +244,33 @@ src/scene_parser.cpp.s:
 	$(MAKE) -f CMakeFiles/PA1.dir/build.make CMakeFiles/PA1.dir/src/scene_parser.cpp.s
 .PHONY : src/scene_parser.cpp.s
 
+src/texture.o: src/texture.cpp.o
+
+.PHONY : src/texture.o
+
+# target to build an object file
+src/texture.cpp.o:
+	$(MAKE) -f CMakeFiles/PA1.dir/build.make CMakeFiles/PA1.dir/src/texture.cpp.o
+.PHONY : src/texture.cpp.o
+
+src/texture.i: src/texture.cpp.i
+
+.PHONY : src/texture.i
+
+# target to preprocess a source file
+src/texture.cpp.i:
+	$(MAKE) -f CMakeFiles/PA1.dir/build.make CMakeFiles/PA1.dir/src/texture.cpp.i
+.PHONY : src/texture.cpp.i
+
+src/texture.s: src/texture.cpp.s
+
+.PHONY : src/texture.s
+
+# target to generate assembly for a file
+src/texture.cpp.s:
+	$(MAKE) -f CMakeFiles/PA1.dir/build.make CMakeFiles/PA1.dir/src/texture.cpp.s
+.PHONY : src/texture.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -266,6 +293,9 @@ help:
 	@echo "... src/scene_parser.o"
 	@echo "... src/scene_parser.i"
 	@echo "... src/scene_parser.s"
+	@echo "... src/texture.o"
+	@echo "... src/texture.i"
+	@echo "... src/texture.s"
 .PHONY : help
 
 

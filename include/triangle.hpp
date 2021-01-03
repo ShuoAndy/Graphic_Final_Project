@@ -44,12 +44,21 @@ public:
 		}
 
 		if (Vector3f::dot(ray.getDirection(), this->normal) > 0)
-            hit.set(t, this->material, -this->normal.normalized());
+            hit.set(t, 0, 0, this->material, -this->normal.normalized());
         else
-            hit.set(t, this->material, this->normal.normalized());
+            hit.set(t, 0, 0, this->material, this->normal.normalized());
 
         return true;
 	}
+	
+	bool getBox(Box& box){
+		Vector3f min_point(fmin(vertices[0].x(), fmin(vertices[1].x(), vertices[2].x())), fmin(vertices[0].y(), fmin(vertices[1].y(), vertices[2].y())), fmin(vertices[0].z(), fmin(vertices[1].z(), vertices[2].z())));
+		Vector3f max_point(fmax(vertices[0].x(), fmax(vertices[1].x(), vertices[2].x())), fmax(vertices[0].y(), fmax(vertices[1].y(), vertices[2].y())), fmax(vertices[0].z(), fmax(vertices[1].z(), vertices[2].z())));
+		Box temp(min_point, max_point);
+		box = temp;
+		return true;
+	}
+
 	Vector3f normal;
 	Vector3f vertices[3];
 protected:

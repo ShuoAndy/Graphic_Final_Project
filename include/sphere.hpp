@@ -36,8 +36,14 @@ public:
             inter_dir =  r.pointAtParameter(inter_t) - this->center;
         else
             inter_dir =  this->center - r.pointAtParameter(inter_t);
-            
-        h.set(inter_t, this->material, inter_dir.normalized());
+        inter_dir.normalize();
+        float u = atan2(-inter_dir.z(), inter_dir.x()) / (2 * M_PI) + 0.5f, v = acos(-inter_dir.y()) / M_PI;    
+        h.set(inter_t, u, v, this->material, inter_dir.normalized());
+        return true;
+    }
+
+    bool getBox(Box& box) override {
+        box = Box(center - Vector3f(radius, radius, radius), center + Vector3f(radius, radius, radius));
         return true;
     }
 

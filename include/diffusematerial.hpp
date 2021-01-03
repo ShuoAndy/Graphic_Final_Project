@@ -8,27 +8,46 @@
 #include "material.hpp"
 #include <iostream>
 
+class DiffuseLight: public Material{
+    public:
+        DiffuseLight(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = ""):Material(d_color, s_color, atten, s, texture_name){}
+        bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scatteredv){
+            return false;
+        }
+        virtual Vector3f Emission() const override {
+            return specularColor;
+        }
+        char* name(){
+            return "diffuse_light";
+        }
+};
+
 class DiffuseMaterial: public Material{
     public:
-        DiffuseMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0):Material(d_color, s_color, atten, s){}
+        DiffuseMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = ""):Material(d_color, s_color, atten, s, texture_name){}
         bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
             Vector3f target = ray.pointAtParameter(hit.getT()) + hit.getNormal() + generateRandomPoint();
             scattered = Ray(ray.pointAtParameter(hit.getT()), target - ray.pointAtParameter(hit.getT()));
-            attenuation = this->attenuation;
+            attenuation = getAttenuation(hit.getU(), hit.getV());
             return true;
         }
         char* name(){
             return "diff";
         }
+    private:
+        Vector3f getAttenuation(float u, float v) {
+            if (texture.hasTexture()) return texture.ColorAt(u ,v);
+            return this->attenuation;
+        }
 };
 
 class MetalMaterial: public Material{
     public:
-        MetalMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, float fuzz = 0):Material(d_color, s_color, atten, s){ this->fuzz = fuzz > 1 ? 1 : fuzz;}
+        MetalMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", float fuzz = 0):Material(d_color, s_color, atten, s, texture_name){ this->fuzz = fuzz > 1 ? 1 : fuzz;}
         bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
             Vector3f target = reflectRay(ray.getDirection().normalized(), hit.getNormal());
             scattered = Ray(ray.pointAtParameter(hit.getT()), target + fuzz * generateRandomPoint());
-            attenuation = this->attenuation;
+            attenuation = getAttenuation(hit.getU(), hit.getV());
             return (Vector3f::dot(scattered.getDirection(), hit.getNormal()) > 0);
         }
         char* name(){
@@ -39,11 +58,15 @@ class MetalMaterial: public Material{
         Vector3f reflectRay(const Vector3f& input, const Vector3f& normal){
             return input - 2*Vector3f::dot(input, normal) * normal;
         }
+        Vector3f getAttenuation(float u, float v) {
+            if (texture.hasTexture()) return texture.ColorAt(u ,v);
+            return this->attenuation;
+        }
 };
 
 class DielecMaterial: public Material{
     public:
-        DielecMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, float refractive = 0):Material(d_color, s_color, atten, s){ this->refractive = refractive;}
+        DielecMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", float refractive = 0):Material(d_color, s_color, atten, s, texture_name){ this->refractive = refractive;}
         bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
             attenuation = Vector3f(1.0,1.0,1.0);
             Vector3f target = reflectRay(ray.getDirection().normalized(), hit.getNormal());

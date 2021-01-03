@@ -1,4 +1,5 @@
 #include "mesh.hpp"
+#include "box.hpp"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
@@ -18,6 +19,22 @@ bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
         result |= triangle.intersect(r, h, tmin);
     }
     return result;
+}
+
+bool Mesh::getBox(Box &box) {
+    Box temp;
+    for (int triId = 0; triId < (int) t.size(); ++triId) {
+        TriangleIndex& triIndex = t[triId];
+        Triangle triangle(v[triIndex[0]],
+                          v[triIndex[1]], v[triIndex[2]], material);
+        if (!triangle.getBox(temp)) return false;
+        if (triId == 0) {
+            box = temp;
+        } else {
+            box = mergeBox(box, temp);
+        }
+    }
+    return true;
 }
 
 Mesh::Mesh(const char *filename, Material *material) : Object3D(material) {

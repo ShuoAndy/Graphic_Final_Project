@@ -6,15 +6,16 @@
 
 #include "ray.hpp"
 #include "hit.hpp"
+#include "texture.h"
 #include <iostream>
 
 // TODO: Implement Shade function that computes Phong introduced in class.
 class Material {
 public:
 
-    explicit Material(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0) :
+    explicit Material(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "") :
             diffuseColor(d_color), specularColor(s_color), attenuation(atten), shininess(s) {
-
+            texture = Texture(texture_name);
     }
 
     virtual ~Material() = default;
@@ -44,12 +45,16 @@ public:
         return "mat";
     }
     virtual bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered)=0;
+    virtual Vector3f Emission() const {
+        return Vector3f::ZERO;
+    }
 
 protected:
     Vector3f diffuseColor;
     Vector3f specularColor;
     Vector3f attenuation;
     float shininess;
+    Texture texture;
     Vector3f generateRandomPoint(){
         Vector3f ret;
         do {

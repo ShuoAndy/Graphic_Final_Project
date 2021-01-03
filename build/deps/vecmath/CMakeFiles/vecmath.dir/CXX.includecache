@@ -32,9 +32,9 @@ iostream
 
 ../deps/vecmath/include/Vector4f.h
 
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix2f.cpp
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix2f.cpp
 Matrix2f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix2f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix2f.h
 cassert
 -
 cmath
@@ -44,11 +44,11 @@ cstdio
 cstring
 -
 Vector2f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.h
 
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix3f.cpp
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix3f.cpp
 Matrix3f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix3f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix3f.h
 cassert
 -
 cmath
@@ -58,15 +58,15 @@ cstdio
 cstring
 -
 Matrix2f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix2f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix2f.h
 Quat4f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Quat4f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Quat4f.h
 Vector3f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
 
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix4f.cpp
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix4f.cpp
 Matrix4f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix4f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix4f.h
 cassert
 -
 cmath
@@ -76,29 +76,29 @@ cstdio
 cstring
 -
 Matrix2f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix2f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix2f.h
 Matrix3f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix3f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix3f.h
 Quat4f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Quat4f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Quat4f.h
 Vector3f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
 Vector4f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector4f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector4f.h
 
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Quat4f.cpp
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Quat4f.cpp
 cmath
 -
 cstdio
 -
 Quat4f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Quat4f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Quat4f.h
 Vector3f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
 Vector4f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector4f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector4f.h
 
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.cpp
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.cpp
 cassert
 -
 cmath
@@ -108,11 +108,11 @@ cstdio
 cstdlib
 -
 Vector2f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.h
 Vector3f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
 
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.cpp
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.cpp
 cmath
 -
 cstdio
@@ -122,11 +122,11 @@ cstdlib
 iostream
 -
 Vector3f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
 Vector2f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.h
 
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector4f.cpp
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector4f.cpp
 cmath
 -
 cstdio
@@ -134,9 +134,9 @@ cstdio
 cstdlib
 -
 Vector4f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector4f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector4f.h
 Vector2f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.h
 Vector3f.h
-/home/yxchar/ComputerGraphic/project/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
+/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.h
 
