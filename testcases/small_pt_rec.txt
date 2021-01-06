@@ -95,9 +95,10 @@ Group {
         radius 16.5
     }
     MaterialIndex 6
-    Sphere {
-    center 50 681.10 80.6 
-        radius 600
+    XZRectangle {
+        points 27 60 73 80
+        offset 81.0
+        normal -1
     }
 }
 

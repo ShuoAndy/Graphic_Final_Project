@@ -1,13 +1,13 @@
 
 PerspectiveCamera {
-    center 0 2 6
+    center 0 2 4
     direction 0 -1.5 -5
     up 0 1 0
     angle 45
     lens_radius 0
     focus_distance 1
-    width 100
-    height 100
+    width 400
+    height 400
 }
 
 Lights {
@@ -30,6 +30,7 @@ Background {
 Materials {
     numMaterials 6
     DielecMaterial { 
+      attenuation 0.9 0.2 0.2
       refractive 1.5
 	}
     DiffuseMaterial { 
@@ -42,7 +43,7 @@ Materials {
         attenuation 0.75 0.25 0.25 
     }
     DiffuseMaterial { 
-        attenuation 0.25 0.75 0.25 
+        attenuation 0.75 0.75 0.75 
     }
     DiffuseMaterial { 
         attenuation 0.25 0.25 0.75 
@@ -53,10 +54,10 @@ Group {
     numObjects 9
     MaterialIndex 0
     Transform {
-		Scale  5 5 5 
-		Translate  0.03 -0.0466 0 	
+        Translate  0.0 0 -1
+		Scale  2 2 2 	
         TriangleMesh {
-            obj_file mesh/bunny_200k.obj
+            obj_file mesh/Buddha.obj
         }
     }
     MaterialIndex 1
@@ -74,11 +75,11 @@ Group {
     }
     MaterialIndex 2
     Sphere {
-	    center 0 5 -1 
+	    center 1.5 5 -2 
         radius 2 
     }
     Sphere {
-	    center 1.5 0 8 
+	    center 1.5 0 5 
         radius 2
     }
     MaterialIndex 3

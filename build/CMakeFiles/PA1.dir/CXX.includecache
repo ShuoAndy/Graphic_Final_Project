@@ -58,6 +58,24 @@ material.hpp
 Vector3f.h
 -
 
+../include/bvh.hpp
+object3d.hpp
+../include/object3d.hpp
+ray.hpp
+../include/ray.hpp
+hit.hpp
+../include/hit.hpp
+box.hpp
+../include/box.hpp
+iostream
+-
+algorithm
+-
+vector
+-
+limits
+-
+
 ../include/camera.hpp
 ray.hpp
 ../include/ray.hpp
@@ -93,9 +111,17 @@ hit.hpp
 ../include/hit.hpp
 box.hpp
 ../include/box.hpp
+bvh.hpp
+../include/bvh.hpp
+kdtree.hpp
+../include/kdtree.hpp
 iostream
 -
 vector
+-
+cstring
+-
+cassert
 -
 
 ../include/hit.hpp
@@ -121,6 +147,8 @@ group.hpp
 ../include/group.hpp
 light.hpp
 ../include/light.hpp
+photonkdtree.hpp
+../include/photonkdtree.hpp
 omp.h
 -
 cstdio
@@ -128,6 +156,30 @@ cstdio
 iostream
 -
 ctime
+-
+vector
+-
+cstring
+-
+string
+-
+
+../include/kdtree.hpp
+object3d.hpp
+../include/object3d.hpp
+ray.hpp
+../include/ray.hpp
+hit.hpp
+../include/hit.hpp
+box.hpp
+../include/box.hpp
+iostream
+-
+algorithm
+-
+vector
+-
+limits
 -
 
 ../include/light.hpp
@@ -161,6 +213,10 @@ Vector2f.h
 ../include/Vector2f.h
 Vector3f.h
 ../include/Vector3f.h
+bvh.hpp
+../include/bvh.hpp
+kdtree.hpp
+../include/kdtree.hpp
 
 ../include/object3d.hpp
 ray.hpp
@@ -172,9 +228,29 @@ material.hpp
 box.hpp
 ../include/box.hpp
 
+../include/photonkdtree.hpp
+hit.hpp
+../include/hit.hpp
+ray.hpp
+../include/ray.hpp
+cassert
+-
+iostream
+-
+Vector3f.h
+-
+vector
+-
+algorithm
+-
+cstdio
+-
+
 ../include/plane.hpp
 object3d.hpp
 ../include/object3d.hpp
+cassert
+-
 vecmath.h
 -
 cmath
@@ -188,6 +264,16 @@ cassert
 iostream
 -
 Vector3f.h
+-
+
+../include/rectangles.hpp
+object3d.hpp
+../include/object3d.hpp
+box.hpp
+../include/box.hpp
+vecmath.h
+-
+cmath
 -
 
 ../include/scene_parser.hpp
@@ -303,12 +389,16 @@ integrator.hpp
 /home/yxc/graph/ComputerGraphics-THU-2020/src/integrator.hpp
 string
 -
+cstring
+-
 
 /home/yxc/graph/ComputerGraphics-THU-2020/src/mesh.cpp
 mesh.hpp
 /home/yxc/graph/ComputerGraphics-THU-2020/src/mesh.hpp
 box.hpp
 /home/yxc/graph/ComputerGraphics-THU-2020/src/box.hpp
+bvh.hpp
+/home/yxc/graph/ComputerGraphics-THU-2020/src/bvh.hpp
 fstream
 -
 iostream
@@ -320,6 +410,8 @@ cstdlib
 utility
 -
 sstream
+-
+vector
 -
 
 /home/yxc/graph/ComputerGraphics-THU-2020/src/scene_parser.cpp
@@ -353,6 +445,8 @@ triangle.hpp
 /home/yxc/graph/ComputerGraphics-THU-2020/src/triangle.hpp
 transform.hpp
 /home/yxc/graph/ComputerGraphics-THU-2020/src/transform.hpp
+rectangles.hpp
+/home/yxc/graph/ComputerGraphics-THU-2020/src/rectangles.hpp
 diffusematerial.hpp
 /home/yxc/graph/ComputerGraphics-THU-2020/src/diffusematerial.hpp
 

@@ -1,24 +1,27 @@
 #include "mesh.hpp"
 #include "box.hpp"
+#include "bvh.hpp"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
 #include <utility>
 #include <sstream>
+#include <vector>
 
 bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
-
-    // Optional: Change this brute force method into a faster one.
-    bool result = false;
-    for (int triId = 0; triId < (int) t.size(); ++triId) {
-        TriangleIndex& triIndex = t[triId];
-        Triangle triangle(v[triIndex[0]],
-                          v[triIndex[1]], v[triIndex[2]], material);
-        triangle.normal = n[triId];
-        result |= triangle.intersect(r, h, tmin);
+    bool flag = false;
+    if (strcmp(accelerator, "bvh") == 0){
+        flag = BVHRoot->intersect(r, h, tmin);
+    } else if (strcmp(accelerator, "kdtree") == 0) {
+        flag = KDTreeRoot->intersect(r, h, tmin);
+    } else {
+        for (auto obj: triangle_list) {
+            if (obj->intersect(r, h, tmin))
+                flag = true;
+        }
     }
-    return result;
+    return flag;
 }
 
 bool Mesh::getBox(Box &box) {
@@ -37,8 +40,31 @@ bool Mesh::getBox(Box &box) {
     return true;
 }
 
-Mesh::Mesh(const char *filename, Material *material) : Object3D(material) {
+void Mesh::buildTree() {
+    std::cout << "start building tree for mesh " << std::endl;
+    for (int triId = 0; triId < (int) t.size(); ++triId) {
+        TriangleIndex& triIndex = t[triId];
+        Triangle* triangle_ptr = new Triangle(v[triIndex[0]],
+                          v[triIndex[1]], v[triIndex[2]], material);
+        triangle_ptr->normal = n[triId];
+        triangle_list.push_back(triangle_ptr);
+    }
+    if (strcmp(accelerator, "bvh") == 0){
+        std::cout << "start building BVH accelerator for mesh " << std::endl;
+        BVHRoot = new BVHNode(triangle_list, 0, t.size());
+    }
+    else if (strcmp(accelerator, "kdtree") == 0){
+        std::cout << "start building KDTree accelerator for mesh " << std::endl;
+        KDTreeRoot = new KDTreeNode(triangle_list, 0, t.size(), 0);
+    }
+    else {
+        fprintf(stderr, "unsupported accelerator %s, using default intersection method\n", accelerator);
+    }
+}
 
+Mesh::Mesh(const char *filename, Material *material, const char* accelerator) : Object3D(material) {
+
+    this->accelerator = accelerator;
     // Optional: Use tiny obj loader to replace this simple one.
     std::ifstream f;
     f.open(filename);
@@ -96,7 +122,7 @@ Mesh::Mesh(const char *filename, Material *material) : Object3D(material) {
         }
     }
     computeNormal();
-
+    buildTree();
     f.close();
 }
 

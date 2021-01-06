@@ -12,5 +12,7 @@ Texture::Texture(const char* texture_file) {
     texture_image = stbi_load(texture_file, &width, &height, &channel, 0);
     if (!texture_image) {
         fprintf(stderr, "cannot load texture file with name %s \n", texture_file);
+    } else {
+        printf("load texture file %s with size %d %d %d \n", texture_file, width, height, channel);
     }
 }

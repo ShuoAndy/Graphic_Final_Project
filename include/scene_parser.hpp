@@ -15,6 +15,9 @@ class Plane;
 class Triangle;
 class Transform;
 class Mesh;
+class XYRectangle;
+class YZRectangle;
+class XZRectangle;
 
 #define MAX_PARSER_TOKEN_LENGTH 1024
 
@@ -22,7 +25,7 @@ class SceneParser {
 public:
 
     SceneParser() = delete;
-    SceneParser(const char *filename);
+    SceneParser(const char *filename, const char * accelerator);
 
     ~SceneParser();
 
@@ -79,10 +82,14 @@ private:
     Triangle *parseTriangle();
     Mesh *parseTriangleMesh();
     Transform *parseTransform();
+    XYRectangle *parseXYRectangle();
+    XZRectangle *parseXZRectangle();
+    YZRectangle *parseYZRectangle();
 
     int getToken(char token[MAX_PARSER_TOKEN_LENGTH]);
 
     Vector3f readVector3f();
+    Vector4f readVector4f();
 
     float readFloat();
     int readInt();
@@ -98,6 +105,7 @@ private:
     Material *current_material;
     Group *group;
     int background_color_num;
+    const char* accelerator;
 };
 
 #endif // SCENE_PARSER_H

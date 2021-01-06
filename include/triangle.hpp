@@ -21,6 +21,10 @@ public:
 		this->normal = Vector3f::cross(b - a, c - a);
 		this->normal.normalize();
 		this->d = Vector3f::dot(this->normal, a);
+		if (Vector3f::cross(this->normal.normalized(), Vector3f::UP).length() < 1e-6)
+            this->vdim = Vector3f::FORWARD;
+        else this->vdim = Vector3f::UP;
+        this->udim = Vector3f::cross(this->normal.normalized(), this->vdim);
 	}
 
 	bool intersect( const Ray& ray,  Hit& hit , float tmin) override {
@@ -43,10 +47,10 @@ public:
 				return false;
 		}
 
-		if (Vector3f::dot(ray.getDirection(), this->normal) > 0)
-            hit.set(t, 0, 0, this->material, -this->normal.normalized());
-        else
-            hit.set(t, 0, 0, this->material, this->normal.normalized());
+		Vector3f hit_point = ray.pointAtParameter(t);
+		float v = Vector3f::dot(hit_point, vdim);
+        float u = Vector3f::dot(hit_point, udim);
+        hit.set(t, u, v, this->material, this->normal.normalized(), ray);
 
         return true;
 	}
@@ -61,8 +65,16 @@ public:
 
 	Vector3f normal;
 	Vector3f vertices[3];
+	Vector3f vdim, udim;
 protected:
 	float d;
+	Vector3f smoothedNorm(const Vector3f &hit_point) {
+		Vector3f va = (vertices[0] - hit_point), vb = (vertices[1] - hit_point), vc = (vertices[2] - hit_point);
+        float ra = Vector3f::cross(vb, vc).length(),
+              rb = Vector3f::cross(vc, va).length(),
+              rc = Vector3f::cross(va, vb).length();
+		return Vector3f::ZERO;
+	}
 };
 
 #endif //TRIANGLE_H

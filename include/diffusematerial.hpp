@@ -10,7 +10,7 @@
 
 class DiffuseLight: public Material{
     public:
-        DiffuseLight(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = ""):Material(d_color, s_color, atten, s, texture_name){}
+        DiffuseLight(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = ""):Material(d_color, s_color, atten, s, texture_name, bump_name){}
         bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scatteredv){
             return false;
         }
@@ -24,7 +24,7 @@ class DiffuseLight: public Material{
 
 class DiffuseMaterial: public Material{
     public:
-        DiffuseMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = ""):Material(d_color, s_color, atten, s, texture_name){}
+        DiffuseMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = ""):Material(d_color, s_color, atten, s, texture_name, bump_name){}
         bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
             Vector3f target = ray.pointAtParameter(hit.getT()) + hit.getNormal() + generateRandomPoint();
             scattered = Ray(ray.pointAtParameter(hit.getT()), target - ray.pointAtParameter(hit.getT()));
@@ -43,7 +43,7 @@ class DiffuseMaterial: public Material{
 
 class MetalMaterial: public Material{
     public:
-        MetalMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", float fuzz = 0):Material(d_color, s_color, atten, s, texture_name){ this->fuzz = fuzz > 1 ? 1 : fuzz;}
+        MetalMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = "", float fuzz = 0):Material(d_color, s_color, atten, s, texture_name, bump_name){ this->fuzz = fuzz > 1 ? 1 : fuzz;}
         bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
             Vector3f target = reflectRay(ray.getDirection().normalized(), hit.getNormal());
             scattered = Ray(ray.pointAtParameter(hit.getT()), target + fuzz * generateRandomPoint());
@@ -66,23 +66,20 @@ class MetalMaterial: public Material{
 
 class DielecMaterial: public Material{
     public:
-        DielecMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", float refractive = 0):Material(d_color, s_color, atten, s, texture_name){ this->refractive = refractive;}
+        DielecMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = "", float refractive = 0):Material(d_color, s_color, atten, s, texture_name, bump_name){ this->refractive = refractive;}
         bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
-            attenuation = Vector3f(1.0,1.0,1.0);
-            Vector3f target = reflectRay(ray.getDirection().normalized(), hit.getNormal());
-            float index, reflect_prob, cos;
-            Vector3f out_normal, refract_ray;
-            if (Vector3f::dot(ray.getDirection(), hit.getNormal()) > 0){
-                out_normal = -hit.getNormal();
+            attenuation = this->attenuation;
+            Vector3f unit = ray.getDirection().normalized();
+            Vector3f target = reflectRay(unit, hit.getNormal());
+            float index, reflect_prob, cos = -1*Vector3f::dot(unit, hit.getNormal());
+            Vector3f refract_ray;
+            if (!hit.isFrontFace()){
                 index = refractive;
-                cos = refractive * Vector3f::dot(ray.getDirection().normalized(), hit.getNormal().normalized());
             } else {
-                out_normal = hit.getNormal();
                 index = 1.0 / refractive;
-                cos = -1* Vector3f::dot(ray.getDirection().normalized(), hit.getNormal().normalized());
             }
 
-            if (refractRay(ray.getDirection(), out_normal, index, refract_ray)){
+            if (refractRay(unit, hit.getNormal(), index, refract_ray)){
                 reflect_prob = Schlick(cos, refractive);
             } else {
                 reflect_prob = 1.1;
@@ -105,11 +102,11 @@ class DielecMaterial: public Material{
             return input - 2*Vector3f::dot(input, normal) * normal;
         }
         bool refractRay(const Vector3f& input, const Vector3f& normal, float index, Vector3f& refracted){
-            Vector3f unit = input.normalized();
-            float t = Vector3f::dot(unit, normal);
+            Vector3f unit = input;
+            float t = -1*Vector3f::dot(unit, normal);
             float disc = 1.0 - index * index * (1 - t * t);
             if (disc > 0){
-                refracted = index * (unit - t * normal) - normal * sqrt(disc);
+                refracted = index * (unit + t * normal) - normal * sqrt(disc);
                 return true;
             }
             return false;

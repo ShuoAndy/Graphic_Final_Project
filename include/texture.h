@@ -36,14 +36,43 @@ class Texture {
         }
 
 
-    private:
-    float Clamp(float a) {
-        a -= int(a);
-        if (a < 0) a += 1;
-        return a;
-    }
-    unsigned char* texture_image;
-    int width, height;
-    int channel; 
+    protected:
+        float Clamp(float a) {
+            a -= int(a);
+            if (a < 0) a += 1;
+            return a;
+        }
+        unsigned char* texture_image;
+        int width, height;
+        int channel; 
+};
+
+class BumpTexture: public Texture {
+    public:
+        BumpTexture(): Texture() {}
+        BumpTexture(const char* texture_file): Texture(texture_file) {
+        }
+        
+        Vector2f GradAt(float u, float v, float &value) {
+            value = getValue(u, v);
+            float du = 1.0f / width, dv = 1.0f / height;
+            Vector2f grad(width * (getValue(u + du, v) - getValue(u - du, v)), height * (getValue(u, v + dv) - getValue(u, v - dv)));
+            return grad;
+        }
+
+        bool hasBump() {
+            if (texture_image == nullptr) return false;
+            return true;
+        }
+
+    protected:
+        float getValue(float u, float v) {
+
+            if (texture_image == nullptr) return 0.0;
+            int x = ((static_cast<int>(u * width + width)) % width + width) % width;
+            int y = ((static_cast<int>(v * height + height)) % height + height) % height;
+            return float(texture_image[y * channel * width + x * channel] / 255.f);
+
+        }
 };
 #endif

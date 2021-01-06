@@ -17,9 +17,16 @@ public:
         this->material = material;
     }
 
+    virtual Material* getMaterial() {
+        return material;
+    }
+
     // Intersect Ray with this object. If hit, store information in hit structure.
     virtual bool intersect(const Ray &r, Hit &h, float tmin) = 0;
     virtual bool getBox(Box& box) = 0;
+    virtual Ray generateRandomRay(){
+        return Ray(Vector3f::ZERO, Vector3f::ZERO);
+    }
     
 protected:
 

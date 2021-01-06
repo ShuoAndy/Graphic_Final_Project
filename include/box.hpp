@@ -15,7 +15,6 @@ class Box {
         }
 
         bool intersect(const Ray& r, float t_min, float t_max) {
-
             float inv = 1.0f / r.getDirection().x();
             float t0 = (min_point.x() - r.getOrigin().x()) * inv;
             float t1 = (max_point.x() - r.getOrigin().x()) * inv;
@@ -71,4 +70,5 @@ class Box {
         Vector3f max_point;
         
 };
+
 #endif

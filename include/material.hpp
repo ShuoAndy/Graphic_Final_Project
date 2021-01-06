@@ -13,9 +13,10 @@
 class Material {
 public:
 
-    explicit Material(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "") :
+    explicit Material(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = "") :
             diffuseColor(d_color), specularColor(s_color), attenuation(atten), shininess(s) {
             texture = Texture(texture_name);
+            bump = BumpTexture(bump_name);
     }
 
     virtual ~Material() = default;
@@ -48,6 +49,9 @@ public:
     virtual Vector3f Emission() const {
         return Vector3f::ZERO;
     }
+    BumpTexture* getBump() {
+        return &bump;
+    }
 
 protected:
     Vector3f diffuseColor;
@@ -55,6 +59,7 @@ protected:
     Vector3f attenuation;
     float shininess;
     Texture texture;
+    BumpTexture bump;
     Vector3f generateRandomPoint(){
         Vector3f ret;
         do {

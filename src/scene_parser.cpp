@@ -14,11 +14,12 @@
 #include "plane.hpp"
 #include "triangle.hpp"
 #include "transform.hpp"
+#include "rectangles.hpp"
 #include "diffusematerial.hpp"
 
 #define DegreesToRadians(x) ((M_PI * x) / 180.0f)
 
-SceneParser::SceneParser(const char *filename) {
+SceneParser::SceneParser(const char *filename, const char* accelerator) {
 
     // initialize some reasonable default values
     group = nullptr;
@@ -45,6 +46,7 @@ SceneParser::SceneParser(const char *filename) {
         printf("cannot open scene file\n");
         exit(0);
     }
+    this->accelerator = accelerator;
     parseFile();
     fclose(file);
     file = nullptr;
@@ -255,7 +257,9 @@ void SceneParser::parseMaterials() {
 Material *SceneParser::parseMaterial(char type[]) {
     char token[MAX_PARSER_TOKEN_LENGTH];
     char filename[MAX_PARSER_TOKEN_LENGTH];
+    char bumpname[MAX_PARSER_TOKEN_LENGTH];
     filename[0] = 0;
+    bumpname[0] = 0;
     Vector3f diffuseColor(1, 1, 1), specularColor(0, 0, 0), attenuation(0.5, 0.5, 0.5);
     float shininess = 0, fuzz = 0, refractive = 0;
     getToken(token);
@@ -277,25 +281,28 @@ Material *SceneParser::parseMaterial(char type[]) {
         } else if (strcmp(token, "texture") == 0) {
             // Optional: read in texture and draw it.
             getToken(filename);
+        } else if (strcmp(token, "bump") == 0) {
+            // Optional: read in bump and draw it.
+            getToken(bumpname);
         } else {
             assert (!strcmp(token, "}"));
             break;
         }
     }
     if (strcmp(type, "DiffuseMaterial") == 0){
-        auto *answer = new DiffuseMaterial(diffuseColor, specularColor, attenuation, shininess, filename);
+        auto *answer = new DiffuseMaterial(diffuseColor, specularColor, attenuation, shininess, filename, bumpname);
         return answer;
     }
     if (strcmp(type, "LightMaterial") == 0){
-        auto *answer = new DiffuseLight(diffuseColor, specularColor, attenuation, shininess, filename);
+        auto *answer = new DiffuseLight(diffuseColor, specularColor, attenuation, shininess, filename, bumpname);
         return answer;
     }
     if (strcmp(type, "MetalMaterial") == 0){
-        auto *answer = new MetalMaterial(diffuseColor, specularColor, attenuation, shininess, filename, fuzz);
+        auto *answer = new MetalMaterial(diffuseColor, specularColor, attenuation, shininess, filename, bumpname, fuzz);
         return answer;
     }
     if (strcmp(type, "DielecMaterial") == 0){
-        auto *answer = new DielecMaterial(diffuseColor, specularColor, attenuation, shininess, filename, refractive);
+        auto *answer = new DielecMaterial(diffuseColor, specularColor, attenuation, shininess, filename, bumpname, refractive);
         return answer;
     }  
 }
@@ -317,6 +324,12 @@ Object3D *SceneParser::parseObject(char token[MAX_PARSER_TOKEN_LENGTH]) {
         answer = (Object3D *) parseTriangleMesh();
     } else if (!strcmp(token, "Transform")) {
         answer = (Object3D *) parseTransform();
+    } else if (!strcmp(token, "XYRectangle")) {
+        answer = (Object3D *) parseXYRectangle();
+    } else if (!strcmp(token, "YZRectangle")) {
+        answer = (Object3D *) parseYZRectangle();
+    } else if (!strcmp(token, "XZRectangle")) {
+        answer = (Object3D *) parseXZRectangle();
     } else {
         printf("Unknown token in parseObject: '%s'\n", token);
         exit(0);
@@ -345,7 +358,7 @@ Group *SceneParser::parseGroup() {
     assert (!strcmp(token, "numObjects"));
     int num_objects = readInt();
 
-    auto *answer = new Group(num_objects);
+    auto *answer = new Group(num_objects, accelerator);
 
     // read in the objects
     int count = 0;
@@ -366,7 +379,7 @@ Group *SceneParser::parseGroup() {
     }
     getToken(token);
     assert (!strcmp(token, "}"));
-
+    answer->buildTree();
     // return the group
     return answer;
 }
@@ -440,11 +453,67 @@ Mesh *SceneParser::parseTriangleMesh() {
     assert (!strcmp(token, "}"));
     const char *ext = &filename[strlen(filename) - 4];
     assert(!strcmp(ext, ".obj"));
-    Mesh *answer = new Mesh(filename, current_material);
+    Mesh *answer = new Mesh(filename, current_material, accelerator);
 
     return answer;
 }
 
+XYRectangle *SceneParser::parseXYRectangle() {
+    char token[MAX_PARSER_TOKEN_LENGTH];
+    getToken(token);
+    assert (!strcmp(token, "{"));
+    getToken(token);
+    assert (!strcmp(token, "points"));
+    Vector4f points = readVector4f();
+    getToken(token);
+    assert (!strcmp(token, "offset"));
+    float offset = readFloat();
+    getToken(token);
+    assert (!strcmp(token, "normal"));
+    float normal = readFloat();
+    getToken(token);
+    assert (!strcmp(token, "}"));
+    assert (current_material != nullptr);
+    return new XYRectangle(points[0], points[1], points[2], points[3], offset, normal, current_material);
+}
+
+XZRectangle *SceneParser::parseXZRectangle() {
+    char token[MAX_PARSER_TOKEN_LENGTH];
+    getToken(token);
+    assert (!strcmp(token, "{"));
+    getToken(token);
+    assert (!strcmp(token, "points"));
+    Vector4f points = readVector4f();
+    getToken(token);
+    assert (!strcmp(token, "offset"));
+    float offset = readFloat();
+    getToken(token);
+    assert (!strcmp(token, "normal"));
+    float normal = readFloat();
+    getToken(token);
+    assert (!strcmp(token, "}"));
+    assert (current_material != nullptr);
+    return new XZRectangle(points[0], points[1], points[2], points[3], offset, normal, current_material);
+}
+
+YZRectangle *SceneParser::parseYZRectangle() {
+    char token[MAX_PARSER_TOKEN_LENGTH];
+    getToken(token);
+    assert (!strcmp(token, "{"));
+    getToken(token);
+    assert (!strcmp(token, "points"));
+    Vector4f points = readVector4f();
+    getToken(token);
+    assert (!strcmp(token, "offset"));
+    float offset = readFloat();
+    getToken(token);
+    assert (!strcmp(token, "normal"));
+    float normal = readFloat();
+    getToken(token);
+    assert (!strcmp(token, "}"));
+    assert (current_material != nullptr);
+    return new YZRectangle(points[0], points[1], points[2], points[3], offset, normal, current_material);
+}
 
 Transform *SceneParser::parseTransform() {
     char token[MAX_PARSER_TOKEN_LENGTH];
@@ -534,6 +603,15 @@ Vector3f SceneParser::readVector3f() {
     return Vector3f(x, y, z);
 }
 
+Vector4f SceneParser::readVector4f() {
+    float x, y, z, f;
+    int count = fscanf(file, "%f %f %f %f", &x, &y, &z, &f);
+    if (count != 4) {
+        printf("Error trying to read 4 floats to make a Vector4f\n");
+        assert (0);
+    }
+    return Vector4f(x, y, z, f);
+}
 
 float SceneParser::readFloat() {
     float answer;

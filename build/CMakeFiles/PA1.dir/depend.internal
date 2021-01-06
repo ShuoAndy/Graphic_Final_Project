@@ -22,14 +22,17 @@ CMakeFiles/PA1.dir/src/main.cpp.o
  ../deps/vecmath/include/Vector4f.h
  ../deps/vecmath/include/vecmath.h
  ../include/box.hpp
+ ../include/bvh.hpp
  ../include/camera.hpp
  ../include/group.hpp
  ../include/hit.hpp
  ../include/image.hpp
  ../include/integrator.hpp
+ ../include/kdtree.hpp
  ../include/light.hpp
  ../include/material.hpp
  ../include/object3d.hpp
+ ../include/photonkdtree.hpp
  ../include/ray.hpp
  ../include/scene_parser.hpp
  ../include/texture.h
@@ -44,7 +47,9 @@ CMakeFiles/PA1.dir/src/mesh.cpp.o
  ../deps/vecmath/include/Vector4f.h
  ../deps/vecmath/include/vecmath.h
  ../include/box.hpp
+ ../include/bvh.hpp
  ../include/hit.hpp
+ ../include/kdtree.hpp
  ../include/material.hpp
  ../include/mesh.hpp
  ../include/object3d.hpp
@@ -62,16 +67,19 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o
  ../deps/vecmath/include/Vector4f.h
  ../deps/vecmath/include/vecmath.h
  ../include/box.hpp
+ ../include/bvh.hpp
  ../include/camera.hpp
  ../include/diffusematerial.hpp
  ../include/group.hpp
  ../include/hit.hpp
+ ../include/kdtree.hpp
  ../include/light.hpp
  ../include/material.hpp
  ../include/mesh.hpp
  ../include/object3d.hpp
  ../include/plane.hpp
  ../include/ray.hpp
+ ../include/rectangles.hpp
  ../include/scene_parser.hpp
  ../include/sphere.hpp
  ../include/texture.h

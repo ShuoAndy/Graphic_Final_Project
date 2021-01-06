@@ -4,10 +4,10 @@ PerspectiveCamera {
     direction 0 -0.042612 -1
     up 0 1 0
     angle 30
-    lens_radius 0.2
-    focus_distance 131.4
-    width 500
-    height 400
+    lens_radius 0
+    focus_distance 1
+    width 1024
+    height 728
 }
 
 Lights {
@@ -35,16 +35,19 @@ Materials {
         attenuation 0.25 0.25 0.75 
     }
     DiffuseMaterial { 
-        attenuation 0.75 0.75 0.75 
+        attenuation 0.75 0.75 0.75
+        texture texture/bricks.jpg 
     }
     DiffuseMaterial { 
         attenuation 0.75 0.75 0.75
     }
     MetalMaterial {
         attenuation 1 1 1
+        texture texture/world_cloud.jpg
+        fuzz 0.3
     }
     DielecMaterial {
-        attenuation 1 1 1
+        attenuation 0.9 0.9 0.9
         refractive 1.5
     }
     LightMaterial {
@@ -79,7 +82,7 @@ Group {
         normal 0 1 0
         offset 0
     }
-    MaterialIndex 2
+    MaterialIndex 3
     Plane {
         normal 0 -1 0
         offset -81.6
@@ -90,13 +93,16 @@ Group {
         radius 16.5
     }
     MaterialIndex 5
-    Sphere {
-    center 73 16.5 78
-        radius 16.5
+    Transform {
+        Translate  73 -10 100
+		Scale  230 230 230  	
+        TriangleMesh {
+            obj_file mesh/bunny.fine.obj
+        }
     }
     MaterialIndex 6
     Sphere {
-    center 50 681.10 80.6 
+    center 50 681.33 81.6 
         radius 600
     }
 }
