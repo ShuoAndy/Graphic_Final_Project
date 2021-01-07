@@ -27,7 +27,7 @@ public:
         this->udim = Vector3f::cross(this->normal.normalized(), this->vdim);
 		Vector3f min_point(fmin(vertices[0].x(), fmin(vertices[1].x(), vertices[2].x())), fmin(vertices[0].y(), fmin(vertices[1].y(), vertices[2].y())), fmin(vertices[0].z(), fmin(vertices[1].z(), vertices[2].z())));
 		Vector3f max_point(fmax(vertices[0].x(), fmax(vertices[1].x(), vertices[2].x())), fmax(vertices[0].y(), fmax(vertices[1].y(), vertices[2].y())), fmax(vertices[0].z(), fmax(vertices[1].z(), vertices[2].z())));
-		box = Box(min_point, max_point);
+		box = Box(min_point - 0.001, max_point + 0.001);
 	}
 
 	bool intersect( const Ray& ray,  Hit& hit , float tmin) override {
@@ -38,7 +38,7 @@ public:
 
         float t = (this->d - Vector3f::dot(this->normal, ray.getOrigin()))/(Vector3f::dot(this->normal, ray.getDirection()));
         
-		if (t < tmin || t > hit.getT())
+		if (t < tmin || t > hit.getT() || !isnormal(t))
             return false;
 
 		Vector3f inter_point = ray.pointAtParameter(t);
@@ -53,7 +53,19 @@ public:
 		Vector3f hit_point = ray.pointAtParameter(t);
 		float v = Vector3f::dot(hit_point, vdim);
         float u = Vector3f::dot(hit_point, udim);
-        hit.set(t, u, v, this->material, this->normal.normalized(), ray);
+		Vector3f norm = this->normal;
+
+		if (has_tex) {
+			Vector3f va = (vertices[0] - hit_point), vb = (vertices[1] - hit_point), vc = (vertices[2] - hit_point);
+			float ra = Vector3f::cross(vb, vc).length(), rb = Vector3f::cross(vc, va).length(), rc = Vector3f::cross(va, vb).length();
+			Vector2f uv = (ra * at + rb * bt + rc * ct) / (ra + rb + rc);
+			u = uv.x();
+			v = uv.y();
+		}
+
+		if (has_smooth_norm) norm = smoothedNorm(hit_point);
+
+        hit.set(t, u, v, this->material, norm, ray);
 
         return true;
 	}
@@ -63,10 +75,28 @@ public:
 		return true;
 	}
 
+	void setSmoothedNorm(const Vector3f& anorm, const Vector3f& bnorm,
+                  const Vector3f& cnorm) {
+        an = anorm;
+        bn = bnorm;
+        cn = cnorm;
+        has_smooth_norm = true;
+    }
+
+    void setTexCoord(const Vector2f& _at, const Vector2f& _bt, const Vector2f& _ct) {
+        at = _at;
+        bt = _bt;
+        ct = _ct;
+        has_tex = true;
+    }
+
 	Vector3f normal;
 	Vector3f vertices[3];
-	Vector3f vdim, udim;
+	Vector3f vdim, udim, an, bn, cn;
+	Vector2f at, bt, ct;
 	Box box;
+	bool has_tex, has_smooth_norm;
+
 protected:
 	float d;
 	Vector3f smoothedNorm(const Vector3f &hit_point) {
@@ -74,7 +104,7 @@ protected:
         float ra = Vector3f::cross(vb, vc).length(),
               rb = Vector3f::cross(vc, va).length(),
               rc = Vector3f::cross(va, vb).length();
-		return Vector3f::ZERO;
+		return (ra * an + rb * bn + rc * cn).normalized();
 	}
 };
 

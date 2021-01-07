@@ -7,9 +7,10 @@
 #include "curve.hpp"
 #include "object3d.hpp"
 #include "triangle.hpp"
-const int resolution = 10;
-const int NEWTON_STEPS = 20;
-const float NEWTON_EPS = 1e-4;
+
+const int steps = 20;
+const float eps = 1e-4;
+
 class RevSurface : public Object3D {
    Curve *pCurve;
    Box box;
@@ -23,8 +24,7 @@ class RevSurface : public Object3D {
                 exit(0);
             }
         }
-        box = Box(Vector3f(-pCurve->xzmax, pCurve->ymin - 3, -pCurve->xzmax),
-                 Vector3f(pCurve->xzmax, pCurve->ymax + 3, pCurve->xzmax));
+        box = Box(Vector3f(-pCurve->xzmax, pCurve->ymin - 3, -pCurve->xzmax), Vector3f(pCurve->xzmax, pCurve->ymax + 3, pCurve->xzmax));
     }
 
 
@@ -32,7 +32,7 @@ class RevSurface : public Object3D {
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         float t, theta, mu;
-        if (!getInitIntersect(r, t) || t > h.getT()) return false;
+        if (!getInitIntersect(r, t) || t > h.t) return false;
         Vector3f pt(r.origin + r.direction * t);
         theta = atan2(-pt.z(), pt.x()) + M_PI;
         mu = (pCurve->ymax - pt.y()) / (pCurve->ymax - pCurve->ymin);
@@ -41,9 +41,7 @@ class RevSurface : public Object3D {
             return false;
         }
         if (!isnormal(mu) || !isnormal(theta) || !isnormal(t)) return false;
-        if (t < tmin || mu < pCurve->mu_min || mu > pCurve->mu_max ||
-            t > h.getT())
-            return false;
+        if (t < tmin || mu < pCurve->mu_min || mu > pCurve->mu_max || t > h.getT()) return false;
 
         h.set(t, theta / (2 * M_PI), mu, material, normal.normalized(), r);
         return true;
@@ -52,7 +50,8 @@ class RevSurface : public Object3D {
     bool NG(const Ray &r, float &t, float &theta, float &mu,
                 Vector3f &normal) {
         Vector3f dmu, dtheta;
-        for (int i = 0; i < NEWTON_STEPS; ++i) {
+        for (int i = 0; i < steps; ++i) {
+
             if (theta < 0.0) theta += 2 * M_PI;
             if (theta >= 2 * M_PI) theta = fmod(theta, 2 * M_PI);
             if (mu >= 1) mu = 1.0 - FLT_EPSILON;
@@ -68,11 +67,12 @@ class RevSurface : public Object3D {
             Vector3f f = r.origin + r.direction * t - point;
             float dist2 = f.squaredLength();
             normal = Vector3f::cross(dmu, dtheta);
-            if (dist2 < NEWTON_EPS) return true;
+            if (dist2 < eps) return true;
             float D = Vector3f::dot(r.direction, normal);
             t -= Vector3f::dot(dmu, Vector3f::cross(dtheta, f)) / D;
             mu -= Vector3f::dot(r.direction, Vector3f::cross(dtheta, f)) / D;
             theta += Vector3f::dot(r.direction, Vector3f::cross(dmu, f)) / D;
+
         }
         return false;
     }

@@ -26,7 +26,7 @@ public:
     explicit Group (int num_objects, const char* accelerator) {
         this->objects.resize(num_objects, nullptr);
         this->group_size = num_objects;
-        this->accelerator = "seq";
+        this->accelerator = accelerator;
     }
 
     ~Group() override {
@@ -35,9 +35,15 @@ public:
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         bool flag = false;
         if (strcmp(accelerator, "bvh") == 0){
-            flag = BVHRoot->intersect(r, h, tmin);
+            for (auto obj: infinities){
+                if (obj->intersect(r, h, tmin)) flag = true;
+            }
+            flag |= BVHRoot->intersect(r, h, tmin);
         } else if (strcmp(accelerator, "kdtree") == 0) {
-            flag = KDTreeRoot->intersect(r, h, tmin);
+            for (auto obj: infinities){
+                if (obj->intersect(r, h, tmin)) flag = true;
+            }
+            flag |= KDTreeRoot->intersect(r, h, tmin);
         } else {
             for (auto obj: objects) {
                 if (obj->intersect(r, h, tmin))
@@ -68,10 +74,16 @@ public:
 
     void buildTree() {
         std::cout << "start building accelerator for group" << std::endl;
+        std::vector<Object3D*> finite;
+        for (auto obj: this->objects) {
+            if (obj->is_infinite) this->infinities.push_back(obj);
+            else finite.push_back(obj);
+        }
+        std::cout << "finite objects: " << finite.size() <<  ", infinite objects: " << infinities.size() << std::endl; 
         if (strcmp(accelerator, "bvh") == 0){
-            BVHRoot = new BVHNode(this->objects, 0, group_size);
+            BVHRoot = new BVHNode(finite, 0, finite.size());
         } else if (strcmp(accelerator, "kdtree") == 0) {
-            KDTreeRoot = new KDTreeNode(this->objects, 0, group_size, 0);
+            KDTreeRoot = new KDTreeNode(finite, 0, finite.size(), 0);
         }
         else {
             fprintf(stderr, "unsupported accelerator %s using default intersection method\n", accelerator);
@@ -94,6 +106,7 @@ public:
 
 private:
     std::vector<Object3D*> objects;
+    std::vector<Object3D*> infinities;
     int group_size;
     BVHNode* BVHRoot;
     KDTreeNode* KDTreeRoot;

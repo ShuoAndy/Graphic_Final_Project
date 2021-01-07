@@ -76,6 +76,7 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o
  ../include/kdtree.hpp
  ../include/light.hpp
  ../include/material.hpp
+ ../include/medium.hpp
  ../include/mesh.hpp
  ../include/object3d.hpp
  ../include/plane.hpp

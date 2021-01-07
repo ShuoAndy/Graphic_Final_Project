@@ -18,6 +18,7 @@
 #include "diffusematerial.hpp"
 #include "revsurface.hpp"
 #include "curve.hpp"
+#include "medium.hpp"
 
 #define DegreesToRadians(x) ((M_PI * x) / 180.0f)
 
@@ -338,6 +339,8 @@ Object3D *SceneParser::parseObject(char token[MAX_PARSER_TOKEN_LENGTH]) {
         answer = (Object3D *)parseBsplineCurve();
     } else if (!strcmp(token, "RevSurface")) {
         answer = (Object3D *)parseRevSurface();
+    } else if (!strcmp(token, "Medium")) {
+        answer = (Object3D *)parseMedium();
     } else {
         printf("Unknown token in parseObject: '%s'\n", token);
         exit(0);
@@ -656,6 +659,35 @@ RevSurface *SceneParser::parseRevSurface() {
     return answer;
 }
 
+Medium *SceneParser::parseMedium() {
+    char token[MAX_PARSER_TOKEN_LENGTH];
+    Object3D *object = nullptr;
+    Vector3f color(1,1,1);
+    float dense = 0;
+    getToken(token);
+    assert (!strcmp(token, "{"));
+    
+    getToken(token);
+
+    while (true) {
+        if (!strcmp(token, "Color")) {
+            color = readVector3f();
+        } else if (!strcmp(token, "Dense")) {
+            dense = readFloat();
+        } else {
+            // otherwise this must be an object,
+            // and there are no more transformations
+            object = parseObject(token);
+            break;
+        }
+        getToken(token);
+    }
+
+    assert(object != nullptr);
+    getToken(token);
+    assert (!strcmp(token, "}"));
+    return new Medium(object, dense, color);
+}
 // ====================================================================
 // ====================================================================
 

@@ -31,20 +31,13 @@ bool Mesh::getBox(Box &box) {
 
 void Mesh::buildTree() {
     std::cout << "start building tree for mesh " << std::endl;
-    for (int triId = 0; triId < (int) t.size(); ++triId) {
-        TriangleIndex& triIndex = t[triId];
-        Triangle* triangle_ptr = new Triangle(v[triIndex[0]],
-                          v[triIndex[1]], v[triIndex[2]], material);
-        triangle_ptr->normal = n[triId];
-        triangle_list.push_back(triangle_ptr);
-    }
     if (strcmp(accelerator, "bvh") == 0){
         std::cout << "start building BVH accelerator for mesh " << std::endl;
-        BVHRoot = new BVHNode(triangle_list, 0, t.size());
+        BVHRoot = new BVHNode(triangle_list, 0, triangle_list.size());
     }
     else if (strcmp(accelerator, "kdtree") == 0){
         std::cout << "start building KDTree accelerator for mesh " << std::endl;
-        KDTreeRoot = new KDTreeNode(triangle_list, 0, t.size(), 0);
+        KDTreeRoot = new KDTreeNode(triangle_list, 0, triangle_list.size(), 0);
     }
     else {
         fprintf(stderr, "unsupported accelerator %s, using default intersection method\n", accelerator);
@@ -61,11 +54,15 @@ Mesh::Mesh(const char *filename, Material *material, const char* accelerator) : 
         std::cout << "Cannot open " << filename << "\n";
         return;
     }
+    std::vector<TriangleIndex> vIdx, tIdx, nIdx;
+    std::vector<Vector3f> v, vn;
+    std::vector<Vector2f> vt;
     std::string line;
     std::string vTok("v");
     std::string fTok("f");
+    std::string vnTok("vn");
     std::string texTok("vt");
-    char bslash = '/', space = ' ';
+    std::string bslash("/"), space(" ");
     std::string tok;
     int texID;
     while (true) {
@@ -82,58 +79,74 @@ Mesh::Mesh(const char *filename, Material *material, const char* accelerator) : 
         std::stringstream ss(line);
         ss >> tok;
         if (tok == vTok) {
+
             Vector3f vec;
             ss >> vec[0] >> vec[1] >> vec[2];
             v.push_back(vec);
+
         } else if (tok == fTok) {
-            if (line.find(bslash) != std::string::npos) {
-                std::replace(line.begin(), line.end(), bslash, space);
-                std::stringstream facess(line);
-                TriangleIndex trig;
-                facess >> tok;
-                for (int ii = 0; ii < 3; ii++) {
-                    facess >> trig[ii] >> texID;
-                    trig[ii]--;
+
+            bool tFlag = 1, nFlag = 1;
+            TriangleIndex vId, tId, nId;
+            for (int i = 0; i < 3; ++i) {
+                std::string str;
+                ss >> str;
+
+                std::vector<std::string> id;
+                std::string::size_type pos;
+                std::vector<std::string> result;
+                str += bslash;
+                int size = str.size();
+
+                for (int i = 0; i < size; i++) {
+                    pos = str.find(bslash, i);
+                    if (pos < size) {
+                        std::string s = str.substr(i, pos - i);
+                        id.push_back(s);
+                        i = pos + bslash.size() - 1;
+                    }
                 }
-                t.push_back(trig);
-            } else {
-                TriangleIndex trig;
-                for (int ii = 0; ii < 3; ii++) {
-                    ss >> trig[ii];
-                    trig[ii]--;
+
+                vId[i] = atoi(id[0].c_str()) - 1;
+                if (id.size() > 1) {
+                    tId[i] = atoi(id[1].c_str()) - 1;
                 }
-                t.push_back(trig);
+                if (id.size() > 2) {
+                    nId[i] = atoi(id[2].c_str()) - 1;
+                }
             }
+            vIdx.push_back(vId);
+            tIdx.push_back(tId);
+            nIdx.push_back(nId);
+
         } else if (tok == texTok) {
+
             Vector2f texcoord;
             ss >> texcoord[0];
             ss >> texcoord[1];
-        }
-    }
-    computeNormal();
-    buildTree();
-    Box temp;
-    for (int triId = 0; triId < (int) t.size(); ++triId) {
-        TriangleIndex& triIndex = t[triId];
-        Triangle triangle(v[triIndex[0]],
-                          v[triIndex[1]], v[triIndex[2]], material);
-        triangle.getBox(temp);
-        if (triId == 0) {
-            box = temp;
-        } else {
-            box = mergeBox(box, temp);
+            vt.push_back(texcoord);
+
+        } else if (tok == vnTok) {
+
+            Vector3f vec;
+            ss >> vec[0] >> vec[1] >> vec[2];
+            vn.push_back(vec);
         }
     }
     f.close();
+    Box temp;
+    for (int triId = 0; triId < (int)vIdx.size(); ++triId) {
+        TriangleIndex &vIndex = vIdx[triId];
+        triangle_list.push_back((Object3D *)new Triangle(
+            v[vIndex[0]], v[vIndex[1]], v[vIndex[2]], material));
+        ((Triangle *)triangle_list.back())->getBox(temp);
+        triId == 0 ? (box = temp) : (box = mergeBox(box, temp));
+        TriangleIndex &tIndex = tIdx[triId];
+        if (tIndex.valid()) ((Triangle *)triangle_list.back())->setTexCoord(vt[tIndex[0]], vt[tIndex[1]], vt[tIndex[2]]);
+        TriangleIndex &nIndex = nIdx[triId];
+        if (nIndex.valid()) ((Triangle *)triangle_list.back())->setSmoothedNorm(vn[nIndex[0]], vn[nIndex[1]], vn[nIndex[2]]);
+    }
+    buildTree();
+
 }
 
-void Mesh::computeNormal() {
-    n.resize(t.size());
-    for (int triId = 0; triId < (int) t.size(); ++triId) {
-        TriangleIndex& triIndex = t[triId];
-        Vector3f a = v[triIndex[1]] - v[triIndex[0]];
-        Vector3f b = v[triIndex[2]] - v[triIndex[0]];
-        b = Vector3f::cross(a, b);
-        n[triId] = b / b.length();
-    }
-}

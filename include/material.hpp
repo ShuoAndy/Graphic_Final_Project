@@ -45,7 +45,7 @@ public:
     virtual char* name(){
         return "mat";
     }
-    virtual bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered)=0;
+    inline virtual bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered)=0;
 
     virtual Vector3f Emission() const {
         return specularColor;
@@ -65,7 +65,9 @@ public:
     Vector3f diffuseColor;
     Vector3f specularColor;
     Vector3f attenuation;
+    float fuzz;
     float shininess;
+    float refractive;
     Texture texture;
     BumpTexture bump;
     Vector3f generateRandomPoint(){

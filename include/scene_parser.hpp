@@ -20,6 +20,7 @@ class YZRectangle;
 class XZRectangle;
 class Curve;
 class RevSurface;
+class Medium;
 
 #define MAX_PARSER_TOKEN_LENGTH 1024
 
@@ -90,6 +91,7 @@ private:
     Curve *parseBezierCurve();
     Curve *parseBsplineCurve();
     RevSurface *parseRevSurface();
+    Medium *parseMedium();
 
     int getToken(char token[MAX_PARSER_TOKEN_LENGTH]);
 

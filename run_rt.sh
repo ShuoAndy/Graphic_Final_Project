@@ -2,7 +2,10 @@
 
 INTEGATOR=sppm
 ACCELERATOR=bvh
+STEP=10
 NUM_SAMPLE=5000
+NUM_PHOTON=1000000
+USEV2=1
 
 #rm -r ./build
 
@@ -30,7 +33,9 @@ mkdir -p output
 #time bin/PA1 testcases/smallpt.txt output/smallpt_sppm $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
 #mkdir -p output/smallpt_sppm_rec
 #time bin/PA1 testcases/small_pt_rec.txt output/smallpt_sppm_rec $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
-mkdir -p output/con_box_test_sppm
-time bin/PA1 testcases/con_box_test.txt output/con_box_test_sppm $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
+#mkdir -p output/sponza_sppm
+#time bin/PA1 sponza/s.txt output/sponza_sppm $ACCELERATOR $NUM_SAMPLE $INTEGATOR $STEP $NUM_PHOTON >> test.log
+mkdir -p output/con_box_test_sppm_v2
+time bin/PA1 testcases/con_box_test.txt output/con_box_test_sppm_v2 $ACCELERATOR $NUM_SAMPLE $INTEGATOR $USEV2 $STEP $NUM_PHOTON >> test.log
 #bin/PA1 testcases/test_bump.txt output/test_bump.bmp
 #time bin/PA1 testcases/small_rabit.txt output/small_rabit_bvh.bmp bvh 200 >> test.log

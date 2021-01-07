@@ -115,6 +115,8 @@ material.hpp
 ../include/material.hpp
 iostream
 -
+cstdio
+-
 
 ../include/group.hpp
 object3d.hpp
@@ -215,6 +217,14 @@ texture.h
 ../include/texture.h
 iostream
 -
+
+../include/medium.hpp
+object3d.hpp
+../include/object3d.hpp
+material.hpp
+../include/material.hpp
+ray.hpp
+../include/ray.hpp
 
 ../include/mesh.hpp
 vector
@@ -479,6 +489,8 @@ revsurface.hpp
 /home/yxc/graph/ComputerGraphics-THU-2020/src/revsurface.hpp
 curve.hpp
 /home/yxc/graph/ComputerGraphics-THU-2020/src/curve.hpp
+medium.hpp
+/home/yxc/graph/ComputerGraphics-THU-2020/src/medium.hpp
 
 /home/yxc/graph/ComputerGraphics-THU-2020/src/texture.cpp
 texture.h

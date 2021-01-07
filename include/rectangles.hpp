@@ -40,7 +40,6 @@ class XYRectangle: public Object3D {
 
         Ray generateRandomRay() override {
             float u = drand48(), v = drand48();
-            
             u = x0 + (x1 - x0) * u;
             v = y0 + (y1 - y0) * v;
 
@@ -48,7 +47,6 @@ class XYRectangle: public Object3D {
             do {
                 ret2 = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
             }   while(ret2.squaredLength() >= 1.0);
-
             return Ray(Vector3f(u, v, d), (ret2 + n*Vector3f(0, 0, 1)).normalized());
         }
     
@@ -88,7 +86,6 @@ class XZRectangle: public Object3D {
 
         Ray generateRandomRay() override {
             float u = drand48(), v = drand48();
-            
             u = x0 + (x1 - x0) * u;
             v = z0 + (z1 - z0) * v;
 
@@ -96,7 +93,6 @@ class XZRectangle: public Object3D {
             do {
                 ret2 = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
             }   while(ret2.squaredLength() >= 1.0);
-
             return Ray(Vector3f(u, d, v), (ret2 + n*Vector3f(0, 1, 0)).normalized());
         }
     

@@ -35,8 +35,9 @@ SET(PA1_INCLUDES
         include/texture.h
         include/bvh.hpp
         include/kdtree.hpp
-        include/constants.h 
-        include/bound.hpp
+        include/curve.hpp
+        include/revsurface.hpp
+        include/medium.hpp
         )
 
 SET(CMAKE_CXX_STANDARD 11)

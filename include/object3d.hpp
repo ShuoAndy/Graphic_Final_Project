@@ -15,6 +15,7 @@ public:
 
     explicit Object3D(Material *material) {
         this->material = material;
+        is_infinite = false;
     }
 
     virtual Material* getMaterial() {
@@ -27,6 +28,7 @@ public:
     virtual Ray generateRandomRay(){
         return Ray(Vector3f::ZERO, Vector3f::ZERO);
     }
+    bool is_infinite;
     
 protected:
 

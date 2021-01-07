@@ -87,7 +87,7 @@ public:
     float Radius;
     int PhotonCount;
 
-private:
+public:
     float t;
     float u, v;
     Material *material;

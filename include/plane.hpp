@@ -24,6 +24,7 @@ public:
             this->vdim = Vector3f::FORWARD;
         else this->vdim = Vector3f::UP;
         this->udim = Vector3f::cross(this->normal.normalized(), this->vdim).normalized();
+        is_infinite = true;
     }
 
     ~Plane() override = default;
