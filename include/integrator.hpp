@@ -231,7 +231,7 @@ class SPPMIntegrator: public Integrator {
                         fprintf(stderr, "tracing photon %d with thread %d round %d\n", x, omp_get_thread_num(), i);
                     for (int y = 0; y < light_sources.size(); y ++){
                         Ray r = light_sources[y]->generateRandomRay();
-                        if (use_v2) photonTracingV2(r, light_sources[y]->getMaterial()->Emission());
+                        if (use_v2) photonTracingV3(r, light_sources[y]->getMaterial()->Emission());
                         else photonTracing(r, light_sources[y]->getMaterial()->Emission());
                     }
                 }
@@ -420,6 +420,7 @@ class SPPMIntegrator: public Integrator {
             int depth = 0;
             Vector3f total_atten(radiance);
             total_atten = total_atten * Vector3f(255, 255, 255);
+            ray.direction.normalize();
             while(depth < depth_limit  && (total_atten.x() >= 1e-3 || total_atten.y() >= 1e-3 || total_atten.z() >= 1e-3)) {
                 depth ++;
                 Hit hit;
@@ -427,50 +428,40 @@ class SPPMIntegrator: public Integrator {
                 if (!baseGroup->intersect(ray, hit, 0.0001)){
                     return;
                 }
-
+                ray.origin += ray.direction * hit.t;
                 Material* mat = hit.getMaterial();
                 Vector3f normal = hit.normal;
-                Vector3f finalColor = mat->Emission();
                 Ray scattered(ray);
                 Vector3f attenuation;
                 bool scatter_success = true; 
                 if (!strcmp(mat->name(), "diff")) {
 
                     KDTreeRoot->Update(hit.getPoint(), total_atten, hit.isFrontFace());
-                    Vector3f target = normal + mat->generateRandomPoint();
-                    scattered = Ray(hit.point, target);
+                    ray.direction = normal + mat->generateRandomPoint();
                     attenuation = mat->getAttenuation(hit.u, hit.v);
 
                 } else if (!strcmp(mat->name(), "met")) {
 
                     Vector3f input = ray.getDirection().normalized();
                     Vector3f target = input - 2*Vector3f::dot(input, normal) * normal;
-                    scattered = Ray(ray.pointAtParameter(hit.t), target + mat->fuzz * mat->generateRandomPoint());
+                    ray.direction = ray.direction- 2*Vector3f::dot(ray.direction, normal) * normal + mat->fuzz * mat->generateRandomPoint();
                     attenuation = mat->getAttenuation(hit.u, hit.v);
 
                 } else if (!strcmp(mat->name(), "die")) {
 
                     attenuation = mat->getAttenuation(hit.u, hit.v);
-                    float refractive = mat->refractive;
+                    float index = mat->refractive;
                     Vector3f unit = ray.getDirection().normalized();
-                    Vector3f target = unit - 2*Vector3f::dot(unit, normal) * normal;
-                    float index, reflect_prob, cos = -1*Vector3f::dot(unit, normal);
+                    float reflect_prob, cos = -1*Vector3f::dot(unit, normal);
                     Vector3f refract_ray;
 
-                    if (!hit.is_front_face){
-                        index = refractive;
-                    } else {
-                        index = 1.0 / refractive;
-                    }
+                    if (hit.is_front_face)
+                        index = 1.0 / index;
 
                     bool can_refract = false;
                     float t = -1*Vector3f::dot(unit, normal);
                     float disc = 1.0 - index * index * (1 - t * t);
-
-                    if (disc > 0){
-                        refract_ray = index * (unit + t * normal) - normal * sqrt(disc);
-                        can_refract = true;
-                    }
+                    can_refract = (disc > 0);
 
                     if (can_refract){
                         float r = ((1 - index) / (1 + index)) * ((1 - index) / (1 + index));
@@ -480,15 +471,15 @@ class SPPMIntegrator: public Integrator {
                     }
 
                     if (drand48() < reflect_prob){
-                        scattered = Ray(ray.pointAtParameter(hit.t), target);
+                        ray.direction = unit - 2*Vector3f::dot(unit, normal) * normal;
                     } else {
-                        scattered = Ray(ray.pointAtParameter(hit.t), refract_ray);
+                        ray.direction = index * (unit + t * normal) - normal * sqrt(disc);;
                     }
 
                 } else if (!strcmp(mat->name(), "diffuse_light")) {
                     scatter_success = false;
                 } else if (!strcmp(mat->name(), "medium")) {
-                    scattered = Ray(hit.point, mat->generateRandomPoint());
+                    ray.direction = mat->generateRandomPoint();
                     attenuation = mat->attenuation;
                 }
 
@@ -497,7 +488,60 @@ class SPPMIntegrator: public Integrator {
                 }
                 if (!scatter_success) return;
 
-                ray = scattered;
+            }
+        }
+
+        void photonTracingV3(Ray& ray, const Vector3f& radiance, int depth_limit = 20){
+            Group* group = sceneParser->getGroup();
+            if (group == nullptr)
+                return;
+            int depth = 0;
+            Vector3f total_atten(radiance);
+            total_atten = total_atten * Vector3f(255, 255, 255);
+            ray.direction.normalize();
+            while(depth < depth_limit  && (total_atten.x() >= 1e-3 || total_atten.y() >= 1e-3 || total_atten.z() >= 1e-3)) {
+                depth ++;
+                Hit hit;
+                // Doesn't hit anything, stop tracing
+                if (!group->intersect(ray, hit, 0.0001)) return;
+                ray.origin += ray.direction * hit.t;
+                Material* material = hit.material;
+                Vector3f N(hit.normal);
+
+                if (!strcmp(material->name(), "diff")) {  // Diffuse
+                    KDTreeRoot->Update(hit.point, total_atten, hit.is_front_face);
+                    ray.direction = N + generateRandomPoint();
+                } else if (!strcmp(material->name(), "met")) {
+                    float cost = Vector3f::dot(ray.direction, N);
+                    ray.direction = (ray.direction - N * (cost * 2)).normalized();
+                } else if (!strcmp(material->name(), "die")){
+                    float n = material->refractive;
+                    float R0 = ((1.0 - n) * (1.0 - n)) / ((1.0 + n) * (1.0 + n));
+                    if (Vector3f::dot(N, ray.direction) > 0) {  // inside the medium
+                        N.negate();
+                        n = 1 / n;
+                    }
+                    n = 1 / n;
+                    float cost1 =
+                        -Vector3f::dot(N, ray.direction);  // cosine theta_1
+                    float cost2 =
+                        1.0 - n * n * (1.0 - cost1 * cost1);  // cosine theta_2
+                    float Rprob =
+                        R0 + (1.0 - R0) * pow(1.0 - cost1,
+                                            5.0);   // Schlick-approximation
+                    if (cost2 > 0 && drand48() > Rprob) {  // refraction direction
+                        ray.direction =
+                            ((ray.direction * n) + (N * (n * cost1 - sqrt(cost2))))
+                                .normalized();
+                    } else {  // reflection direction
+                        ray.direction =
+                            (ray.direction + N * (cost1 * 2)).normalized();
+                    }
+                } else {
+                    return;
+                }
+                total_atten = total_atten * material->getAttenuation(hit.u, hit.v);
+
             }
         }
 
@@ -517,6 +561,13 @@ class SPPMIntegrator: public Integrator {
                 if (node->right_node) clearTree(node->right_node);
                 delete node;
             }
+        }
+        Vector3f generateRandomPoint(){
+            Vector3f ret;
+            do {
+                ret = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
+            }   while(ret.squaredLength() >= 1.0);
+            return ret;
         }
 
         void saveImage(const char* filename, int rounds, int photons) {

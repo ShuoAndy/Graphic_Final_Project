@@ -6,8 +6,8 @@ PerspectiveCamera {
     angle 30
     lens_radius 0
     focus_distance 1
-    width 1000
-    height 800
+    width 1024
+    height 728
 }
 
 Lights {

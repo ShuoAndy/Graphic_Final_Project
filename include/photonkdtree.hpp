@@ -58,7 +58,9 @@ class PhotonKDTreeNode {
         }
 
         void Update(const Vector3f& photon, const Vector3f& attenuation, bool front) {
+            
             if (getRadius(photon) > max_radius) return;
+
             if ((hit->getPoint() - photon).squaredLength() <= hit->Radius && hit->isFrontFace() == front) {
                 float disc = (hit->PhotonCount * DiscountCoef + DiscountCoef) / (hit->PhotonCount * DiscountCoef + 1.f);
                 hit->PhotonCount ++;
@@ -71,6 +73,7 @@ class PhotonKDTreeNode {
             max_radius = hit->Radius;
             if (left_node) max_radius = max(left_node->max_radius, max_radius);
             if (right_node) max_radius = max(right_node->max_radius, max_radius);
+            
         }
 
         // Compare two hits from three dimensions

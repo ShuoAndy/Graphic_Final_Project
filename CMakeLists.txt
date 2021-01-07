@@ -35,6 +35,7 @@ SET(PA1_INCLUDES
         include/texture.h
         include/bvh.hpp
         include/kdtree.hpp
+        include/photonkdtree.hpp
         include/curve.hpp
         include/revsurface.hpp
         include/medium.hpp

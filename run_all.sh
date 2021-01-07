@@ -3,8 +3,8 @@
 #rm -r ./build
 INTEGATOR=pt
 ACCELERATOR=bvh
-NUM_SAMPLE=500
-USEV2=1
+NUM_SAMPLE=20
+USEV2=0
 
 # If project not ready, generate cmake file.
 if [[ ! -d build ]]; then
@@ -30,7 +30,7 @@ mkdir -p output
 #bin/PA1 testcases/scene06_bunny_1k.txt output/scene06.bmp
 #bin/PA1 testcases/scene07_shine.txt output/scene07.bmp
 #bin/PA1 testcases/random_scene.txt output/random_scene.bmp
-#time bin/PA1 testcases/con_box_test.txt output/con_box_bvh_test.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
+time bin/PA1 testcases/con_box_test.txt output/con_box_bvh_test.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR $USEV2 >> test.log
 #time bin/PA1 testcases/test_curve.txt output/curve_pt.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
 #time bin/PA1 testcases/con_box.txt output/con_box_kdtree.bmp kdtree 20 >> test.log
 #time bin/PA1 testcases/con_box.txt output/con_box_seq.bmp seq 20 >> test.log
@@ -39,4 +39,4 @@ mkdir -p output
 #bin/PA1 testcases/test_bump.txt output/test_bump.bmp
 #time bin/PA1 testcases/small_rabit.txt output/small_rabit_bvh.bmp bvh 200 >> test.log
 #time bin/PA1 sponza/s.txt output/sponza_pt.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
-time bin/PA1 testcases/small_fog.txt output/small_fog.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR $USEV2 >> test.log
+#time bin/PA1 testcases/small_fog.txt output/small_fog.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR $USEV2 >> test.log
