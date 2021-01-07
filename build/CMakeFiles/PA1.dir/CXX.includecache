@@ -88,6 +88,20 @@ cmath
 iostream
 -
 
+../include/curve.hpp
+object3d.hpp
+../include/object3d.hpp
+vecmath.h
+-
+vector
+-
+utility
+-
+algorithm
+-
+iostream
+-
+
 ../include/diffusematerial.hpp
 cassert
 -
@@ -276,6 +290,18 @@ vecmath.h
 cmath
 -
 
+../include/revsurface.hpp
+tuple
+-
+box.hpp
+../include/box.hpp
+curve.hpp
+../include/curve.hpp
+object3d.hpp
+../include/object3d.hpp
+triangle.hpp
+../include/triangle.hpp
+
 ../include/scene_parser.hpp
 cassert
 -
@@ -449,6 +475,10 @@ rectangles.hpp
 /home/yxc/graph/ComputerGraphics-THU-2020/src/rectangles.hpp
 diffusematerial.hpp
 /home/yxc/graph/ComputerGraphics-THU-2020/src/diffusematerial.hpp
+revsurface.hpp
+/home/yxc/graph/ComputerGraphics-THU-2020/src/revsurface.hpp
+curve.hpp
+/home/yxc/graph/ComputerGraphics-THU-2020/src/curve.hpp
 
 /home/yxc/graph/ComputerGraphics-THU-2020/src/texture.cpp
 texture.h

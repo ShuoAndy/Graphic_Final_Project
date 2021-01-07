@@ -81,7 +81,7 @@ public:
     std::vector<Object3D*> getLightSources() {
         std::vector<Object3D*> light_sources;
         for (auto obj: objects){
-            if (strcmp(obj->getMaterial()->name(), "diffuse_light") == 0){
+            if (obj->getMaterial()->Emission() != Vector3f::ZERO){
                 light_sources.push_back(obj);
             }
         }

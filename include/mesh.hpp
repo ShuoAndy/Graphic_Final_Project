@@ -39,6 +39,7 @@ private:
     KDTreeNode* KDTreeRoot;
     std::vector<Object3D*> triangle_list;
     const char* accelerator;
+    Box box;
 };
 
 #endif

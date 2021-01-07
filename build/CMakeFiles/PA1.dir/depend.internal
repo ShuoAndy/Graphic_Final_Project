@@ -69,6 +69,7 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o
  ../include/box.hpp
  ../include/bvh.hpp
  ../include/camera.hpp
+ ../include/curve.hpp
  ../include/diffusematerial.hpp
  ../include/group.hpp
  ../include/hit.hpp
@@ -80,6 +81,7 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o
  ../include/plane.hpp
  ../include/ray.hpp
  ../include/rectangles.hpp
+ ../include/revsurface.hpp
  ../include/scene_parser.hpp
  ../include/sphere.hpp
  ../include/texture.h

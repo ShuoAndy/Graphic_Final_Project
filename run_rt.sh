@@ -28,9 +28,9 @@ mkdir -p output
 #time bin/PA1 testcases/con_box.txt output/con_box_seq.bmp seq 20 >> test.log
 #bin/PA1 testcases/texture.txt output/texture.bmp
 #time bin/PA1 testcases/smallpt.txt output/smallpt_sppm $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
-mkdir -p output/smallpt_sppm_rec
-time bin/PA1 testcases/small_pt_rec.txt output/smallpt_sppm_rec $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
-#mkdir -p output/con_box_test_sppm
-#time bin/PA1 testcases/con_box_test.txt output/con_box_test_sppm $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
+#mkdir -p output/smallpt_sppm_rec
+#time bin/PA1 testcases/small_pt_rec.txt output/smallpt_sppm_rec $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
+mkdir -p output/con_box_test_sppm
+time bin/PA1 testcases/con_box_test.txt output/con_box_test_sppm $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
 #bin/PA1 testcases/test_bump.txt output/test_bump.bmp
 #time bin/PA1 testcases/small_rabit.txt output/small_rabit_bvh.bmp bvh 200 >> test.log

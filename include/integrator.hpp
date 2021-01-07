@@ -112,11 +112,11 @@ class SPPMIntegrator: public Integrator {
             printf("started rendering \n");
             omp_set_num_threads(25);
             for (int i = 0; i < num_round; i ++){
-                printf("sppm round %d \n", i);
+                fprintf(stderr, "sppm round %d / %d \n", i, num_round);
 #pragma omp parallel for schedule(dynamic, 1)
                 for (int x = 0; x < width; x ++){
                     if (x % 100 == 0)
-                        fprintf(stderr, "tracing row %d for visible points with thread %d round %d\n", x, omp_get_thread_num(), i);
+                        printf("tracing row %d for visible points with thread %d round %d\n", x, omp_get_thread_num(), i);
                     for (int y = 0; y < height; y ++){
                         float u = float(x + drand48());
                         float v = float(y + drand48());
@@ -131,7 +131,7 @@ class SPPMIntegrator: public Integrator {
 #pragma omp parallel for schedule(dynamic, 1)
                 for (int x = 0; x < avg_photons; x ++){
                     if (x % 100000 == 0)
-                        fprintf(stderr, "tracing photon %d with thread %d round %d\n", x, omp_get_thread_num(), i);
+                        printf("tracing photon %d with thread %d round %d\n", x, omp_get_thread_num(), i);
                     for (int y = 0; y < light_sources.size(); y ++){
                         Ray r = light_sources[y]->generateRandomRay();
                         photonTracing(r, light_sources[y]->getMaterial()->Emission());
@@ -230,13 +230,13 @@ class SPPMIntegrator: public Integrator {
         }
 
         void buildTree(){
-            fprintf(stderr, "building KDTree for SPPM \n");
+            printf("building KDTree for SPPM \n");
             if (KDTreeRoot != nullptr)
                 clearTree(KDTreeRoot);
             vector<Hit*> hit_list(visible_points);
-            fprintf(stderr, "total visible points %d \n", hit_list.size());
+            printf("total visible points %d \n", hit_list.size());
             KDTreeRoot = new PhotonKDTreeNode(hit_list, 0, hit_list.size() - 1, 0);
-            fprintf(stderr, "building finished \n");
+            printf("building finished \n");
         }
 
         void clearTree(PhotonKDTreeNode* node) {
@@ -254,7 +254,7 @@ class SPPMIntegrator: public Integrator {
             for (int u = 0; u < width; ++u)
                 for (int v = 0; v < height; ++v) {
                     Hit* hit = visible_points[u * height + v];
-                    image.SetPixel(u, v, hit->PhotonFlux / (M_PI * hit->Radius * (hit->PhotonCount + 1)) + hit->LightFlux / rounds);
+                    image.SetPixel(u, v, hit->PhotonFlux / (M_PI * hit->Radius * num_photon * rounds) + hit->LightFlux / rounds);
                 }
             char abs_path[1024];
             strcpy(abs_path, ckpt_dir);

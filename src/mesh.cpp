@@ -25,18 +25,7 @@ bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
 }
 
 bool Mesh::getBox(Box &box) {
-    Box temp;
-    for (int triId = 0; triId < (int) t.size(); ++triId) {
-        TriangleIndex& triIndex = t[triId];
-        Triangle triangle(v[triIndex[0]],
-                          v[triIndex[1]], v[triIndex[2]], material);
-        if (!triangle.getBox(temp)) return false;
-        if (triId == 0) {
-            box = temp;
-        } else {
-            box = mergeBox(box, temp);
-        }
-    }
+    box = this->box;
     return true;
 }
 
@@ -123,6 +112,18 @@ Mesh::Mesh(const char *filename, Material *material, const char* accelerator) : 
     }
     computeNormal();
     buildTree();
+    Box temp;
+    for (int triId = 0; triId < (int) t.size(); ++triId) {
+        TriangleIndex& triIndex = t[triId];
+        Triangle triangle(v[triIndex[0]],
+                          v[triIndex[1]], v[triIndex[2]], material);
+        triangle.getBox(temp);
+        if (triId == 0) {
+            box = temp;
+        } else {
+            box = mergeBox(box, temp);
+        }
+    }
     f.close();
 }
 

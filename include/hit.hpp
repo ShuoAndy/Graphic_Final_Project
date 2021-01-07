@@ -15,7 +15,7 @@ public:
         t = 1e38;
         PhotonFlux = LightFlux = Vector3f::ZERO;
         Attenuation = Vector3f(1.0);
-        Radius = 0.01;
+        Radius = 0.0005;
         PhotonCount = 0;
     }
 
@@ -25,7 +25,7 @@ public:
         normal = n;
         PhotonFlux = LightFlux = Vector3f::ZERO;
         Attenuation = Vector3f(1.0);
-        Radius = 0.0001;
+        Radius = 0.0005;
         PhotonCount = 0;
     }
 

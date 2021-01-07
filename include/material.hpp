@@ -46,14 +46,22 @@ public:
         return "mat";
     }
     virtual bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered)=0;
+
     virtual Vector3f Emission() const {
-        return Vector3f::ZERO;
+        return specularColor;
     }
+    
+    virtual float getRefractive() {
+        return 0.0;
+    }
+
+    virtual Vector3f getAttenuation(float u, float v) {
+        return this->attenuation;
+    }
+
     BumpTexture* getBump() {
         return &bump;
     }
-
-protected:
     Vector3f diffuseColor;
     Vector3f specularColor;
     Vector3f attenuation;
@@ -67,6 +75,7 @@ protected:
         }   while(ret.squaredLength() >= 1.0);
         return ret;
     }
+
 };
 
 

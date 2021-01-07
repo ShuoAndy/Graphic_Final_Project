@@ -25,6 +25,9 @@ public:
             this->vdim = Vector3f::FORWARD;
         else this->vdim = Vector3f::UP;
         this->udim = Vector3f::cross(this->normal.normalized(), this->vdim);
+		Vector3f min_point(fmin(vertices[0].x(), fmin(vertices[1].x(), vertices[2].x())), fmin(vertices[0].y(), fmin(vertices[1].y(), vertices[2].y())), fmin(vertices[0].z(), fmin(vertices[1].z(), vertices[2].z())));
+		Vector3f max_point(fmax(vertices[0].x(), fmax(vertices[1].x(), vertices[2].x())), fmax(vertices[0].y(), fmax(vertices[1].y(), vertices[2].y())), fmax(vertices[0].z(), fmax(vertices[1].z(), vertices[2].z())));
+		box = Box(min_point, max_point);
 	}
 
 	bool intersect( const Ray& ray,  Hit& hit , float tmin) override {
@@ -56,16 +59,14 @@ public:
 	}
 	
 	bool getBox(Box& box){
-		Vector3f min_point(fmin(vertices[0].x(), fmin(vertices[1].x(), vertices[2].x())), fmin(vertices[0].y(), fmin(vertices[1].y(), vertices[2].y())), fmin(vertices[0].z(), fmin(vertices[1].z(), vertices[2].z())));
-		Vector3f max_point(fmax(vertices[0].x(), fmax(vertices[1].x(), vertices[2].x())), fmax(vertices[0].y(), fmax(vertices[1].y(), vertices[2].y())), fmax(vertices[0].z(), fmax(vertices[1].z(), vertices[2].z())));
-		Box temp(min_point, max_point);
-		box = temp;
+		box = this->box;
 		return true;
 	}
 
 	Vector3f normal;
 	Vector3f vertices[3];
 	Vector3f vdim, udim;
+	Box box;
 protected:
 	float d;
 	Vector3f smoothedNorm(const Vector3f &hit_point) {

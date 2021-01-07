@@ -26,8 +26,8 @@ class DiffuseMaterial: public Material{
     public:
         DiffuseMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = ""):Material(d_color, s_color, atten, s, texture_name, bump_name){}
         bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
-            Vector3f target = ray.pointAtParameter(hit.getT()) + hit.getNormal() + generateRandomPoint();
-            scattered = Ray(ray.pointAtParameter(hit.getT()), target - ray.pointAtParameter(hit.getT()));
+            Vector3f target = hit.getNormal() + generateRandomPoint();
+            scattered = Ray(ray.pointAtParameter(hit.getT()), target);
             attenuation = getAttenuation(hit.getU(), hit.getV());
             return true;
         }
@@ -94,6 +94,10 @@ class DielecMaterial: public Material{
 
         char* name(){
             return "die";
+        }
+
+        virtual float getRefractive() override {
+            return refractive;
         }
 
     private:
