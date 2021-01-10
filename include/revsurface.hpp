@@ -46,15 +46,14 @@ class RevSurface : public Object3D {
         return true;
     }
 
-    bool NG(const Ray &r, float &t, float &theta, float &mu,
-                Vector3f &normal) {
+    bool NG(const Ray &r, float &t, float &theta, float &mu, Vector3f &normal) {
         Vector3f dmu, dtheta;
+        
         for (int i = 0; i < steps; ++i) {
 
-            if (theta < 0.0) theta += 2 * M_PI;
-            if (theta >= 2 * M_PI) theta = fmod(theta, 2 * M_PI);
-            if (mu >= pCurve->mu_max) mu = pCurve->mu_max - FLT_EPSILON;
-            if (mu <= pCurve->mu_min) mu = pCurve->mu_min + FLT_EPSILON;
+            theta = ClampTheta(theta);
+            mu = ClampMu(mu);
+
             Vector3f point;
             Quat4f rot;
             rot.setAxisAngle(theta, Vector3f::UP);
@@ -73,7 +72,20 @@ class RevSurface : public Object3D {
             theta += Vector3f::dot(r.direction, Vector3f::cross(dmu, f)) / D;
 
         }
+
         return false;
+    }
+
+    float ClampTheta(float theta) {
+        if (theta < 0.0) theta += 2 * M_PI;
+        if (theta >= 2 * M_PI) theta = fmod(theta, 2 * M_PI);
+        return theta;
+    }
+
+    float ClampMu(float mu) {
+        if (mu >= pCurve->mu_max) mu = pCurve->mu_max - FLT_EPSILON;
+        if (mu <= pCurve->mu_min) mu = pCurve->mu_min + FLT_EPSILON;
+        return mu;
     }
 
 
