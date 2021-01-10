@@ -21,7 +21,7 @@ public:
 
     Transform(const Matrix4f &m, Object3D *obj) : o(obj) {
         transform = m.inverse();
-        is_infinite = obj->is_infinite;
+        is_infinite = true;
     }
 
     ~Transform() {

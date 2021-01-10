@@ -26,8 +26,8 @@ class XYRectangle: public Object3D {
             auto y = r.getOrigin().y() + t*r.getDirection().y();
             if (x < x0 || x > x1 || y < y0 || y > y1)
                 return false;
-            
-            h.set(t, (x-x0)/(x1-x0), (y-y0)/(y1-y0), getMaterial(), Vector3f(0, 0, 1), r);
+
+            h.set(t, (x-x0)/(x1-x0), (y-y0)/(y1-y0), getMaterial(), getNorm((x-x0)/(x1-x0), (y-y0)/(y1-y0)), r);
 
             return true;
 
@@ -48,6 +48,15 @@ class XYRectangle: public Object3D {
                 ret2 = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
             }   while(ret2.squaredLength() >= 1.0);
             return Ray(Vector3f(u, v, d), (ret2 + n*Vector3f(0, 0, 1)).normalized());
+        }
+
+        Vector3f getNorm(float u, float v) {
+            if (!material->getBump()->hasBump()) {
+                return n*Vector3f(0, 0, 1);
+            }
+            float value = 0;
+            Vector2f grad = material->getBump()->GradAt(u, v, value);
+            return Vector3f::cross(Vector3f(1.f,0.f,0.f) + grad[0] * n * Vector3f(0, 0, 1), Vector3f(0,1,0) + grad[1] * n * Vector3f(0, 0, 1)).normalized();
         }
     
     private:
@@ -74,7 +83,7 @@ class XZRectangle: public Object3D {
             if (x < x0 || x > x1 || z < z0 || z > z1)
                 return false;
             
-            h.set(t, (x-x0)/(x1-x0), (z-z0)/(z1-z0), getMaterial(), n*Vector3f(0, 1, 0), r);
+            h.set(t, (z-z0)/(z1-z0), (x-x0)/(x1-x0), getMaterial(), getNorm((z-z0)/(z1-z0), (x-x0)/(x1-x0)), r);
 
             return true;
         }
@@ -94,6 +103,15 @@ class XZRectangle: public Object3D {
                 ret2 = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
             }   while(ret2.squaredLength() >= 1.0);
             return Ray(Vector3f(u, d, v), (ret2 + n*Vector3f(0, 1, 0)).normalized());
+        }
+
+        Vector3f getNorm(float u, float v) {
+            if (!material->getBump()->hasBump()) {
+                return n*Vector3f(0, 1, 0);
+            }
+            float value = 0;
+            Vector2f grad = material->getBump()->GradAt(u, v, value);
+            return n * Vector3f::cross(Vector3f(0,0,1) + grad[0] * n * Vector3f(0, 1, 0), Vector3f(1,0,0) + grad[1] * n * Vector3f(0, 1, 0)).normalized();
         }
     
     private:
@@ -142,6 +160,15 @@ class YZRectangle: public Object3D {
             }   while(ret2.squaredLength() >= 1.0);
 
             return Ray(Vector3f(u, v, d), (ret2 + n*Vector3f(1, 0, 0)).normalized());
+        }
+
+        Vector3f getNorm(float u, float v) {
+            if (!material->getBump()->hasBump()) {
+                return n*Vector3f(1, 0, 0);
+            }
+            float value = 0;
+            Vector2f grad = material->getBump()->GradAt(u, v, value);
+            return n * Vector3f::cross(Vector3f(0,1,0) + grad[0] * n * Vector3f(1, 0, 0), Vector3f(0,0,1) + grad[1] * n * Vector3f(1, 0, 0)).normalized();
         }
     
     private:

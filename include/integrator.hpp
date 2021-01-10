@@ -67,7 +67,7 @@ public:
 private:
     int num_sample;
     bool use_v2;
-    Vector3f get_color(float x, float y, Camera* camera, int depth_limit=20){
+    Vector3f get_color(float x, float y, Camera* camera, int depth_limit=50){
         Ray camRay = camera->generateRay(Vector2f(x, y));
         if (use_v2) {
             return pathTracingV2(camRay, camera, 0, depth_limit);
@@ -213,7 +213,7 @@ class SPPMIntegrator: public Integrator {
 #pragma omp parallel for schedule(dynamic, 1)
                 for (int x = 0; x < width; x ++){
                     if (x % 100 == 0)
-                        fprintf(stderr, "tracing row %d for visible points with thread %d round %d\n", x, omp_get_thread_num(), i);
+                        printf("tracing row %d for visible points with thread %d round %d\n", x, omp_get_thread_num(), i);
                     for (int y = 0; y < height; y ++){
                         float u = float(x + drand48());
                         float v = float(y + drand48());
@@ -228,10 +228,10 @@ class SPPMIntegrator: public Integrator {
 #pragma omp parallel for schedule(dynamic, 1)
                 for (int x = 0; x < avg_photons; x ++){
                     if (x % 100000 == 0)
-                        fprintf(stderr, "tracing photon %d with thread %d round %d\n", x, omp_get_thread_num(), i);
+                        printf("tracing photon %d with thread %d round %d\n", x, omp_get_thread_num(), i);
                     for (int y = 0; y < light_sources.size(); y ++){
                         Ray r = light_sources[y]->generateRandomRay();
-                        if (use_v2) photonTracingV3(r, light_sources[y]->getMaterial()->Emission());
+                        if (use_v2) photonTracingV2(r, light_sources[y]->getMaterial()->Emission());
                         else photonTracing(r, light_sources[y]->getMaterial()->Emission());
                     }
                 }
@@ -239,7 +239,7 @@ class SPPMIntegrator: public Integrator {
                 if ((i + 1) % steps_to_save == 0) {
                     fprintf(stderr, "save checkpoints ...\n");
                     char file[1024];
-                    sprintf(file, "ckpt-%d.bmp", i + 1);
+                    sprintf(file, "checkpoint-%d.bmp", i + 1);
                     saveImage(file, i + 1, num_photon);
                 }                
 
@@ -271,7 +271,7 @@ class SPPMIntegrator: public Integrator {
                 hit->setT(1e38);
 
                 // Doesn't hit anything, stop tracing
-                if (!baseGroup->intersect(ray, *hit, 0.0001)){
+                if (!baseGroup->intersect(ray, *hit, 0.0000001)){
                     hit->LightFlux += hit->Attenuation * sceneParser->getBackgroundColor(ray);
                     return;
                 }
@@ -393,7 +393,7 @@ class SPPMIntegrator: public Integrator {
                 depth ++;
                 Hit hit;
                 // Doesn't hit anything, stop tracing
-                if (!baseGroup->intersect(ray, hit, 0.0001)){
+                if (!baseGroup->intersect(ray, hit, 0.0000001)){
                     return;
                 }
                 Ray scattered(ray);
@@ -425,7 +425,7 @@ class SPPMIntegrator: public Integrator {
                 depth ++;
                 Hit hit;
                 // Doesn't hit anything, stop tracing
-                if (!baseGroup->intersect(ray, hit, 0.0001)){
+                if (!baseGroup->intersect(ray, hit, 0.0000001)){
                     return;
                 }
                 ray.origin += ray.direction * hit.t;
@@ -487,60 +487,6 @@ class SPPMIntegrator: public Integrator {
                     total_atten = total_atten * attenuation;
                 }
                 if (!scatter_success) return;
-
-            }
-        }
-
-        void photonTracingV3(Ray& ray, const Vector3f& radiance, int depth_limit = 20){
-            Group* group = sceneParser->getGroup();
-            if (group == nullptr)
-                return;
-            int depth = 0;
-            Vector3f total_atten(radiance);
-            total_atten = total_atten * Vector3f(255, 255, 255);
-            ray.direction.normalize();
-            while(depth < depth_limit  && (total_atten.x() >= 1e-3 || total_atten.y() >= 1e-3 || total_atten.z() >= 1e-3)) {
-                depth ++;
-                Hit hit;
-                // Doesn't hit anything, stop tracing
-                if (!group->intersect(ray, hit, 0.0001)) return;
-                ray.origin += ray.direction * hit.t;
-                Material* material = hit.material;
-                Vector3f N(hit.normal);
-
-                if (!strcmp(material->name(), "diff")) {  // Diffuse
-                    KDTreeRoot->Update(hit.point, total_atten, hit.is_front_face);
-                    ray.direction = N + generateRandomPoint();
-                } else if (!strcmp(material->name(), "met")) {
-                    float cost = Vector3f::dot(ray.direction, N);
-                    ray.direction = (ray.direction - N * (cost * 2)).normalized();
-                } else if (!strcmp(material->name(), "die")){
-                    float n = material->refractive;
-                    float R0 = ((1.0 - n) * (1.0 - n)) / ((1.0 + n) * (1.0 + n));
-                    if (Vector3f::dot(N, ray.direction) > 0) {  // inside the medium
-                        N.negate();
-                        n = 1 / n;
-                    }
-                    n = 1 / n;
-                    float cost1 =
-                        -Vector3f::dot(N, ray.direction);  // cosine theta_1
-                    float cost2 =
-                        1.0 - n * n * (1.0 - cost1 * cost1);  // cosine theta_2
-                    float Rprob =
-                        R0 + (1.0 - R0) * pow(1.0 - cost1,
-                                            5.0);   // Schlick-approximation
-                    if (cost2 > 0 && drand48() > Rprob) {  // refraction direction
-                        ray.direction =
-                            ((ray.direction * n) + (N * (n * cost1 - sqrt(cost2))))
-                                .normalized();
-                    } else {  // reflection direction
-                        ray.direction =
-                            (ray.direction + N * (cost1 * 2)).normalized();
-                    }
-                } else {
-                    return;
-                }
-                total_atten = total_atten * material->getAttenuation(hit.u, hit.v);
 
             }
         }

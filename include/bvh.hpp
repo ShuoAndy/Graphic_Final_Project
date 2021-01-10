@@ -44,7 +44,7 @@ class BVHNode: public Object3D {
         }
 
         virtual bool intersect(const Ray &r, Hit &h, float tmin) override {
-            if (!box.intersect(r, -0x3f3f3f3f, 0x3f3f3f3f)){
+            if (!box.intersect(r, -0x3f3f3f3f, 0x3f3f3f3f, tmin)){
                 return false;
             }
             bool h_left = left_node->intersect(r, h, tmin);

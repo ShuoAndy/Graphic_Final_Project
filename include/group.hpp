@@ -83,11 +83,9 @@ public:
         if (strcmp(accelerator, "bvh") == 0){
             BVHRoot = new BVHNode(finite, 0, finite.size());
         } else if (strcmp(accelerator, "kdtree") == 0) {
-            KDTreeRoot = new KDTreeNode(finite, 0, finite.size(), 0);
+            KDTreeRoot = new KDTreeNode(finite, 0, finite.size() - 1, 0);
         }
-        else {
-            fprintf(stderr, "unsupported accelerator %s using default intersection method\n", accelerator);
-        }
+
     }
 
     std::vector<Object3D*> getLightSources() {

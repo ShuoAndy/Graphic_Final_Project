@@ -1,7 +1,5 @@
 #ifndef REVSURFACE_HPP
 #define REVSURFACE_HPP
-// 参数曲面
-#include <tuple>
 
 #include "box.hpp"
 #include "curve.hpp"
@@ -40,7 +38,8 @@ class RevSurface : public Object3D {
         if (!NG(r, t, theta, mu, normal)) {
             return false;
         }
-        if (!isnormal(mu) || !isnormal(theta) || !isnormal(t)) return false;
+        if (isnan(mu) || isnan(theta) || isnan(t)) return false;
+        if (isinf(mu) || isinf(theta) || isinf(t)) return false;
         if (t < tmin || mu < pCurve->mu_min || mu > pCurve->mu_max || t > h.getT()) return false;
 
         h.set(t, theta / (2 * M_PI), mu, material, normal.normalized(), r);
@@ -54,8 +53,8 @@ class RevSurface : public Object3D {
 
             if (theta < 0.0) theta += 2 * M_PI;
             if (theta >= 2 * M_PI) theta = fmod(theta, 2 * M_PI);
-            if (mu >= 1) mu = 1.0 - FLT_EPSILON;
-            if (mu <= 0) mu = FLT_EPSILON;
+            if (mu >= pCurve->mu_max) mu = pCurve->mu_max - FLT_EPSILON;
+            if (mu <= pCurve->mu_min) mu = pCurve->mu_min + FLT_EPSILON;
             Vector3f point;
             Quat4f rot;
             rot.setAxisAngle(theta, Vector3f::UP);

@@ -55,7 +55,13 @@ hit.hpp
 ../include/hit.hpp
 material.hpp
 ../include/material.hpp
+object3d.hpp
+../include/object3d.hpp
 Vector3f.h
+-
+cmath
+-
+vector
 -
 
 ../include/bvh.hpp
@@ -225,6 +231,8 @@ material.hpp
 ../include/material.hpp
 ray.hpp
 ../include/ray.hpp
+cstdio
+-
 
 ../include/mesh.hpp
 vector
@@ -301,8 +309,6 @@ cmath
 -
 
 ../include/revsurface.hpp
-tuple
--
 box.hpp
 ../include/box.hpp
 curve.hpp

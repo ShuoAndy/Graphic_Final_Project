@@ -6,8 +6,8 @@ PerspectiveCamera {
     angle 30
     lens_radius 0.2
     focus_distance 131.4
-    width 500
-    height 400
+    width 1024
+    height 728
 }
 
 Lights {
@@ -18,7 +18,7 @@ Lights {
     }
     PointLight {
       position 50 60 70
-      color 12 12 12
+      color 200 200 200
     }
 }
 
@@ -85,19 +85,27 @@ Group {
         offset -81.6
     }
     MaterialIndex 4
+    Medium {
+    Dense 0.05
+    Color 0.25 0.25 0.75
     Sphere {
     center 27 16.5 47
         radius 16.5
     }
+    }
     MaterialIndex 5
+    Medium {
+    Dense 0.05
+    Color 0.75 0.25 0.25
     Sphere {
     center 73 16.5 78
         radius 16.5
     }
+    }
     MaterialIndex 6
-    Sphere {
-    center 50 681.10 80.6 
-        radius 600
+    XZRectangle {
+        points 27 60 73 80
+        offset 81.0
+        normal -1
     }
 }
-

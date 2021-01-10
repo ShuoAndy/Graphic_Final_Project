@@ -4,7 +4,12 @@
 #include "ray.hpp"
 #include "hit.hpp"
 #include "material.hpp"
+#include "object3d.hpp"
 #include <Vector3f.h>
+#include <cmath>
+#include <vector>
+
+using namespace std;
 
 class Box {
     public:
@@ -14,8 +19,10 @@ class Box {
             max_point = b;
         }
 
-        bool intersect(const Ray& r, float t_min, float t_max) {
+        bool intersect(const Ray& r, float t_min, float t_max, float tmin = -0x3f3f3f3f) {
             float inv = 1.0f / r.getDirection().x();
+            float eps = 1e-3;
+            if (isinf(inv)) return true;
             float t0 = (min_point.x() - r.getOrigin().x()) * inv;
             float t1 = (max_point.x() - r.getOrigin().x()) * inv;
             if (inv < 0.0f) {
@@ -23,10 +30,11 @@ class Box {
             }
             t_min = t0 > t_min ? t0 : t_min;
             t_max = t1 < t_max ? t1 : t_max;
-            if (t_max <= t_min) 
+            if (t_max < t_min) 
                 return false;
 
             inv = 1.0f / r.getDirection().y();
+            if (isinf(inv)) return true;
             t0 = (min_point.y() - r.getOrigin().y()) * inv;
             t1 = (max_point.y() - r.getOrigin().y()) * inv;
             if (inv < 0.0f) {
@@ -34,10 +42,11 @@ class Box {
             }
             t_min = t0 > t_min ? t0 : t_min;
             t_max = t1 < t_max ? t1 : t_max;
-            if (t_max <= t_min) 
+            if (t_max < t_min) 
                 return false;
             
             inv = 1.0f / r.getDirection().z();
+            if (isinf(inv)) return true;
             t0 = (min_point.z() - r.getOrigin().z()) * inv;
             t1 = (max_point.z() - r.getOrigin().z()) * inv;
             if (inv < 0.0f) {
@@ -45,9 +54,9 @@ class Box {
             }
             t_min = t0 > t_min ? t0 : t_min;
             t_max = t1 < t_max ? t1 : t_max;
-            if (t_max <= t_min) 
+            if (t_max < t_min) 
                 return false;
-            
+            //if (t_min < tmin) return false;
             return true;
         }
 

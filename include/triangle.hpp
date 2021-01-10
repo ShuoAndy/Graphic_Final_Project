@@ -21,13 +21,14 @@ public:
 		this->normal = Vector3f::cross(b - a, c - a);
 		this->normal.normalize();
 		this->d = Vector3f::dot(this->normal, a);
+		has_smooth_norm = has_tex = false;
 		if (Vector3f::cross(this->normal.normalized(), Vector3f::UP).length() < 1e-6)
             this->vdim = Vector3f::FORWARD;
         else this->vdim = Vector3f::UP;
         this->udim = Vector3f::cross(this->normal.normalized(), this->vdim);
 		Vector3f min_point(fmin(vertices[0].x(), fmin(vertices[1].x(), vertices[2].x())), fmin(vertices[0].y(), fmin(vertices[1].y(), vertices[2].y())), fmin(vertices[0].z(), fmin(vertices[1].z(), vertices[2].z())));
 		Vector3f max_point(fmax(vertices[0].x(), fmax(vertices[1].x(), vertices[2].x())), fmax(vertices[0].y(), fmax(vertices[1].y(), vertices[2].y())), fmax(vertices[0].z(), fmax(vertices[1].z(), vertices[2].z())));
-		box = Box(min_point - 0.001, max_point + 0.001);
+		box = Box(min_point - 0.0001f, max_point + 0.0001f);
 	}
 
 	bool intersect( const Ray& ray,  Hit& hit , float tmin) override {
@@ -38,7 +39,7 @@ public:
 
         float t = (this->d - Vector3f::dot(this->normal, ray.getOrigin()))/(Vector3f::dot(this->normal, ray.getDirection()));
         
-		if (t < tmin || t > hit.getT() || !isnormal(t))
+		if (t < tmin || t > hit.getT() || isinf(t) || isnan(t) )
             return false;
 
 		Vector3f inter_point = ray.pointAtParameter(t);
@@ -62,8 +63,6 @@ public:
 			u = uv.x();
 			v = uv.y();
 		}
-
-		if (has_smooth_norm) norm = smoothedNorm(hit_point);
 
         hit.set(t, u, v, this->material, norm, ray);
 
@@ -99,13 +98,6 @@ public:
 
 protected:
 	float d;
-	Vector3f smoothedNorm(const Vector3f &hit_point) {
-		Vector3f va = (vertices[0] - hit_point), vb = (vertices[1] - hit_point), vc = (vertices[2] - hit_point);
-        float ra = Vector3f::cross(vb, vc).length(),
-              rb = Vector3f::cross(vc, va).length(),
-              rc = Vector3f::cross(va, vb).length();
-		return (ra * an + rb * bn + rc * cn).normalized();
-	}
 };
 
 #endif //TRIANGLE_H

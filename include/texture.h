@@ -56,7 +56,7 @@ class BumpTexture: public Texture {
         Vector2f GradAt(float u, float v, float &value) {
             value = getValue(u, v);
             float du = 1.0f / width, dv = 1.0f / height;
-            Vector2f grad(width * (getValue(u + du, v) - getValue(u - du, v)), height * (getValue(u, v + dv) - getValue(u, v - dv)));
+            Vector2f grad(10*(getValue(u + du, v) - getValue(u - du, v)), 10*(getValue(u, v + dv) - getValue(u, v - dv)));
             return grad;
         }
 

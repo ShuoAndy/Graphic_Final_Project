@@ -1,12 +1,12 @@
 PerspectiveCamera {
-    center 13 2 6
-    direction -13 -2 -6
+    center 13 2 3
+    direction -13 -2 -3
     up 0 1 0
     angle 20
     lens_radius 0.05
     focus_distance 10
-    width 1200
-    height 600
+    width 1024
+    height 728
 }
 
 Background {
@@ -15,13 +15,11 @@ Background {
 }
 
 Materials {
-numMaterials 972
+numMaterials 973
 DiffuseMaterial { attenuation 0.5 0.5 0.5 }
-DiffuseMaterial { attenuation 0.4 0.2 0.1 }
-MetalMaterial { attenuation 0.7 0.6 0.5 
-fuzz 0.0
-}
-DielecMaterial { refractive 1.5 }
+DiffuseMaterial { texture texture/jupyter.png }
+DiffuseMaterial { texture texture/world_cloud.jpg }
+DiffuseMaterial { texture texture/mars.jpg }
 DiffuseMaterial { attenuation 3.85091e-17 0.00735381 0.0332993 }
 DiffuseMaterial { attenuation 0.044969 0.239373 0.193839 }
 DiffuseMaterial { attenuation 0.529279 0.0282673 0.0145086 }
@@ -1474,6 +1472,10 @@ MetalMaterial { attenuation 0.514348 0.56587 0.708137
 fuzz 0.482821 }
 MetalMaterial { attenuation 0.689751 0.558218 0.834291
 fuzz 0.37022 }
+DielecMaterial { 
+    attenuation 1 1 1
+    refractive 1.5 
+}
 }
 Group {
 numObjects 488
@@ -1497,7 +1499,7 @@ Sphere {
  center 4 1 0
  radius 1.0
 }
-MaterialIndex 4
+MaterialIndex 972
 Sphere {
  center -10.3093 0.2 -10.366
  radius 0.2
@@ -1527,7 +1529,7 @@ Sphere {
  center -10.9128 0.2 -5.27966
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center -10.9043 0.2 -4.42156
  radius 0.2
@@ -1627,12 +1629,12 @@ Sphere {
  center -9.46172 0.2 -7.78823
  radius 0.2
 }
-MaterialIndex 30
+MaterialIndex 40
 Sphere {
  center -9.93053 0.2 -6.36302
  radius 0.2
 }
-MaterialIndex 31
+MaterialIndex 41
 Sphere {
  center -9.8069 0.2 -5.79772
  radius 0.2
@@ -1642,37 +1644,37 @@ Sphere {
  center -9.26055 0.2 -4.26157
  radius 0.2
 }
-MaterialIndex 33
+MaterialIndex 43
 Sphere {
  center -9.73878 0.2 -3.33825
  radius 0.2
 }
-MaterialIndex 34
+MaterialIndex 44
 Sphere {
  center -9.83366 0.2 -2.56058
  radius 0.2
 }
-MaterialIndex 35
+MaterialIndex 45
 Sphere {
  center -9.58585 0.2 -1.96609
  radius 0.2
 }
-MaterialIndex 36
+MaterialIndex 46
 Sphere {
  center -9.93213 0.2 -0.456127
  radius 0.2
 }
-MaterialIndex 37
+MaterialIndex 47
 Sphere {
  center -9.92515 0.2 0.0838707
  radius 0.2
 }
-MaterialIndex 38
+MaterialIndex 48
 Sphere {
  center -9.81249 0.2 1.40977
  radius 0.2
 }
-MaterialIndex 39
+MaterialIndex 49
 Sphere {
  center -9.91745 0.2 2.34363
  radius 0.2
@@ -1752,7 +1754,7 @@ Sphere {
  center -8.94361 0.2 -4.9295
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center -8.94021 0.2 -3.40892
  radius 0.2
@@ -1862,7 +1864,7 @@ Sphere {
  center -7.54859 0.2 -4.38895
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center -7.83197 0.2 -3.48623
  radius 0.2
@@ -2037,7 +2039,7 @@ Sphere {
  center -6.12843 0.2 8.42295
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center -6.24022 0.2 9.74992
  radius 0.2
@@ -2067,7 +2069,7 @@ Sphere {
  center -5.98368 0.2 -7.22331
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center -5.4233 0.2 -6.50707
  radius 0.2
@@ -2107,7 +2109,7 @@ Sphere {
  center -5.55694 0.2 0.390888
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center -5.58752 0.2 1.39987
  radius 0.2
@@ -2312,7 +2314,7 @@ Sphere {
  center -3.2974 0.2 -2.15521
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center -3.43199 0.2 -1.53848
  radius 0.2
@@ -2327,7 +2329,7 @@ Sphere {
  center -3.85996 0.2 0.373662
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center -3.31056 0.2 1.26244
  radius 0.2
@@ -2462,7 +2464,7 @@ Sphere {
  center -2.46489 0.2 5.40867
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center -2.84976 0.2 6.7957
  radius 0.2
@@ -2642,7 +2644,7 @@ Sphere {
  center -0.912654 0.2 -2.1263
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center -0.648306 0.2 -1.79029
  radius 0.2
@@ -2742,7 +2744,7 @@ Sphere {
  center 0.604409 0.2 -4.26394
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 0.16662 0.2 -3.90718
  radius 0.2
@@ -2827,7 +2829,7 @@ Sphere {
  center 1.58633 0.2 -9.92681
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 1.8269 0.2 -8.29029
  radius 0.2
@@ -2847,7 +2849,7 @@ Sphere {
  center 1.56282 0.2 -5.24018
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 1.1951 0.2 -4.25168
  radius 0.2
@@ -2977,7 +2979,7 @@ Sphere {
  center 2.71291 0.2 -1.51779
  radius 0.2
 }
-MaterialIndex 300
+MaterialIndex 400
 Sphere {
  center 2.08411 0.2 -0.367
  radius 0.2
@@ -2987,57 +2989,57 @@ Sphere {
  center 2.23728 0.2 0.0884657
  radius 0.2
 }
-MaterialIndex 302
+MaterialIndex 402
 Sphere {
  center 2.46096 0.2 1.89203
  radius 0.2
 }
-MaterialIndex 303
+MaterialIndex 403
 Sphere {
  center 2.06871 0.2 2.21739
  radius 0.2
 }
-MaterialIndex 304
+MaterialIndex 404
 Sphere {
  center 2.84593 0.2 3.6127
  radius 0.2
 }
-MaterialIndex 305
+MaterialIndex 405
 Sphere {
  center 2.24464 0.2 4.62715
  radius 0.2
 }
-MaterialIndex 306
+MaterialIndex 406
 Sphere {
  center 2.30991 0.2 5.73733
  radius 0.2
 }
-MaterialIndex 307
+MaterialIndex 407
 Sphere {
  center 2.59561 0.2 6.84098
  radius 0.2
 }
-MaterialIndex 308
+MaterialIndex 408
 Sphere {
  center 2.27704 0.2 7.82496
  radius 0.2
 }
-MaterialIndex 309
+MaterialIndex 409
 Sphere {
  center 2.43472 0.2 8.1739
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 2.08865 0.2 9.57268
  radius 0.2
 }
-MaterialIndex 311
+MaterialIndex 411
 Sphere {
  center 2.65691 0.2 10.3394
  radius 0.2
 }
-MaterialIndex 312
+MaterialIndex 412
 Sphere {
  center 3.60931 0.2 -10.6068
  radius 0.2
@@ -3047,62 +3049,62 @@ Sphere {
  center 3.34463 0.2 -9.20392
  radius 0.2
 }
-MaterialIndex 314
+MaterialIndex 414
 Sphere {
  center 3.86807 0.2 -8.33118
  radius 0.2
 }
-MaterialIndex 315
+MaterialIndex 415
 Sphere {
  center 3.75485 0.2 -7.11683
  radius 0.2
 }
-MaterialIndex 316
+MaterialIndex 416
 Sphere {
  center 3.53414 0.2 -6.11217
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 3.86903 0.2 -5.69828
  radius 0.2
 }
-MaterialIndex 318
+MaterialIndex 418
 Sphere {
  center 3.1771 0.2 -4.80938
  radius 0.2
 }
-MaterialIndex 319
+MaterialIndex 419
 Sphere {
  center 3.08236 0.2 -3.84242
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 3.70829 0.2 -2.6006
  radius 0.2
 }
-MaterialIndex 321
+MaterialIndex 421
 Sphere {
  center 3.32852 0.2 -1.72825
  radius 0.2
 }
-MaterialIndex 322
+MaterialIndex 422
 Sphere {
  center 3.4105 0.2 -0.912614
  radius 0.2
 }
-MaterialIndex 323
+MaterialIndex 423
 Sphere {
  center 3.33884 0.2 0.861855
  radius 0.2
 }
-MaterialIndex 324
+MaterialIndex 424
 Sphere {
  center 3.05428 0.2 1.35835
  radius 0.2
 }
-MaterialIndex 325
+MaterialIndex 425
 Sphere {
  center 3.86309 0.2 2.3014
  radius 0.2
@@ -3112,17 +3114,17 @@ Sphere {
  center 3.19725 0.2 3.30641
  radius 0.2
 }
-MaterialIndex 327
+MaterialIndex 427
 Sphere {
  center 3.84703 0.2 4.35956
  radius 0.2
 }
-MaterialIndex 328
+MaterialIndex 428
 Sphere {
  center 3.01439 0.2 5.43868
  radius 0.2
 }
-MaterialIndex 329
+MaterialIndex 429
 Sphere {
  center 3.81417 0.2 6.24544
  radius 0.2
@@ -3132,7 +3134,7 @@ Sphere {
  center 3.28752 0.2 7.06733
  radius 0.2
 }
-MaterialIndex 331
+MaterialIndex 431
 Sphere {
  center 3.54589 0.2 8.86401
  radius 0.2
@@ -3142,82 +3144,82 @@ Sphere {
  center 3.20456 0.2 9.06313
  radius 0.2
 }
-MaterialIndex 333
+MaterialIndex 433
 Sphere {
  center 3.86316 0.2 10.3402
  radius 0.2
 }
-MaterialIndex 334
+MaterialIndex 434
 Sphere {
  center 4.73154 0.2 -10.2781
  radius 0.2
 }
-MaterialIndex 335
+MaterialIndex 435
 Sphere {
  center 4.04643 0.2 -9.74965
  radius 0.2
 }
-MaterialIndex 336
+MaterialIndex 436
 Sphere {
  center 4.74504 0.2 -8.74529
  radius 0.2
 }
-MaterialIndex 337
+MaterialIndex 437
 Sphere {
  center 4.74354 0.2 -7.51378
  radius 0.2
 }
-MaterialIndex 338
+MaterialIndex 438
 Sphere {
  center 4.85745 0.2 -6.90724
  radius 0.2
 }
-MaterialIndex 339
+MaterialIndex 439
 Sphere {
  center 4.31769 0.2 -5.29972
  radius 0.2
 }
-MaterialIndex 340
+MaterialIndex 440
 Sphere {
  center 4.80417 0.2 -4.88476
  radius 0.2
 }
-MaterialIndex 341
+MaterialIndex 441
 Sphere {
  center 4.82475 0.2 -3.68017
  radius 0.2
 }
-MaterialIndex 342
+MaterialIndex 442
 Sphere {
  center 4.24503 0.2 -2.54475
  radius 0.2
 }
-MaterialIndex 343
+MaterialIndex 443
 Sphere {
  center 4.7064 0.2 -1.82743
  radius 0.2
 }
-MaterialIndex 344
+MaterialIndex 444
 Sphere {
  center 4.52497 0.2 -0.92514
  radius 0.2
 }
-MaterialIndex 345
+MaterialIndex 445
 Sphere {
  center 4.52996 0.2 0.896096
  radius 0.2
 }
-MaterialIndex 346
+MaterialIndex 446
 Sphere {
  center 4.47821 0.2 1.38428
  radius 0.2
 }
-MaterialIndex 347
+MaterialIndex 447
 Sphere {
  center 4.89024 0.2 2.0608
  radius 0.2
 }
-MaterialIndex 348
+MaterialIndex 448
 Sphere {
  center 4.56041 0.2 3.12774
  radius 0.2
@@ -3227,12 +3229,12 @@ Sphere {
  center 4.50615 0.2 4.76793
  radius 0.2
 }
-MaterialIndex 350
+MaterialIndex 450
 Sphere {
  center 4.55611 0.2 5.51968
  radius 0.2
 }
-MaterialIndex 351
+MaterialIndex 451
 Sphere {
  center 4.5165 0.2 6.45484
  radius 0.2
@@ -3242,17 +3244,17 @@ Sphere {
  center 4.0532 0.2 7.54606
  radius 0.2
 }
-MaterialIndex 353
+MaterialIndex 453
 Sphere {
  center 4.20084 0.2 8.649
  radius 0.2
 }
-MaterialIndex 354
+MaterialIndex 454
 Sphere {
  center 4.20744 0.2 9.14613
  radius 0.2
 }
-MaterialIndex 355
+MaterialIndex 455
 Sphere {
  center 4.36183 0.2 10.2118
  radius 0.2
@@ -3262,7 +3264,7 @@ Sphere {
  center 5.76096 0.2 -10.758
  radius 0.2
 }
-MaterialIndex 357
+MaterialIndex 457
 Sphere {
  center 5.70541 0.2 -9.90508
  radius 0.2
@@ -3272,92 +3274,92 @@ Sphere {
  center 5.22358 0.2 -8.56801
  radius 0.2
 }
-MaterialIndex 359
+MaterialIndex 459
 Sphere {
  center 5.42881 0.2 -7.37289
  radius 0.2
 }
-MaterialIndex 360
+MaterialIndex 460
 Sphere {
  center 5.49801 0.2 -6.16719
  radius 0.2
 }
-MaterialIndex 361
+MaterialIndex 461
 Sphere {
  center 5.81106 0.2 -5.35358
  radius 0.2
 }
-MaterialIndex 362
+MaterialIndex 462
 Sphere {
  center 5.13027 0.2 -4.49823
  radius 0.2
 }
-MaterialIndex 363
+MaterialIndex 463
 Sphere {
  center 5.44035 0.2 -3.38613
  radius 0.2
 }
-MaterialIndex 364
+MaterialIndex 464
 Sphere {
  center 5.32134 0.2 -2.17615
  radius 0.2
 }
-MaterialIndex 365
+MaterialIndex 465
 Sphere {
  center 5.532 0.2 -1.30129
  radius 0.2
 }
-MaterialIndex 366
+MaterialIndex 466
 Sphere {
  center 5.60685 0.2 -0.552485
  radius 0.2
 }
-MaterialIndex 367
+MaterialIndex 467
 Sphere {
  center 5.35842 0.2 0.396653
  radius 0.2
 }
-MaterialIndex 368
+MaterialIndex 468
 Sphere {
  center 5.65179 0.2 1.65443
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 5.55592 0.2 2.09781
  radius 0.2
 }
-MaterialIndex 370
+MaterialIndex 470
 Sphere {
  center 5.62812 0.2 3.66984
  radius 0.2
 }
-MaterialIndex 371
+MaterialIndex 471
 Sphere {
  center 5.71153 0.2 4.41192
  radius 0.2
 }
-MaterialIndex 372
+MaterialIndex 472
 Sphere {
  center 5.5956 0.2 5.46836
  radius 0.2
 }
-MaterialIndex 373
+MaterialIndex 473
 Sphere {
  center 5.81959 0.2 6.27785
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 5.09382 0.2 7.60569
  radius 0.2
 }
-MaterialIndex 375
+MaterialIndex 475
 Sphere {
  center 5.07599 0.2 8.12201
  radius 0.2
 }
-MaterialIndex 376
+MaterialIndex 476
 Sphere {
  center 5.37475 0.2 9.09856
  radius 0.2
@@ -3367,22 +3369,22 @@ Sphere {
  center 5.17602 0.2 10.0568
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 6.15383 0.2 -10.6113
  radius 0.2
 }
-MaterialIndex 379
+MaterialIndex 479
 Sphere {
  center 6.4663 0.2 -9.75212
  radius 0.2
 }
-MaterialIndex 380
+MaterialIndex 480
 Sphere {
  center 6.74939 0.2 -8.46432
  radius 0.2
 }
-MaterialIndex 381
+MaterialIndex 481
 Sphere {
  center 6.43219 0.2 -7.33547
  radius 0.2
@@ -3392,7 +3394,7 @@ Sphere {
  center 6.65685 0.2 -6.68019
  radius 0.2
 }
-MaterialIndex 383
+MaterialIndex 483
 Sphere {
  center 6.32645 0.2 -5.65946
  radius 0.2
@@ -3402,37 +3404,37 @@ Sphere {
  center 6.24526 0.2 -4.93592
  radius 0.2
 }
-MaterialIndex 385
+MaterialIndex 485
 Sphere {
  center 6.69856 0.2 -3.19944
  radius 0.2
 }
-MaterialIndex 386
+MaterialIndex 486
 Sphere {
  center 6.58338 0.2 -2.23471
  radius 0.2
 }
-MaterialIndex 387
+MaterialIndex 487
 Sphere {
  center 6.64134 0.2 -1.65559
  radius 0.2
 }
-MaterialIndex 388
+MaterialIndex 488
 Sphere {
  center 6.62307 0.2 -0.246284
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 6.45716 0.2 0.503474
  radius 0.2
 }
-MaterialIndex 390
+MaterialIndex 490
 Sphere {
  center 6.1731 0.2 1.22929
  radius 0.2
 }
-MaterialIndex 391
+MaterialIndex 491
 Sphere {
  center 6.1304 0.2 2.50013
  radius 0.2
@@ -3442,42 +3444,42 @@ Sphere {
  center 6.61959 0.2 3.88927
  radius 0.2
 }
-MaterialIndex 393
+MaterialIndex 493
 Sphere {
  center 6.35076 0.2 4.65753
  radius 0.2
 }
-MaterialIndex 394
+MaterialIndex 494
 Sphere {
  center 6.12053 0.2 5.10923
  radius 0.2
 }
-MaterialIndex 395
+MaterialIndex 495
 Sphere {
  center 6.05396 0.2 6.20002
  radius 0.2
 }
-MaterialIndex 396
+MaterialIndex 496
 Sphere {
  center 6.67699 0.2 7.45332
  radius 0.2
 }
-MaterialIndex 397
+MaterialIndex 497
 Sphere {
  center 6.1466 0.2 8.59368
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 6.10224 0.2 9.83622
  radius 0.2
 }
-MaterialIndex 399
+MaterialIndex 499
 Sphere {
  center 6.37925 0.2 10.6489
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 7.66441 0.2 -10.5992
  radius 0.2
@@ -3502,7 +3504,7 @@ Sphere {
  center 7.39528 0.2 -6.87922
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 7.27894 0.2 -5.95348
  radius 0.2
@@ -3667,7 +3669,7 @@ Sphere {
  center 8.4389 0.2 4.82427
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 8.40169 0.2 5.44658
  radius 0.2
@@ -3762,7 +3764,7 @@ Sphere {
  center 9.74798 0.2 1.25916
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 9.59916 0.2 2.00714
  radius 0.2
@@ -3787,7 +3789,7 @@ Sphere {
  center 9.55718 0.2 6.05738
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 9.42413 0.2 7.60246
  radius 0.2
@@ -3817,7 +3819,7 @@ Sphere {
  center 10.7676 0.2 -9.97738
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 10.5455 0.2 -8.71336
  radius 0.2
@@ -3867,7 +3869,7 @@ Sphere {
  center 10.541 0.2 0.260475
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 10.4342 0.2 1.79696
  radius 0.2
@@ -3887,7 +3889,7 @@ Sphere {
  center 10.5146 0.2 4.10766
  radius 0.2
 }
-MaterialIndex 3
+MaterialIndex 972
 Sphere {
  center 10.321 0.2 5.097
  radius 0.2

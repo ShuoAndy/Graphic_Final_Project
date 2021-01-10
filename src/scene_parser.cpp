@@ -378,6 +378,7 @@ Group *SceneParser::parseGroup() {
         if (!strcmp(token, "MaterialIndex")) {
             // change the current material
             int index = readInt();
+            // fprintf(stderr, "%d %d\n", index, getNumMaterials());
             assert (index >= 0 && index <= getNumMaterials());
             current_material = getMaterial(index);
         } else {

@@ -4,6 +4,7 @@
 #include "object3d.hpp"
 #include "material.hpp"
 #include "ray.hpp"
+#include <cstdio>
 
 class Isotropic : public Material {
     public:
@@ -26,7 +27,7 @@ public:
     Medium(Object3D* obj, float density, Vector3f color): obj(obj), NegInvDense(-1/density)
     {
         this->material = new Isotropic(color);
-        is_infinite = obj->is_infinite;
+        is_infinite = true;
     }
 
     virtual bool intersect(const Ray &r, Hit &h, float tmin) override {

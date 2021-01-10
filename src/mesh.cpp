@@ -37,7 +37,7 @@ void Mesh::buildTree() {
     }
     else if (strcmp(accelerator, "kdtree") == 0){
         std::cout << "start building KDTree accelerator for mesh " << std::endl;
-        KDTreeRoot = new KDTreeNode(triangle_list, 0, triangle_list.size(), 0);
+        KDTreeRoot = new KDTreeNode(triangle_list, 0, triangle_list.size() - 1, 0);
     }
     else {
         fprintf(stderr, "unsupported accelerator %s, using default intersection method\n", accelerator);
