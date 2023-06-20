@@ -1,21 +1,17 @@
 INTEGATOR=pt
-NUM_SAMPLE=2000
+NUM_SAMPLE=20
 ACCELERATOR=bvh
-USEV2=0
+
 
 # If project not ready, generate cmake file.
 if [[ ! -d build ]]; then
-    mkdir -p build
-    cd build
-    cmake ..
-    cd ..
+    echo "good"
+else
+    rm -rf build
 fi
-
-# Build project.
-cd build
-make -j
-cd ..
+cmake -B build
+cmake --build build
 
 mkdir -p output
 
-time bin/PA1 testcases/curve.txt output/curve.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR $USEV2 >> test.log
+time bin/PA1 testcases/curve.txt output/curve.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR  >> test.log

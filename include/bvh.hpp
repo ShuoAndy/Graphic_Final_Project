@@ -10,6 +10,7 @@
 #include <vector>
 #include <limits>
 
+//实现kdtree树【数据结构课上讲过】，原理详见https://www.cnblogs.com/KillerAery/p/10878367.html#%E5%B1%82%E6%AC%A1%E5%8C%85%E5%9B%B4%E7%9B%92%E6%A0%91-bounding-volume-hierarchy-based-on-tree
 class BVHNode: public Object3D {
     public:
         BVHNode() {
@@ -17,14 +18,19 @@ class BVHNode: public Object3D {
         }
 
         BVHNode(std::vector<Object3D*> &objects, int start, int end) {
-            int axis = GetRandomAxis();
+            int axis = int(3*drand48()); //随机选取x或y或z
             int len = end - start;
-            if (len == 1) {
+            if (len == 1) //只有左孩子
+            {
                 left_node = right_node = objects[start];
-            } else if (len == 2) {
+            } 
+            else if (len == 2) //有左右孩子
+            {
                 left_node = objects[start];
                 right_node = objects[start + 1];
-            } else {
+            } 
+            else 
+            {
                 auto temp_objects = objects;
                 if (axis == 0){
                     std::sort(temp_objects.begin() + start, temp_objects.begin() + end, CompareXAxis);
@@ -57,7 +63,6 @@ class BVHNode: public Object3D {
             return true;
         }
 
-        // Compare two boxes from three dimensions
         static bool CompareXAxis(Object3D* a, Object3D* b) {
             Box aBox, bBox;
             if (!a->getBox(aBox) || !b->getBox(bBox))
@@ -83,12 +88,6 @@ class BVHNode: public Object3D {
         Object3D* left_node;
         Object3D* right_node;
         Box box;
-
-        //Get a random integer from 0, 1 or 2 
-        int GetRandomAxis() {
-            float rd = 3*drand48();
-            return int(rd);
-        }
 };
 
 

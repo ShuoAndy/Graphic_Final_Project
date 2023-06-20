@@ -23,9 +23,7 @@ public:
 
     }
 
-    explicit Group (int num_objects, const char* accelerator) {
-        this->objects.resize(num_objects, nullptr);
-        this->group_size = num_objects;
+    explicit Group (int num_objects, const char* accelerator):list(num_objects) {
         this->accelerator = accelerator;
     }
 
@@ -45,10 +43,8 @@ public:
             }
             flag |= KDTreeRoot->intersect(r, h, tmin);
         } else {
-            for (auto obj: objects) {
-                if (obj->intersect(r, h, tmin))
-                    flag = true;
-            }
+            for (auto obj : list)
+            if (obj) flag |= obj->intersect(r, h, tmin);
         }
         return flag;
     }
@@ -56,7 +52,7 @@ public:
     bool getBox(Box &box) override {
         bool flag = true;
         Box temp;
-        for (auto obj: objects) {
+        for (auto obj: list) {
             if (!obj->getBox(temp)) return false;
             if (flag) {
                 box = temp;
@@ -69,13 +65,13 @@ public:
     }
 
     void addObject(int index, Object3D *obj) {
-        this->objects[index] = obj;
+        this->list[index] = obj;
     }
 
     void buildTree() {
         std::cout << "start building accelerator for group" << std::endl;
         std::vector<Object3D*> finite;
-        for (auto obj: this->objects) {
+        for (auto obj: this->list) {
             if (obj->is_infinite) this->infinities.push_back(obj);
             else finite.push_back(obj);
         }
@@ -90,7 +86,7 @@ public:
 
     std::vector<Object3D*> getLightSources() {
         std::vector<Object3D*> light_sources;
-        for (auto obj: objects){
+        for (auto obj: list){
             if (obj->getMaterial()->Emission() != Vector3f::ZERO){
                 light_sources.push_back(obj);
             }
@@ -99,13 +95,12 @@ public:
     }
 
     int getGroupSize() {
-        return this->group_size;
+        return list.size();
     }
 
 private:
-    std::vector<Object3D*> objects;
+    std::vector<Object3D*> list;
     std::vector<Object3D*> infinities;
-    int group_size;
     BVHNode* BVHRoot;
     KDTreeNode* KDTreeRoot;
     const char* accelerator;

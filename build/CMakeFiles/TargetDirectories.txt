@@ -1,6 +1,6 @@
-/home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles/rebuild_cache.dir
-/home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles/PA1.dir
-/home/yxc/graph/ComputerGraphics-THU-2020/build/CMakeFiles/edit_cache.dir
-/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/rebuild_cache.dir
-/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/vecmath.dir
-/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/edit_cache.dir
+/home/w/Program/final/build/CMakeFiles/PA1.dir
+/home/w/Program/final/build/CMakeFiles/edit_cache.dir
+/home/w/Program/final/build/CMakeFiles/rebuild_cache.dir
+/home/w/Program/final/build/deps/vecmath/CMakeFiles/vecmath.dir
+/home/w/Program/final/build/deps/vecmath/CMakeFiles/edit_cache.dir
+/home/w/Program/final/build/deps/vecmath/CMakeFiles/rebuild_cache.dir

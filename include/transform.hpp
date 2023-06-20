@@ -30,16 +30,19 @@ public:
     virtual Material* getMaterial() override {
         return o->getMaterial();
     }
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) {
+
+     virtual bool intersect(const Ray &r, Hit &h, float tmin) {
         Vector3f trSource = transformPoint(transform, r.getOrigin());
         Vector3f trDirection = transformDirection(transform, r.getDirection());
         Ray tr(trSource, trDirection);
         bool inter = o->intersect(tr, h, tmin);
         if (inter) {
-            h.set(h.getT(), h.getU(), h.getV(), h.getMaterial(), transformDirection(transform.transposed(), h.getNormal()).normalized(), r);
+             h.set(h.getT(), h.getU(), h.getV(), h.getMaterial(), transformDirection(transform.transposed(), h.getNormal()).normalized(), r);
         }
         return inter;
     }
+
+    
     virtual bool getBox(Box& box) override {
         Box objBox;
         if(!o->getBox(objBox))

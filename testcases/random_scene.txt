@@ -17,9 +17,9 @@ Background {
 Materials {
 numMaterials 973
 DiffuseMaterial { attenuation 0.5 0.5 0.5 }
-DiffuseMaterial { texture texture/jupyter.png }
-DiffuseMaterial { texture texture/world_cloud.jpg }
-DiffuseMaterial { texture texture/mars.jpg }
+DiffuseMaterial { texture texture/jupyter.jpg }
+DiffuseMaterial { texture texture/earth.jpg }
+DiffuseMaterial { texture texture/mars.png }
 DiffuseMaterial { attenuation 3.85091e-17 0.00735381 0.0332993 }
 DiffuseMaterial { attenuation 0.044969 0.239373 0.193839 }
 DiffuseMaterial { attenuation 0.529279 0.0282673 0.0145086 }

@@ -15,58 +15,42 @@ public:
 
     // a b c are three vertex positions of the triangle
 	Triangle( const Vector3f& a, const Vector3f& b, const Vector3f& c, Material* m) : Object3D(m) {
-		this->vertices[0] = a;
-		this->vertices[1] = b;
-		this->vertices[2] = c;
-		this->normal = Vector3f::cross(b - a, c - a);
-		this->normal.normalize();
-		this->d = Vector3f::dot(this->normal, a);
-		has_smooth_norm = has_tex = false;
-		if (Vector3f::cross(this->normal.normalized(), Vector3f::UP).length() < 1e-6)
-            this->vdim = Vector3f::FORWARD;
-        else this->vdim = Vector3f::UP;
-        this->udim = Vector3f::cross(this->normal.normalized(), this->vdim);
-		Vector3f min_point(fmin(vertices[0].x(), fmin(vertices[1].x(), vertices[2].x())), fmin(vertices[0].y(), fmin(vertices[1].y(), vertices[2].y())), fmin(vertices[0].z(), fmin(vertices[1].z(), vertices[2].z())));
-		Vector3f max_point(fmax(vertices[0].x(), fmax(vertices[1].x(), vertices[2].x())), fmax(vertices[0].y(), fmax(vertices[1].y(), vertices[2].y())), fmax(vertices[0].z(), fmax(vertices[1].z(), vertices[2].z())));
-		box = Box(min_point - 0.0001f, max_point + 0.0001f);
+		//构造函数
+		vertices[0] = a;
+		vertices[1] = b;
+		vertices[2] = c;
+		normal = Vector3f::cross(a - b, a - c).normalized();
 	}
 
 	bool intersect( const Ray& ray,  Hit& hit , float tmin) override {
-		Vector3f r_dir = ray.getDirection();
+		if (fabs( Vector3f::dot(normal, ray.getDirection())) < 1e-6) return false;
+		Vector3f E1 = vertices[0] - vertices[1];
+		Vector3f E2 = vertices[0] - vertices[2];
+		Vector3f S = vertices[0] - ray.getOrigin();//忠实地还原课件内容
 
-        if(abs(Vector3f::dot(r_dir.normalized(), this->normal.normalized())) < 1e-10)
-            return false;
+		float det1 = Matrix3f(S, E1, E2).determinant();//调用计算三元矩阵行列式的函数
+		float det2 = Matrix3f(ray.getDirection(), S, E2).determinant();
+		float det3 = Matrix3f(ray.getDirection(), E1, S).determinant();
+		float det = Matrix3f(ray.getDirection(), E1, E2).determinant();
 
-        float t = (this->d - Vector3f::dot(this->normal, ray.getOrigin()))/(Vector3f::dot(this->normal, ray.getDirection()));
-        
-		if (t < tmin || t > hit.getT() || isinf(t) || isnan(t) )
-            return false;
-
-		Vector3f inter_point = ray.pointAtParameter(t);
-		for (int i = 0; i < 3; i ++){
-			Vector3f line = inter_point - this->vertices[i];
-			Vector3f line_a = this->vertices[(i+1)%3] - this->vertices[i];
-			Vector3f line_b = this->vertices[(i+2)%3] - this->vertices[i];
-			if (Vector3f::dot(Vector3f::cross(line, line_a), Vector3f::cross(line, line_b)) > 0)
-				return false;
-		}
-
+		float t = det1 / det;
+		float beta = det2 / det;
+		float gama = det3 / det;
+		
 		Vector3f hit_point = ray.pointAtParameter(t);
 		float v = Vector3f::dot(hit_point, vdim);
         float u = Vector3f::dot(hit_point, udim);
-		Vector3f norm = this->normal;
 
-		if (has_tex) {
-			Vector3f va = (vertices[0] - hit_point), vb = (vertices[1] - hit_point), vc = (vertices[2] - hit_point);
-			float ra = Vector3f::cross(vb, vc).length(), rb = Vector3f::cross(vc, va).length(), rc = Vector3f::cross(va, vb).length();
-			Vector2f uv = (ra * at + rb * bt + rc * ct) / (ra + rb + rc);
-			u = uv.x();
-			v = uv.y();
+		if (t > 0 && t < hit.getT() && t > tmin && beta >= 0 && beta <= 1 && gama >= 0 && gama <= 1 && beta + gama <= 1)
+		{
+			if (Vector3f::dot(normal, ray.getDirection()) < 0)
+				hit.set(t, u, v, this->material, normal, ray);
+			else
+				hit.set(t, u, v, this->material, -normal, ray);
+			return true;
 		}
-
-        hit.set(t, u, v, this->material, norm, ray);
-
-        return true;
+		else
+			return false;
 	}
 	
 	bool getBox(Box& box){

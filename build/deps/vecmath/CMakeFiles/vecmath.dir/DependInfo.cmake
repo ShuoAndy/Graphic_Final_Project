@@ -1,22 +1,20 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "CXX"
   )
-# The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix2f.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/vecmath.dir/src/Matrix2f.cpp.o"
-  "/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix3f.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/vecmath.dir/src/Matrix3f.cpp.o"
-  "/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Matrix4f.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/vecmath.dir/src/Matrix4f.cpp.o"
-  "/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Quat4f.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/vecmath.dir/src/Quat4f.cpp.o"
-  "/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector2f.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/vecmath.dir/src/Vector2f.cpp.o"
-  "/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector3f.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/vecmath.dir/src/Vector3f.cpp.o"
-  "/home/yxc/graph/ComputerGraphics-THU-2020/deps/vecmath/src/Vector4f.cpp" "/home/yxc/graph/ComputerGraphics-THU-2020/build/deps/vecmath/CMakeFiles/vecmath.dir/src/Vector4f.cpp.o"
-  )
-set(CMAKE_CXX_COMPILER_ID "GNU")
 
-# The include file search paths:
-set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "../deps/vecmath/include"
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/w/Program/final/deps/vecmath/src/Matrix2f.cpp" "deps/vecmath/CMakeFiles/vecmath.dir/src/Matrix2f.cpp.o" "gcc" "deps/vecmath/CMakeFiles/vecmath.dir/src/Matrix2f.cpp.o.d"
+  "/home/w/Program/final/deps/vecmath/src/Matrix3f.cpp" "deps/vecmath/CMakeFiles/vecmath.dir/src/Matrix3f.cpp.o" "gcc" "deps/vecmath/CMakeFiles/vecmath.dir/src/Matrix3f.cpp.o.d"
+  "/home/w/Program/final/deps/vecmath/src/Matrix4f.cpp" "deps/vecmath/CMakeFiles/vecmath.dir/src/Matrix4f.cpp.o" "gcc" "deps/vecmath/CMakeFiles/vecmath.dir/src/Matrix4f.cpp.o.d"
+  "/home/w/Program/final/deps/vecmath/src/Quat4f.cpp" "deps/vecmath/CMakeFiles/vecmath.dir/src/Quat4f.cpp.o" "gcc" "deps/vecmath/CMakeFiles/vecmath.dir/src/Quat4f.cpp.o.d"
+  "/home/w/Program/final/deps/vecmath/src/Vector2f.cpp" "deps/vecmath/CMakeFiles/vecmath.dir/src/Vector2f.cpp.o" "gcc" "deps/vecmath/CMakeFiles/vecmath.dir/src/Vector2f.cpp.o.d"
+  "/home/w/Program/final/deps/vecmath/src/Vector3f.cpp" "deps/vecmath/CMakeFiles/vecmath.dir/src/Vector3f.cpp.o" "gcc" "deps/vecmath/CMakeFiles/vecmath.dir/src/Vector3f.cpp.o.d"
+  "/home/w/Program/final/deps/vecmath/src/Vector4f.cpp" "deps/vecmath/CMakeFiles/vecmath.dir/src/Vector4f.cpp.o" "gcc" "deps/vecmath/CMakeFiles/vecmath.dir/src/Vector4f.cpp.o.d"
   )
 
 # Targets to which this target links.

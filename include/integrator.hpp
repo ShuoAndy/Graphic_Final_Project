@@ -32,10 +32,9 @@ protected:
 
 class PTIntegrator: public Integrator{
 public:
-    PTIntegrator(SceneParser* sceneParser, int num_sample, int use_v2):Integrator(sceneParser) {
+    PTIntegrator(SceneParser* sceneParser, int num_sample):Integrator(sceneParser) {
         this->num_sample = num_sample;
-        this->use_v2 = use_v2;
-        if (use_v2) printf("switch to v2 renderer \n");
+        
     }
 
     virtual void render(char* outputFile) {
@@ -45,16 +44,25 @@ public:
         time_t start_time = time(NULL);
         printf("started rendering \n");
         omp_set_num_threads(25);
-#pragma omp parallel for schedule(dynamic, 1) 
+#pragma omp parallel for schedule(dynamic, 1)  // openMP并行加速
         for (int x = 0; x < width; x ++){
             fprintf(stderr, "rendering row %d with thread %d\n", x, omp_get_thread_num());
             for (int y = 0; y < height; y ++){
                 Vector3f finalColor = Vector3f::ZERO;
+                unsigned short Xi[3]={0,0,y*y*y};
+
+                // 实现抗锯齿效果        
+                for(int sx=0;sx<2;sx++){
+                for(int sy=0;sy<2;sy++){
                 for (int s = 0; s < num_sample; s ++){
-                    float u = float(x + drand48());
-                    float v = float(y + drand48());
-                    finalColor += get_color(u, v, camera);
-                }
+                    double r1=2*erand48(Xi), dx=(r1<1 ? sqrt(r1)-1: 1-sqrt(2-r1)); 
+                    double r2=2*erand48(Xi), dy=(r2<1 ? sqrt(r2)-1: 1-sqrt(2-r2));
+                    float u = float(x+ (sx-.5 + dx)/2);
+                    float v = float(y+ (sy-.5 + dy)/2);
+                    finalColor += get_color(u, v, camera)/float(4);
+                }}}
+                
+                
                 finalColor = finalColor / float(num_sample);
                 image.SetPixel(x, y, finalColor);
             }
@@ -66,14 +74,9 @@ public:
 
 private:
     int num_sample;
-    bool use_v2;
     Vector3f get_color(float x, float y, Camera* camera, int depth_limit=50){
         Ray camRay = camera->generateRay(Vector2f(x, y));
-        if (use_v2) {
-            return pathTracingV2(camRay, camera, 0, depth_limit);
-        }
-        else
-            return pathTracing(camRay, camera, 0, depth_limit);
+        return pathTracing(camRay, camera, 0, depth_limit);
     }
     Vector3f pathTracing(Ray& camRay, Camera* camera, int depth, int depth_limit=50, Vector3f total_atten = Vector3f(1,1,1)){
         Group* baseGroup = sceneParser->getGroup();
@@ -99,101 +102,12 @@ private:
         }
     }
 
-    // move all scatter logic into pt method 
-    Vector3f pathTracingV2(Ray& camRay, Camera* camera, int depth, int depth_limit=50, Vector3f total_atten = Vector3f(1,1,1)){
-        Group* baseGroup = sceneParser->getGroup();
-        Hit hit;
-        bool isIntersect = false;
-        if (baseGroup != nullptr)
-            isIntersect = baseGroup->intersect(camRay, hit, 0.0001);
-
-        if (isIntersect){
-            Material* mat = hit.getMaterial();
-            Vector3f normal = hit.normal;
-            Vector3f finalColor = mat->Emission();
-            Ray scattered(camRay);
-            Vector3f attenuation;
-            bool scatter_success = true; 
-            if (!strcmp(mat->name(), "diff")) {
-
-                Vector3f target = normal + mat->generateRandomPoint();
-                scattered = Ray(hit.point, target);
-                attenuation = mat->getAttenuation(hit.u, hit.v);
-
-            } else if (!strcmp(mat->name(), "met")) {
-
-                Vector3f input = camRay.getDirection().normalized();
-                Vector3f target = input - 2*Vector3f::dot(input, normal) * normal;
-                scattered = Ray(camRay.pointAtParameter(hit.t), target + mat->fuzz * mat->generateRandomPoint());
-                attenuation = mat->getAttenuation(hit.u, hit.v);
-
-            } else if (!strcmp(mat->name(), "die")) {
-
-                attenuation = mat->getAttenuation(hit.u, hit.v);
-                float refractive = mat->refractive;
-                Vector3f unit = camRay.getDirection().normalized();
-                Vector3f target = unit - 2*Vector3f::dot(unit, normal) * normal;
-                float index, reflect_prob, cos = -1*Vector3f::dot(unit, normal);
-                Vector3f refract_ray;
-
-                if (!hit.is_front_face){
-                    index = refractive;
-                } else {
-                    index = 1.0 / refractive;
-                }
-
-                bool can_refract = false;
-                float t = -1*Vector3f::dot(unit, normal);
-                float disc = 1.0 - index * index * (1 - t * t);
-
-                if (disc > 0){
-                    refract_ray = index * (unit + t * normal) - normal * sqrt(disc);
-                    can_refract = true;
-                }
-
-                if (can_refract){
-                    float r = ((1 - index) / (1 + index)) * ((1 - index) / (1 + index));
-                    reflect_prob = r + (1 - r) * pow((1 - cos), 5);
-                } else {
-                    reflect_prob = 1.1;
-                }
-
-                if (drand48() < reflect_prob){
-                    scattered = Ray(camRay.pointAtParameter(hit.t), target);
-                } else {
-                    scattered = Ray(camRay.pointAtParameter(hit.t), refract_ray);
-                }
-
-            } else if (!strcmp(mat->name(), "diffuse_light")) {
-                scatter_success = false;
-            } else if (!strcmp(mat->name(), "medium")) {
-                scattered = Ray(hit.point, mat->generateRandomPoint());
-                attenuation = mat->attenuation;
-            }
-
-            if (depth < depth_limit && scatter_success){
-                total_atten = total_atten * attenuation;
-                if (total_atten.x() < 1e-3 && total_atten.y() < 1e-3 && total_atten.z() < 1e-3) {
-                    return finalColor;
-                }
-                return finalColor + attenuation*pathTracing(scattered, camera, depth + 1, depth_limit, total_atten);
-            }
-            return finalColor;
-
-        } else {
-            return sceneParser->getBackgroundColor(camRay);
-        }
-    }
-
-
 };
 
 class SPPMIntegrator: public Integrator {
     public:
-        SPPMIntegrator(SceneParser* sceneParser, char* ckpt_dir, int steps_to_save, int num_round, int num_photon, int use_v2): Integrator(sceneParser), ckpt_dir(ckpt_dir), steps_to_save(steps_to_save), num_round(num_round), num_photon(num_photon){
+        SPPMIntegrator(SceneParser* sceneParser, char* ckpt_dir, int steps_to_save, int num_round, int num_photon): Integrator(sceneParser), ckpt_dir(ckpt_dir), steps_to_save(steps_to_save), num_round(num_round), num_photon(num_photon){
             KDTreeRoot = nullptr;
-            this->use_v2 = use_v2;
-            if (use_v2) fprintf(stderr, "switch to v2 renderer \n");
         }
 
         virtual void render(char* outputFile) {
@@ -219,8 +133,7 @@ class SPPMIntegrator: public Integrator {
                         float v = float(y + drand48());
                         Ray camRay = camera->generateRay(Vector2f(u,v));
                         visible_points[x * height + y]->setT(1e38);
-                        if (use_v2) getVisiblePointsV2(camRay, visible_points[x * height + y]);
-                        else getVisiblePoints(camRay, visible_points[x * height + y]);
+                        getVisiblePoints(camRay, visible_points[x * height + y]);
                     }
                 }
                 buildTree();
@@ -231,8 +144,7 @@ class SPPMIntegrator: public Integrator {
                         printf("tracing photon %d with thread %d round %d\n", x, omp_get_thread_num(), i);
                     for (int y = 0; y < light_sources.size(); y ++){
                         Ray r = light_sources[y]->generateRandomRay();
-                        if (use_v2) photonTracingV2(r, light_sources[y]->getMaterial()->Emission());
-                        else photonTracing(r, light_sources[y]->getMaterial()->Emission());
+                       photonTracing(r, light_sources[y]->getMaterial()->Emission());
                     }
                 }
 
@@ -254,7 +166,6 @@ class SPPMIntegrator: public Integrator {
         int steps_to_save;
         int num_round;
         int num_photon;
-        int use_v2;
         vector<Object3D*> light_sources;
         vector<Hit*> visible_points;
         PhotonKDTreeNode* KDTreeRoot;
@@ -325,7 +236,7 @@ class SPPMIntegrator: public Integrator {
 
                     Vector3f input = ray.getDirection().normalized();
                     Vector3f target = input - 2*Vector3f::dot(input, normal) * normal;
-                    scattered = Ray(ray.pointAtParameter(hit->t), target + mat->fuzz * mat->generateRandomPoint());
+                    scattered = Ray(ray.pointAtParameter(hit->t), target + mat->fuzz * mat->random_in_unit_sphere());
                     attenuation = mat->getAttenuation(hit->u, hit->v);
 
                 } else if (!strcmp(mat->name(), "die")) {
@@ -373,7 +284,7 @@ class SPPMIntegrator: public Integrator {
 
                 } else if (!strcmp(mat->name(), "medium")) {
 
-                    scattered = Ray(hit->point, mat->generateRandomPoint());
+                    scattered = Ray(hit->point, mat->random_in_unit_sphere());
                     attenuation = mat->attenuation;
 
                 }
@@ -437,14 +348,14 @@ class SPPMIntegrator: public Integrator {
                 if (!strcmp(mat->name(), "diff")) {
 
                     KDTreeRoot->Update(hit.getPoint(), total_atten, hit.isFrontFace());
-                    ray.direction = normal + mat->generateRandomPoint();
+                    ray.direction = normal + mat->random_in_unit_sphere();
                     attenuation = mat->getAttenuation(hit.u, hit.v);
 
                 } else if (!strcmp(mat->name(), "met")) {
 
                     Vector3f input = ray.getDirection().normalized();
                     Vector3f target = input - 2*Vector3f::dot(input, normal) * normal;
-                    ray.direction = ray.direction- 2*Vector3f::dot(ray.direction, normal) * normal + mat->fuzz * mat->generateRandomPoint();
+                    ray.direction = ray.direction- 2*Vector3f::dot(ray.direction, normal) * normal + mat->fuzz * mat->random_in_unit_sphere();
                     attenuation = mat->getAttenuation(hit.u, hit.v);
 
                 } else if (!strcmp(mat->name(), "die")) {
@@ -479,7 +390,7 @@ class SPPMIntegrator: public Integrator {
                 } else if (!strcmp(mat->name(), "diffuse_light")) {
                     scatter_success = false;
                 } else if (!strcmp(mat->name(), "medium")) {
-                    ray.direction = mat->generateRandomPoint();
+                    ray.direction = mat->random_in_unit_sphere();
                     attenuation = mat->attenuation;
                 }
 
@@ -508,12 +419,13 @@ class SPPMIntegrator: public Integrator {
                 delete node;
             }
         }
-        Vector3f generateRandomPoint(){
-            Vector3f ret;
+        Vector3f random_in_unit_sphere() //Ray Tracing in one weekend中生成单位球内向量的方法
+        {
+            Vector3f p;
             do {
-                ret = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
-            }   while(ret.squaredLength() >= 1.0);
-            return ret;
+                p = 2.0 * Vector3f(drand48(), drand48(), 0) - Vector3f(1,1,0);
+            } while (Vector3f::dot(p, p) >= 1.0);
+            return p;
         }
 
         void saveImage(const char* filename, int rounds, int photons) {

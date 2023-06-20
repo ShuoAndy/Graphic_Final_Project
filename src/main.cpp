@@ -23,30 +23,25 @@ int main(int argc, char *argv[]) {
         std::cout << "Argument " << argNum << " is: " << argv[argNum] << std::endl;
     }
 
-    if (argc < 7) {
-        cout << "Usage: ./bin/PA1 <input scene file> <output bmp file/dir> <accelerator name> <number of sample/round> <integrator type> <use v2>" << endl;
-        return 1;
-    }
     char* integrator = argv[5];
     char* inputFile = argv[1];
     char* outputFile = argv[2];  // only bmp is allowed.
     char* accelerator = argv[3];
     int num_sample = atoi(argv[4]);
-    int use_v2 = atoi(argv[6]);
 
     cout << "parse scene ..." << endl;
     SceneParser sceneParser(inputFile, accelerator);
     cout << "parse scene successfully" << endl;
     if (strcmp(integrator, "pt") == 0) {
         printf("constructing Path tracing integrator... \n");
-        PTIntegrator integrator(&sceneParser, num_sample, use_v2);
+        PTIntegrator integrator(&sceneParser, num_sample);
         printf("integrator successfullt constructed. \n");
         integrator.render(outputFile);
     } else if (strcmp(integrator, "sppm") == 0) {
         int step_to_save = atoi(argv[7]);
         int num_photon = atoi(argv[8]);
         printf("constructing SPPM Integraotor... \n");
-        SPPMIntegrator integrator(&sceneParser, outputFile, step_to_save, num_sample, num_photon, use_v2);
+        SPPMIntegrator integrator(&sceneParser, outputFile, step_to_save, num_sample, num_photon);
         printf("integrator successfully constructed. \n");
         integrator.render(outputFile);
     }

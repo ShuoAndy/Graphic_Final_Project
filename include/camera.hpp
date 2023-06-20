@@ -53,9 +53,19 @@ public:
         this->plain_width = 2 * w * focus_distance * this->horizontal;
         this->plain_height = 2 * h * focus_distance * this->up;
     }
+    
+    Vector3f random_in_unit_sphere() //Ray Tracing in one weekend中生成单位球内向量的方法
+    {
+        Vector3f p;
+        do {
+            p = 2.0 * Vector3f(drand48(), drand48(), 0) - Vector3f(1,1,0);
+        } while (Vector3f::dot(p, p) >= 1.0);
+        return p;
+    }
 
     Ray generateRay(const Vector2f &point) override {
-        Vector3f random = lens_radius * generateRandomPoint();
+        // 已完成
+        Vector3f random = lens_radius * random_in_unit_sphere();
         Vector3f offset = horizontal * random.x() + up * random.y();
         return Ray(this->center + offset, this->focus_plain_corner + float(point.x())/float(this->width) * this->plain_width + float(point.y())/float(this->height) * this->plain_height - this->center - offset);
     }
@@ -63,18 +73,12 @@ public:
 protected:
     float angle;
 
-    //for depth of field
+    //实现景深 DOF
     float lens_radius;
     Vector3f focus_plain_corner;
     Vector3f plain_width;
     Vector3f plain_height;
-    Vector3f generateRandomPoint(){
-        Vector3f p;
-        do {
-            p = 2.0 * Vector3f(drand48(), drand48(), 0) - Vector3f(1,1,0);
-        } while (Vector3f::dot(p, p) >= 1.0);
-        return p;
-    }
+    
 };
 
 #endif //CAMERA_H

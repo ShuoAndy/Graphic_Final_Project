@@ -5,7 +5,7 @@ ACCELERATOR=bvh
 STEP=5
 NUM_SAMPLE=5000
 NUM_PHOTON=1000000
-USEV2=0
+
 
 #rm -r ./build
 
@@ -24,4 +24,4 @@ cd ..
 
 mkdir -p output
 mkdir -p output/sponza_sppm
-time bin/PA1 sponza/sppm.txt output/sponza_sppm $ACCELERATOR $NUM_SAMPLE $INTEGATOR $USEV2 $STEP $NUM_PHOTON >> test.log
+time bin/PA1 sponza/sppm.txt output/sponza_sppm $ACCELERATOR $NUM_SAMPLE $INTEGATOR $STEP $NUM_PHOTON >> test.log

@@ -5,6 +5,7 @@
 #include "curve.hpp"
 #include "object3d.hpp"
 #include "triangle.hpp"
+#include <float.h>
 
 const int steps = 20;
 const float eps = 1e-4;
@@ -29,6 +30,7 @@ class RevSurface : public Object3D {
     ~RevSurface() override { delete pCurve; }
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
+        // (PA2 optional TODO): implement this for the ray-tracing routine using G-N iteration.
         float t, theta, mu;
         if (!getInitIntersect(r, t) || t > h.t) return false;
         Vector3f pt(r.origin + r.direction * t);

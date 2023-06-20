@@ -28,22 +28,30 @@ public:
 
     Vector3f Shade(const Ray &ray, const Hit &hit,
                    const Vector3f &dirToLight, const Vector3f &lightColor) {
-        Vector3f shaded = Vector3f::ZERO;
-        //
-        Vector3f diffuse = this->diffuseColor;
-        float factor = Vector3f::dot(dirToLight, hit.getNormal());
-        diffuse = diffuse * std::max(factor, (float)0);
-        factor = Vector3f::dot(-ray.getDirection(), 2 * Vector3f::dot(dirToLight, hit.getNormal()) * hit.getNormal() - dirToLight);
-        if (factor > 0){
-            Vector3f specular = this->specularColor * powf(factor , this->shininess);
-            shaded = lightColor * (diffuse + specular);
-        } else {
-            shaded = lightColor * diffuse;
-        }
+         Vector3f shaded = Vector3f::ZERO;
+        // 已完成
+        Vector3f N = hit.getNormal().normalized();
+        Vector3f L = dirToLight.normalized();
+        Vector3f V = -(ray.getDirection().normalized());
+        Vector3f R = (2 * Vector3f::dot(N, L) * N - L).normalized();
+        Vector3f diffuse;
+        Vector3f specular;
+        if(Vector3f::dot(L, N)>0)
+            diffuse = diffuseColor * (Vector3f::dot(L, N));
+        else
+            diffuse = Vector3f::ZERO;
+        
+        if (Vector3f::dot(V, R) > 0)
+            specular = specularColor * pow(Vector3f::dot(V, R), shininess);
+        else
+            specular = Vector3f::ZERO;
+        shaded = lightColor * (diffuse + specular);//环境光项为0
         return shaded;
     }
+
+    
     virtual char* name(){
-        return "mat";
+        return "non";
     }
     inline virtual bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered)=0;
 
@@ -62,15 +70,18 @@ public:
     BumpTexture* getBump() {
         return &bump;
     }
-    Vector3f diffuseColor;
-    Vector3f specularColor;
+    
+    Vector3f diffuseColor;//漫反射系数
+    Vector3f specularColor;//镜面反射系数
     Vector3f attenuation;
-    float fuzz;
-    float shininess;
-    float refractive;
-    Texture texture;
+    float fuzz;//模糊度
+    float shininess;//光泽度
+    float refractive;//折射率
+    Texture texture;//纹理
     BumpTexture bump;
-    Vector3f generateRandomPoint(){
+
+    
+    Vector3f random_in_unit_sphere(){
         Vector3f ret;
         do {
             ret = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);

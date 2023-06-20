@@ -82,7 +82,6 @@ class KDTreeNode: public Object3D {
             return true;
         }
 
-        // Compare two boxes from three dimensions
         static bool CompareXAxis(Object3D* a, Object3D* b) {
             Box aBox, bBox;
             if (!a->getBox(aBox) || !b->getBox(bBox))

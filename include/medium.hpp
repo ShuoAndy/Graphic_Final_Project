@@ -12,7 +12,7 @@ class Isotropic : public Material {
             this->attenuation = c;
         }
         virtual bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered) override {
-            scattered = Ray(hit.getPoint(), generateRandomPoint());
+            scattered = Ray(hit.getPoint(), random_in_unit_sphere());
             attenuation = this->attenuation;
             return true;
         }

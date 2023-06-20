@@ -1,7 +1,7 @@
 INTEGATOR=pt
 NUM_SAMPLE=2000
 ACCELERATOR=bvh
-USEV2=0
+
 
 # If project not ready, generate cmake file.
 if [[ ! -d build ]]; then
@@ -18,4 +18,4 @@ cd ..
 
 mkdir -p output
 
-time bin/PA1 testcases/medium.txt output/medium.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR $USEV2 >> test.log
+time bin/PA1 testcases/medium.txt output/medium.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log

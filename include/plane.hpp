@@ -30,19 +30,24 @@ public:
     ~Plane() override = default;
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        Vector3f r_dir = r.getDirection();
-        if(abs(Vector3f::dot(r_dir.normalized(), this->normal.normalized())) < 1e-10)
-            return false;
-        float t = (this->d - Vector3f::dot(this->normal, r.getOrigin()))/(Vector3f::dot(this->normal, r.getDirection()));
-        if (t < tmin || t > h.getT())
-            return false;
+        //已完成
+        if (fabs( Vector3f::dot(normal, r.getDirection())) < 1e-6) return false;
+        float t = (d - Vector3f::dot(normal, r.getOrigin())) / Vector3f::dot(normal, r.getDirection());//参照ppt第16页
 
         Vector3f hit_point = r.pointAtParameter(t);
 		float v = Vector3f::dot(hit_point, vdim);
         float u = Vector3f::dot(hit_point, udim);
-        Vector3f norm = getNorm(u, v, hit_point);
-        h.set(t, u, v, this->material, norm.normalized(), r);
-        return true;
+
+        if( t>0 && t < h.getT() && t > tmin)
+        {
+            if(Vector3f::dot(normal, r.getDirection())<0)
+                h.set(t, u, v, this->material, normal, r);
+            else
+                h.set(t, u, v, this->material, -normal, r);
+            return true;
+        }
+        else
+            return false;
     }
 
     bool getBox(Box& box) override {

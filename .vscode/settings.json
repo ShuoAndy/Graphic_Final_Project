@@ -62,6 +62,10 @@
         "memory_resource": "cpp",
         "random": "cpp",
         "set": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "stop_token": "cpp",
+        "compare": "cpp",
+        "variant": "cpp",
+        "*.ipp": "cpp"
     }
 }

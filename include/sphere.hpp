@@ -4,17 +4,19 @@
 #include "object3d.hpp"
 #include <vecmath.h>
 #include <cmath>
-
+#include <float.h>
 // TODO: Implement functions and add more fields as necessary
 
 class Sphere : public Object3D {
 public:
     Sphere() {
         // unit ball at the center
+        center = Vector3f(0, 0, 0);
+        radius = 1;
     }
 
     Sphere(const Vector3f &center, float radius, Material *material) : Object3D(material) {
-        // 
+        // 构造函数
         this->center = center;
         this->radius = radius;
     }
@@ -22,27 +24,39 @@ public:
     ~Sphere() override = default;
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        //
-        Vector3f sphere_dir = this->center - r.getOrigin();
-        float origin_distance = sphere_dir.length();
-        float t = origin_distance*(Vector3f::dot(r.getDirection().normalized(), sphere_dir.normalized()));
-        if (powf(origin_distance, 2) - powf(t, 2) > powf(this->radius, 2))
+       // 已完成
+        Vector3f l = center - r.getOrigin();//计算向量
+        float tp = Vector3f::dot(l, r.getDirection().normalized());//注意尽量使用normalized，其会返回标准化向量
+        if( l.length()>radius && tp<0 )//对应ppt第37页
             return false;
-        float inter_t = t - sqrt(powf(this->radius, 2) - powf(origin_distance, 2) + powf(t, 2));
-        float outer_t = t + sqrt(powf(this->radius, 2) - powf(origin_distance, 2) + powf(t, 2));
-        float target_t;
-        if (inter_t >= tmin && inter_t <= h.getT())
-            target_t = inter_t;
-        else if (outer_t >= tmin && outer_t <= h.getT())
-            target_t = outer_t;
+
+        float d = sqrt(l.squaredLength() - tp * tp);
+        if( d>radius)//对应ppt第38页
+            return false;
+
+        float t0 = sqrt(radius * radius - d * d);
+        float t;
+        if(l.length()>radius)
+            t = tp - t0;
+        else if(l.length()<radius)
+            t = t0 + tp;
+        //至此，t已计算完毕
+
+        Vector3f out_norm;
+        out_norm =  r.pointAtParameter(t) - this->center;
+        out_norm.normalize();
+        float u = atan2(-out_norm.z(), out_norm.x()) / (2 * M_PI) + 0.5f, v = acos(-out_norm.y()) / M_PI;   
+
+        if (t < h.getT() && t > tmin)
+        {
+            if (l.length()>radius)
+                h.set(t, u, v, material, (r.pointAtParameter(t) - center).normalized(),r);//注意HIT结构体的normal属性是标准法向
+            else
+                h.set(t, u, v,material, (center - r.pointAtParameter(t)).normalized(),r);
+            return true;
+        }
         else
             return false;
-        Vector3f out_norm;
-        out_norm =  r.pointAtParameter(target_t) - this->center;
-        out_norm.normalize();
-        float u = atan2(-out_norm.z(), out_norm.x()) / (2 * M_PI) + 0.5f, v = acos(-out_norm.y()) / M_PI;    
-        h.set(target_t, u, v, this->material, getNorm(u, v, r.pointAtParameter(target_t) - this->center, out_norm), r);
-        return true;
     }
 
     bool getBox(Box& box) override {

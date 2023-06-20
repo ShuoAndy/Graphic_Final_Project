@@ -11,6 +11,8 @@
 
 using namespace std;
 
+//实现AABB包围盒，教程详见https://blog.csdn.net/weixin_43022263/article/details/108550538
+
 class Box {
     public:
         Box() {}
@@ -20,12 +22,14 @@ class Box {
         }
 
         bool intersect(const Ray& r, float t_min, float t_max, float tmin = -0x3f3f3f3f) {
-            float inv = 1.0f / r.getDirection().x();
-            float eps = 1e-3;
-            if (isinf(inv)) return true;
-            float t0 = (min_point.x() - r.getOrigin().x()) * inv;
-            float t1 = (max_point.x() - r.getOrigin().x()) * inv;
-            if (inv < 0.0f) {
+            
+            //在xyz三个维度上计算相交
+            
+            float dir=r.getDirection().x();
+            if(dir==0.0f) return true;
+            float t0 = (min_point.x() - r.getOrigin().x()) /dir;
+            float t1 = (max_point.x() - r.getOrigin().x()) /dir;
+            if (dir < 0.0f) {
                 std::swap(t0, t1);
             }
             t_min = t0 > t_min ? t0 : t_min;
@@ -33,11 +37,11 @@ class Box {
             if (t_max < t_min) 
                 return false;
 
-            inv = 1.0f / r.getDirection().y();
-            if (isinf(inv)) return true;
-            t0 = (min_point.y() - r.getOrigin().y()) * inv;
-            t1 = (max_point.y() - r.getOrigin().y()) * inv;
-            if (inv < 0.0f) {
+            dir=r.getDirection().y();
+            if(dir==0) return true;
+            t0 = (min_point.y() - r.getOrigin().y()) /dir;
+            t1 = (max_point.y() - r.getOrigin().y()) /dir;
+            if (dir < 0.0f) {
                 std::swap(t0, t1);
             }
             t_min = t0 > t_min ? t0 : t_min;
@@ -45,18 +49,18 @@ class Box {
             if (t_max < t_min) 
                 return false;
             
-            inv = 1.0f / r.getDirection().z();
-            if (isinf(inv)) return true;
-            t0 = (min_point.z() - r.getOrigin().z()) * inv;
-            t1 = (max_point.z() - r.getOrigin().z()) * inv;
-            if (inv < 0.0f) {
+            dir=r.getDirection().z();
+            if(dir==0) return true;
+            t0 = (min_point.z() - r.getOrigin().z()) /dir;
+            t1 = (max_point.z() - r.getOrigin().z()) /dir;
+            if (dir < 0.0f) {
                 std::swap(t0, t1);
             }
             t_min = t0 > t_min ? t0 : t_min;
             t_max = t1 < t_max ? t1 : t_max;
             if (t_max < t_min) 
                 return false;
-            //if (t_min < tmin) return false;
+
             return true;
         }
 
@@ -67,7 +71,6 @@ class Box {
             return max_point;
         }
 
-        // Merge the two bounding boxes into one
         friend Box mergeBox(Box a, Box b){
             Vector3f min_point(fmin(a.min().x(), b.min().x()), fmin(a.min().y(), b.min().y()), fmin(a.min().z(), b.min().z()));
             Vector3f max_point(fmax(a.max().x(), b.max().x()), fmax(a.max().y(), b.max().y()), fmax(a.max().z(), b.max().z()));
