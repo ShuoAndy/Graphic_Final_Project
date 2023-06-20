@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/w/Program/final/include -I/home/w/Program/final/deps/vecmath/include
 
-CXX_FLAGS =  -O3 -Wall -fopenmp -std=gnu++11
+CXX_FLAGS =  -O3 -w -fopenmp -std=gnu++11
 

@@ -75,7 +75,7 @@ public:
     Vector3f diffuseColor;  //漫反射系数
     Vector3f specularColor; //镜面反射系数
     Vector3f attenuation;   //衰减系数
-    float fuzz; //模糊度
+    float fuzz;     //模糊度
     float shininess;    //光泽度
     float refractive;   //折射率
     Texture texture;    //纹理

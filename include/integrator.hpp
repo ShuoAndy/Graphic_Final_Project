@@ -204,95 +204,6 @@ class SPPMIntegrator: public Integrator {
             }
         }
 
-        void getVisiblePointsV2(Ray &ray, Hit* hit, int depth_limit = 20) {
-            Group* baseGroup = sceneParser->getGroup();
-            if (baseGroup == nullptr)
-                return;
-            int depth = 0;
-            Vector3f total_atten(1,1,1);
-            while(depth < depth_limit && (total_atten.x() >= 1e-3 || total_atten.y() >= 1e-3 || total_atten.z() >= 1e-3)) {
-                depth ++;
-                hit->setT(1e38);
-
-                // Doesn't hit anything, stop tracing
-                if (!baseGroup->intersect(ray, *hit, 0.0001)){
-                    hit->LightFlux += hit->Attenuation * sceneParser->getBackgroundColor(ray);
-                    return;
-                }
-
-                Material* mat = hit->material;
-                Vector3f normal = hit->normal;
-                Vector3f finalColor = mat->Emission();
-                Ray scattered(ray);
-                Vector3f attenuation;
-                bool scatter_success = true; 
-                if (!strcmp(mat->name(), "diff")) {
-
-                    hit->Attenuation = total_atten * mat->attenuation;
-                    hit->LightFlux += total_atten * finalColor;
-                    return;
-
-                } else if (!strcmp(mat->name(), "met")) {
-
-                    Vector3f input = ray.getDirection().normalized();
-                    Vector3f target = input - 2*Vector3f::dot(input, normal) * normal;
-                    scattered = Ray(ray.pointAtParameter(hit->t), target + mat->fuzz * mat->random_in_unit_sphere());
-                    attenuation = mat->getAttenuation(hit->u, hit->v);
-
-                } else if (!strcmp(mat->name(), "die")) {
-
-                    attenuation = mat->getAttenuation(hit->u, hit->v);
-                    float refractive = mat->refractive;
-                    Vector3f unit = ray.getDirection().normalized();
-                    Vector3f target = unit - 2*Vector3f::dot(unit, normal) * normal;
-                    float index, reflect_prob, cos = -1*Vector3f::dot(unit, normal);
-                    Vector3f refract_ray;
-
-                    if (!hit->is_front_face){
-                        index = refractive;
-                    } else {
-                        index = 1.0 / refractive;
-                    }
-
-                    bool can_refract = false;
-                    float t = -1*Vector3f::dot(unit, normal);
-                    float disc = 1.0 - index * index * (1 - t * t);
-
-                    if (disc > 0){
-                        refract_ray = index * (unit + t * normal) - normal * sqrt(disc);
-                        can_refract = true;
-                    }
-
-                    if (can_refract){
-                        float r = ((1 - index) / (1 + index)) * ((1 - index) / (1 + index));
-                        reflect_prob = r + (1 - r) * pow((1 - cos), 5);
-                    } else {
-                        reflect_prob = 1.1;
-                    }
-
-                    if (drand48() < reflect_prob){
-                        scattered = Ray(ray.pointAtParameter(hit->t), target);
-                    } else {
-                        scattered = Ray(ray.pointAtParameter(hit->t), refract_ray);
-                    }
-
-                } else if (!strcmp(mat->name(), "diffuse_light")) {
-
-                    hit->Attenuation = total_atten;
-                    hit->LightFlux += total_atten * finalColor;
-                    return;
-
-                } else if (!strcmp(mat->name(), "medium")) {
-
-                    scattered = Ray(hit->point, mat->random_in_unit_sphere());
-                    attenuation = mat->attenuation;
-
-                }
-                ray = scattered;
-                total_atten = total_atten * attenuation;
-            }
-        }
-
         void photonTracing(Ray& ray, const Vector3f& radiance, int depth_limit = 20){
             Group* baseGroup = sceneParser->getGroup();
             if (baseGroup == nullptr)
@@ -324,84 +235,6 @@ class SPPMIntegrator: public Integrator {
             }
         }
 
-        void photonTracingV2(Ray& ray, const Vector3f& radiance, int depth_limit = 20){
-            Group* baseGroup = sceneParser->getGroup();
-            if (baseGroup == nullptr)
-                return;
-            int depth = 0;
-            Vector3f total_atten(radiance);
-            total_atten = total_atten * Vector3f(255, 255, 255);
-            ray.direction.normalize();
-            while(depth < depth_limit  && (total_atten.x() >= 1e-3 || total_atten.y() >= 1e-3 || total_atten.z() >= 1e-3)) {
-                depth ++;
-                Hit hit;
-                // Doesn't hit anything, stop tracing
-                if (!baseGroup->intersect(ray, hit, 0.0000001)){
-                    return;
-                }
-                ray.origin += ray.direction * hit.t;
-                Material* mat = hit.getMaterial();
-                Vector3f normal = hit.normal;
-                Ray scattered(ray);
-                Vector3f attenuation;
-                bool scatter_success = true; 
-                if (!strcmp(mat->name(), "diff")) {
-
-                    KDTreeRoot->Update(hit.getPoint(), total_atten, hit.isFrontFace());
-                    ray.direction = normal + mat->random_in_unit_sphere();
-                    attenuation = mat->getAttenuation(hit.u, hit.v);
-
-                } else if (!strcmp(mat->name(), "met")) {
-
-                    Vector3f input = ray.getDirection().normalized();
-                    Vector3f target = input - 2*Vector3f::dot(input, normal) * normal;
-                    ray.direction = ray.direction- 2*Vector3f::dot(ray.direction, normal) * normal + mat->fuzz * mat->random_in_unit_sphere();
-                    attenuation = mat->getAttenuation(hit.u, hit.v);
-
-                } else if (!strcmp(mat->name(), "die")) {
-
-                    attenuation = mat->getAttenuation(hit.u, hit.v);
-                    float index = mat->refractive;
-                    Vector3f unit = ray.getDirection().normalized();
-                    float reflect_prob, cos = -1*Vector3f::dot(unit, normal);
-                    Vector3f refract_ray;
-
-                    if (hit.is_front_face)
-                        index = 1.0 / index;
-
-                    bool can_refract = false;
-                    float t = -1*Vector3f::dot(unit, normal);
-                    float disc = 1.0 - index * index * (1 - t * t);
-                    can_refract = (disc > 0);
-
-                    if (can_refract){
-                        float r = ((1 - index) / (1 + index)) * ((1 - index) / (1 + index));
-                        reflect_prob = r + (1 - r) * pow((1 - cos), 5);
-                    } else {
-                        reflect_prob = 1.1;
-                    }
-
-                    if (drand48() < reflect_prob){
-                        ray.direction = unit - 2*Vector3f::dot(unit, normal) * normal;
-                    } else {
-                        ray.direction = index * (unit + t * normal) - normal * sqrt(disc);;
-                    }
-
-                } else if (!strcmp(mat->name(), "diffuse_light")) {
-                    scatter_success = false;
-                } else if (!strcmp(mat->name(), "medium")) {
-                    ray.direction = mat->random_in_unit_sphere();
-                    attenuation = mat->attenuation;
-                }
-
-                if (scatter_success){
-                    total_atten = total_atten * attenuation;
-                }
-                if (!scatter_success) return;
-
-            }
-        }
-
         void buildTree(){
             printf("building KDTree for SPPM \n");
             if (KDTreeRoot != nullptr)
@@ -419,6 +252,7 @@ class SPPMIntegrator: public Integrator {
                 delete node;
             }
         }
+        
         Vector3f random_in_unit_sphere() //Ray Tracing in one weekend中生成单位球内向量的方法
         {
             Vector3f p;

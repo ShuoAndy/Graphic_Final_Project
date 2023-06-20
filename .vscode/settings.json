@@ -66,6 +66,7 @@
         "stop_token": "cpp",
         "compare": "cpp",
         "variant": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "bit": "cpp"
     }
 }

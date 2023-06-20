@@ -43,14 +43,15 @@ public:
         //至此，t已计算完毕
 
         Vector3f out_norm;
-        out_norm =  r.pointAtParameter(t) - this->center;
+        out_norm =  r.pointAtParameter(t) - this->center;   //计算向外的法向量并标准化
         out_norm.normalize();
-        float u = atan2(-out_norm.z(), out_norm.x()) / (2 * M_PI) + 0.5f, v = acos(-out_norm.y()) / M_PI;   
+        float u = atan2(-out_norm.z(), out_norm.x()) / (2 * M_PI) + 0.5f; //这里的计算详见https://blog.csdn.net/aa20274270/article/details/52709444
+        float v = acos(out_norm.y()) / M_PI;   //u和v分别是方位角和极角
 
         if (t < h.getT() && t > tmin)
         {
             if (l.length()>radius)
-                h.set(t, u, v, material, (r.pointAtParameter(t) - center).normalized(),r);//注意HIT结构体的normal属性是标准法向
+                h.set(t, u, v, material, (r.pointAtParameter(t) - center).normalized(),r); //注意HIT结构体的normal属性是标准法向
             else
                 h.set(t, u, v,material, (center - r.pointAtParameter(t)).normalized(),r);
             return true;

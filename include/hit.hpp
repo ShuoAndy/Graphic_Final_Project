@@ -89,7 +89,7 @@ public:
 
 public:
     float t;
-    float u, v;
+    float u, v;  //用于纹理贴图
     Material *material;
     Vector3f normal;
     Vector3f point;

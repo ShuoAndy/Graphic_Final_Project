@@ -38,8 +38,8 @@ int main(int argc, char *argv[]) {
         printf("integrator successfullt constructed. \n");
         integrator.render(outputFile);
     } else if (strcmp(integrator, "sppm") == 0) {
-        int step_to_save = atoi(argv[7]);
-        int num_photon = atoi(argv[8]);
+        int step_to_save = atoi(argv[6]);
+        int num_photon = atoi(argv[7]);
         printf("constructing SPPM Integraotor... \n");
         SPPMIntegrator integrator(&sceneParser, outputFile, step_to_save, num_sample, num_photon);
         printf("integrator successfully constructed. \n");
