@@ -64,7 +64,8 @@ public:
     }
 
     Ray generateRay(const Vector2f &point) override {
-        // 已完成
+        
+        //实现景深效果
         Vector3f random = lens_radius * random_in_unit_sphere();
         Vector3f offset = horizontal * random.x() + up * random.y();
         return Ray(this->center + offset, this->focus_plain_corner + float(point.x())/float(this->width) * this->plain_width + float(point.y())/float(this->height) * this->plain_height - this->center - offset);
@@ -73,7 +74,6 @@ public:
 protected:
     float angle;
 
-    //实现景深 DOF
     float lens_radius;
     Vector3f focus_plain_corner;
     Vector3f plain_width;

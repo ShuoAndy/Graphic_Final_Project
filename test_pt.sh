@@ -1,6 +1,6 @@
 INTEGATOR=pt
 NUM_SAMPLE=2000
-ACCELERATOR=bvh
+ACCELERATOR=kdtree
 
 
 # If project not ready, generate cmake file.

@@ -183,16 +183,14 @@ CMakeFiles/PA1.dir/src/mesh.cpp.o: /home/w/Program/final/src/mesh.cpp \
  /home/w/Program/final/include/box.hpp \
  /home/w/Program/final/include/triangle.hpp \
  /home/w/Program/final/deps/vecmath/include/Vector2f.h \
- /home/w/Program/final/include/bvh.hpp /usr/include/c++/11/algorithm \
+ /home/w/Program/final/include/kdtree.hpp /usr/include/c++/11/algorithm \
  /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
  /usr/include/c++/11/bits/stl_algo.h \
  /usr/include/c++/11/bits/algorithmfwd.h \
  /usr/include/c++/11/bits/stl_heap.h \
  /usr/include/c++/11/bits/stl_tempbuf.h \
  /usr/include/c++/11/bits/uniform_int_dist.h /usr/include/c++/11/limits \
- /home/w/Program/final/include/kdtree.hpp \
- /home/w/Program/final/include/box.hpp \
- /home/w/Program/final/include/bvh.hpp /usr/include/c++/11/fstream \
+ /home/w/Program/final/include/box.hpp /usr/include/c++/11/fstream \
  /usr/include/c++/11/bits/codecvt.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \

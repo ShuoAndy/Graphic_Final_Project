@@ -28,7 +28,7 @@ public:
 
     Vector3f Shade(const Ray &ray, const Hit &hit,
                    const Vector3f &dirToLight, const Vector3f &lightColor) {
-         Vector3f shaded = Vector3f::ZERO;
+        Vector3f shaded = Vector3f::ZERO;
         // 已完成
         Vector3f N = hit.getNormal().normalized();
         Vector3f L = dirToLight.normalized();
@@ -45,7 +45,8 @@ public:
             specular = specularColor * pow(Vector3f::dot(V, R), shininess);
         else
             specular = Vector3f::ZERO;
-        shaded = lightColor * (diffuse + specular);//环境光项为0
+        
+        shaded = lightColor * (diffuse + specular);
         return shaded;
     }
 
@@ -71,13 +72,13 @@ public:
         return &bump;
     }
     
-    Vector3f diffuseColor;//漫反射系数
-    Vector3f specularColor;//镜面反射系数
-    Vector3f attenuation;
-    float fuzz;//模糊度
-    float shininess;//光泽度
-    float refractive;//折射率
-    Texture texture;//纹理
+    Vector3f diffuseColor;  //漫反射系数
+    Vector3f specularColor; //镜面反射系数
+    Vector3f attenuation;   //衰减系数
+    float fuzz; //模糊度
+    float shininess;    //光泽度
+    float refractive;   //折射率
+    Texture texture;    //纹理
     BumpTexture bump;
 
     

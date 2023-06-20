@@ -33,7 +33,6 @@ SET(PA1_INCLUDES
         include/triangle.hpp
         include/box.hpp
         include/texture.h
-        include/bvh.hpp
         include/kdtree.hpp
         include/photonkdtree.hpp
         include/curve.hpp

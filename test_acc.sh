@@ -17,7 +17,6 @@ cd ..
 
 mkdir -p output
 
-time bin/PA1 testcases/green_rabit.txt output/green_rabit_bvh.bmp bvh $NUM_SAMPLE $INTEGATOR  >> test.log
 time bin/PA1 testcases/green_rabit.txt output/green_rabit_kdtree.bmp kdtree $NUM_SAMPLE $INTEGATOR  >> test.log
 time bin/PA1 testcases/green_rabit.txt output/green_rabit_brute_force.bmp seq $NUM_SAMPLE $INTEGATOR  >> test.log
 

@@ -1,6 +1,5 @@
 #include "mesh.hpp"
 #include "box.hpp"
-#include "bvh.hpp"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
@@ -11,9 +10,7 @@
 
 bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
     bool flag = false;
-    if (strcmp(accelerator, "bvh") == 0){
-        flag = BVHRoot->intersect(r, h, tmin);
-    } else if (strcmp(accelerator, "kdtree") == 0) {
+    if (strcmp(accelerator, "kdtree") == 0) {
         flag = KDTreeRoot->intersect(r, h, tmin);
     } else {
         for (auto obj: triangle_list) {
@@ -31,11 +28,7 @@ bool Mesh::getBox(Box &box) {
 
 void Mesh::buildTree() {
     std::cout << "start building tree for mesh " << std::endl;
-    if (strcmp(accelerator, "bvh") == 0){
-        std::cout << "start building BVH accelerator for mesh " << std::endl;
-        BVHRoot = new BVHNode(triangle_list, 0, triangle_list.size());
-    }
-    else if (strcmp(accelerator, "kdtree") == 0){
+    if (strcmp(accelerator, "kdtree") == 0){
         std::cout << "start building KDTree accelerator for mesh " << std::endl;
         KDTreeRoot = new KDTreeNode(triangle_list, 0, triangle_list.size() - 1, 0);
     }

@@ -6,7 +6,6 @@
 #include "ray.hpp"
 #include "hit.hpp"
 #include "box.hpp"
-#include "bvh.hpp"
 #include "kdtree.hpp"
 #include <iostream>
 #include <vector>
@@ -32,12 +31,7 @@ public:
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         bool flag = false;
-        if (strcmp(accelerator, "bvh") == 0){
-            for (auto obj: infinities){
-                if (obj->intersect(r, h, tmin)) flag = true;
-            }
-            flag |= BVHRoot->intersect(r, h, tmin);
-        } else if (strcmp(accelerator, "kdtree") == 0) {
+        if (strcmp(accelerator, "kdtree") == 0) {
             for (auto obj: infinities){
                 if (obj->intersect(r, h, tmin)) flag = true;
             }
@@ -76,9 +70,7 @@ public:
             else finite.push_back(obj);
         }
         std::cout << "finite objects: " << finite.size() <<  ", infinite objects: " << infinities.size() << std::endl; 
-        if (strcmp(accelerator, "bvh") == 0){
-            BVHRoot = new BVHNode(finite, 0, finite.size());
-        } else if (strcmp(accelerator, "kdtree") == 0) {
+        if (strcmp(accelerator, "kdtree") == 0) {
             KDTreeRoot = new KDTreeNode(finite, 0, finite.size() - 1, 0);
         }
 
@@ -101,7 +93,6 @@ public:
 private:
     std::vector<Object3D*> list;
     std::vector<Object3D*> infinities;
-    BVHNode* BVHRoot;
     KDTreeNode* KDTreeRoot;
     const char* accelerator;
 

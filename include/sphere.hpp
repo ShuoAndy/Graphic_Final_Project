@@ -81,17 +81,6 @@ public:
 protected:
     Vector3f center;
     float radius;
-    Vector3f getNorm(float u, float v, const Vector3f &hit_point, const Vector3f &norm) {
-        if (!material->getBump()->hasBump()) {
-            return norm;
-        }
-        float value = 0;
-        Vector2f grad = material->getBump()->GradAt(u, v, value);
-        float phi = u * 2 * M_PI, theta = M_PI - v * M_PI;
-        Vector3f du(-hit_point.z(), 0, hit_point.x()), dv(hit_point.y() * cos(phi), -radius * sin(theta), hit_point.y() * sin(phi));
-        if (du.squaredLength() < FLT_EPSILON) return norm;
-        return Vector3f::cross(du + norm.normalized() * grad[0] / (2 * M_PI), dv + norm.normalized() * grad[1] / M_PI);
-    }
 
 };
 

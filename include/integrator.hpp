@@ -124,7 +124,7 @@ class SPPMIntegrator: public Integrator {
             omp_set_num_threads(25);
             for (int i = 0; i < num_round; i ++){
                 fprintf(stderr, "sppm round %d / %d \n", i, num_round);
-#pragma omp parallel for schedule(dynamic, 1)
+#pragma omp parallel for schedule(dynamic, 1) // openMP并行加速
                 for (int x = 0; x < width; x ++){
                     if (x % 100 == 0)
                         printf("tracing row %d for visible points with thread %d round %d\n", x, omp_get_thread_num(), i);
@@ -138,7 +138,7 @@ class SPPMIntegrator: public Integrator {
                 }
                 buildTree();
                 int avg_photons = num_photon / light_sources.size();
-#pragma omp parallel for schedule(dynamic, 1)
+#pragma omp parallel for schedule(dynamic, 1) // openMP并行加速
                 for (int x = 0; x < avg_photons; x ++){
                     if (x % 100000 == 0)
                         printf("tracing photon %d with thread %d round %d\n", x, omp_get_thread_num(), i);

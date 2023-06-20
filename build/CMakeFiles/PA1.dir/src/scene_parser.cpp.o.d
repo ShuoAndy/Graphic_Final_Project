@@ -193,14 +193,13 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o: \
  /home/w/Program/final/include/material.hpp \
  /home/w/Program/final/include/object3d.hpp \
  /home/w/Program/final/include/group.hpp \
- /home/w/Program/final/include/bvh.hpp /usr/include/c++/11/algorithm \
+ /home/w/Program/final/include/kdtree.hpp /usr/include/c++/11/algorithm \
  /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
  /usr/include/c++/11/bits/stl_algo.h \
  /usr/include/c++/11/bits/algorithmfwd.h \
  /usr/include/c++/11/bits/stl_heap.h \
  /usr/include/c++/11/bits/stl_tempbuf.h \
  /usr/include/c++/11/bits/uniform_int_dist.h /usr/include/c++/11/limits \
- /home/w/Program/final/include/kdtree.hpp \
  /home/w/Program/final/include/mesh.hpp \
  /home/w/Program/final/include/triangle.hpp \
  /home/w/Program/final/deps/vecmath/include/Vector2f.h \

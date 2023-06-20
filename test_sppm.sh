@@ -1,4 +1,4 @@
-ACCELERATOR=bvh
+ACCELERATOR=kdtree
 
 # If project not ready, generate cmake file.
 if [[ ! -d build ]]; then

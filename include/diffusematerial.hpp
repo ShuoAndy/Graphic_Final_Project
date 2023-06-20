@@ -9,7 +9,7 @@
 #include <iostream>
 #include <cstdio>
 
-//基于Ray Tracing in one weekend的diffusematerial
+//基于 Ray Tracing in one weekend 的 diffuse_material
 
 class DiffuseLight: public Material{
     public:
