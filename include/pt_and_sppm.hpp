@@ -77,7 +77,7 @@ public:
 private:
     int num_sample;
 
-    Vector3f radiance(Ray& camRay, int depth,  Vector3f total_atten = Vector3f(1,1,1))
+    Vector3f radiance(Ray& camRay, int depth,  Vector3f attenuation_new = Vector3f(1,1,1))
     {
         //基于smallpt实现的pathtracing
 
@@ -93,19 +93,17 @@ private:
         Vector3f finalColor = hit.getMaterial()->getSpecularColor();
 
         Ray scattered(camRay);
+
         Vector3f attenuation;
 
         bool scatter_success = hit.getMaterial()->Scatter(camRay, hit, attenuation, scattered);
-        total_atten = total_atten * attenuation;
+        
+        attenuation_new = attenuation_new * attenuation;
 
-        if (total_atten.x() < 1e-3 && total_atten.y() < 1e-3 && total_atten.z() < 1e-3) 
-        {
-            return finalColor;
-        }
 
         if (depth < 50 && scatter_success)
         {
-            return finalColor + attenuation*radiance(scattered,  depth + 1, total_atten);
+            return finalColor + attenuation*radiance(scattered,  depth + 1, attenuation_new); //递归计算散射光
         }
 
         return finalColor;
@@ -184,7 +182,7 @@ class SPPMIntegrator: public Integrator {
             if (baseGroup == nullptr)
                 return;
             int depth = 0;
-            Vector3f total_atten(1,1,1);
+            Vector3f attenuation_new(1,1,1);
             while(depth < depth_limit) {
                 depth ++;
                 hit->setT(1e38);
@@ -199,13 +197,13 @@ class SPPMIntegrator: public Integrator {
                 Vector3f attenuation;
                 bool scatter_success = hit->getMaterial()->Scatter(ray, *hit, attenuation, scattered);
                 if (scatter_success){
-                    total_atten = total_atten * attenuation;
+                    attenuation_new = attenuation_new * attenuation;
                 }
 
                 // hit a diffuse material (including a light material)
                 if (strcmp(hit->getMaterial()->name(), "diff") == 0 || strcmp(hit->getMaterial()->name(), "diffuse_light") == 0){
-                    hit->Attenuation = total_atten;
-                    hit->LightFlux += total_atten * hit->getMaterial()->getSpecularColor();
+                    hit->Attenuation = attenuation_new;
+                    hit->LightFlux += attenuation_new * hit->getMaterial()->getSpecularColor();
                     return;
                 }
                 ray = scattered;
@@ -217,8 +215,8 @@ class SPPMIntegrator: public Integrator {
             if (baseGroup == nullptr)
                 return;
             int depth = 0;
-            Vector3f total_atten(radiance);
-            total_atten = total_atten * Vector3f(255, 255, 255);
+            Vector3f attenuation_new(radiance);
+            attenuation_new = attenuation_new * Vector3f(255, 255, 255);
             while(depth < depth_limit) {
                 depth ++;
                 Hit hit;
@@ -232,10 +230,10 @@ class SPPMIntegrator: public Integrator {
 
                 // hit a diffuse material
                 if (strcmp(hit.getMaterial()->name(), "diff") == 0){
-                    KDTreeRoot->Update(hit.getPoint(), total_atten, hit.isFrontFace());
+                    KDTreeRoot->Update(hit.getPoint(), attenuation_new, hit.isFrontFace());
                 }
                 if (scatter_success){
-                    total_atten = total_atten * attenuation;
+                    attenuation_new = attenuation_new * attenuation;
                 }
                 if (!scatter_success) return;
 

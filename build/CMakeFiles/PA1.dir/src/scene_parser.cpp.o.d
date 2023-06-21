@@ -212,5 +212,4 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o: \
  /home/w/Program/final/include/diffusematerial.hpp \
  /home/w/Program/final/include/revsurface.hpp \
  /home/w/Program/final/include/curve.hpp \
- /home/w/Program/final/include/curve.hpp \
- /home/w/Program/final/include/medium.hpp
+ /home/w/Program/final/include/curve.hpp
