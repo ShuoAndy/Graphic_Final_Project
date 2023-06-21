@@ -11,9 +11,10 @@ class Ray {
 public:
 
     Ray() = delete;
-    Ray(const Vector3f &orig, const Vector3f &dir) {
+    Ray(const Vector3f &orig, const Vector3f &dir,double time = 0.0) {
         origin = orig;
         direction = dir.normalized();
+        tm=time;
     }
 
     Ray(const Ray &r) {
@@ -29,13 +30,17 @@ public:
         return direction;
     }
 
+    double time() const    {
+        return tm; 
+    }
+
     Vector3f pointAtParameter(float t) const {
         return origin + direction * t;
     }
 
     Vector3f origin;
     Vector3f direction;
-
+    double tm;
 };
 
 inline std::ostream &operator<<(std::ostream &os, const Ray &r) {

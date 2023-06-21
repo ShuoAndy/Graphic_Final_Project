@@ -339,6 +339,8 @@ Object3D *SceneParser::parseObject(char token[MAX_PARSER_TOKEN_LENGTH]) {
         answer = (Object3D *)parseBsplineCurve();
     } else if (!strcmp(token, "RevSurface")) {
         answer = (Object3D *)parseRevSurface();
+    } else if (!strcmp(token, "MovingSphere")){
+        answer = (Object3D *) parseMovingSphere();
     } else {
         printf("Unknown token in parseObject: '%s'\n", token);
         exit(0);
@@ -413,6 +415,30 @@ Sphere *SceneParser::parseSphere() {
     return new Sphere(center, radius, current_material);
 }
 
+moving_sphere *SceneParser::parseMovingSphere() {
+    char token[MAX_PARSER_TOKEN_LENGTH];
+    getToken(token);
+    assert (!strcmp(token, "{"));
+    getToken(token);
+    assert (!strcmp(token, "center0"));
+    Vector3f center0 = readVector3f();
+    getToken(token);
+    assert (!strcmp(token, "center1"));
+    Vector3f center1 = readVector3f();
+    getToken(token);
+    assert (!strcmp(token, "time0"));
+    float time0 = readFloat();
+    getToken(token);
+    assert (!strcmp(token, "time1"));
+    float time1 = readFloat();
+    getToken(token);
+    assert (!strcmp(token, "radius"));
+    float radius = readFloat();
+    getToken(token);
+    assert (!strcmp(token, "}"));
+    assert (current_material != nullptr);
+    return new moving_sphere(center0, center1, time0, time1 , radius, current_material);
+}
 
 Plane *SceneParser::parsePlane() {
     char token[MAX_PARSER_TOKEN_LENGTH];

@@ -29,7 +29,7 @@ class DiffuseMaterial: public Material{
         DiffuseMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = ""):Material(d_color, s_color, atten, s, texture_name, bump_name){}
         inline bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
             Vector3f reflect = hit.getNormal() + random_in_unit_sphere();
-            scattered = Ray(ray.pointAtParameter(hit.t), reflect);
+            scattered = Ray(ray.pointAtParameter(hit.t), reflect,ray.time());
             attenuation = getAttenuation(hit.u, hit.v);
             return true;
         }
@@ -51,7 +51,7 @@ class MetalMaterial: public Material{
         MetalMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = "", float fuzz = 0):Material(d_color, s_color, atten, s, texture_name, bump_name){ this->fuzz = fuzz > 1 ? 1 : fuzz;}
         inline bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
             Vector3f reflected = reflectRay(ray.getDirection().normalized(), hit.getNormal());
-            scattered = Ray(ray.pointAtParameter(hit.getT()), reflected + fuzz * random_in_unit_sphere());
+            scattered = Ray(ray.pointAtParameter(hit.getT()), reflected + fuzz * random_in_unit_sphere(),ray.time());
             attenuation = getAttenuation(hit.getU(), hit.getV());
             return (Vector3f::dot(scattered.getDirection(), hit.getNormal()) > 0);
         }

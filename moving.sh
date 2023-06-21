@@ -18,4 +18,4 @@ cmake --build build
 mkdir -p output
 
 
-time bin/PA1 testcases/random.txt output/random.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
+time bin/PA1 testcases/moving.txt output/moving.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
