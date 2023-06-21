@@ -11,10 +11,13 @@
 #include "camera.hpp"
 #include "group.hpp"
 #include "light.hpp"
-#include "integrator.hpp"
+#include "pt_and_sppm.hpp"
 
 #include <string>
 #include <cstring>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 using namespace std;
 

@@ -1,5 +1,8 @@
+# build出错停止运行
+set -e
+
 INTEGATOR=pt
-NUM_SAMPLE=20
+NUM_SAMPLE=2000
 ACCELERATOR=kdtree
 
 
@@ -18,4 +21,4 @@ cd ..
 
 mkdir -p output
 
-time bin/PA1 testcases/medium.txt output/medium.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
+time bin/PA1 testcases/cornell_box.txt output/cornell_box.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log

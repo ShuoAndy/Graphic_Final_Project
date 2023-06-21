@@ -180,6 +180,7 @@ CMakeFiles/PA1.dir/src/mesh.cpp.o: /home/w/Program/final/src/mesh.cpp \
  /usr/include/string.h /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+ /home/w/Program/final/include/stb_image.h /usr/include/c++/11/stdlib.h \
  /home/w/Program/final/include/box.hpp \
  /home/w/Program/final/include/triangle.hpp \
  /home/w/Program/final/deps/vecmath/include/Vector2f.h \

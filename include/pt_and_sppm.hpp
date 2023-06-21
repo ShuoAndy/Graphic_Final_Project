@@ -1,5 +1,5 @@
-#ifndef INTEGRATOR_H
-#define INTEGRATOR_H
+#ifndef PTSPPM_H
+#define PTSPPM_H
 
 #include "scene_parser.hpp"
 #include "image.hpp"
@@ -34,14 +34,12 @@ class PTIntegrator: public Integrator{
 public:
     PTIntegrator(SceneParser* sceneParser, int num_sample):Integrator(sceneParser) {
         this->num_sample = num_sample;
-        
     }
 
     virtual void render(char* outputFile) {
         Camera* camera = sceneParser->getCamera();
         int height = camera->getHeight(), width = camera->getWidth();
         Image image(width, height);
-        time_t start_time = time(NULL);
         printf("started rendering \n");
         omp_set_num_threads(25);
 #pragma omp parallel for schedule(dynamic, 1)  // openMP并行加速
@@ -53,53 +51,64 @@ public:
 
                 // 实现抗锯齿效果        
                 for(int sx=0;sx<2;sx++){
-                for(int sy=0;sy<2;sy++){
-                for (int s = 0; s < num_sample; s ++){
-                    double r1=2*erand48(Xi), dx=(r1<1 ? sqrt(r1)-1: 1-sqrt(2-r1)); 
-                    double r2=2*erand48(Xi), dy=(r2<1 ? sqrt(r2)-1: 1-sqrt(2-r2));
-                    float u = float(x+ (sx-.5 + dx)/2);
-                    float v = float(y+ (sy-.5 + dy)/2);
-                    finalColor += get_color(u, v, camera)/float(4);
-                }}}
+                    for(int sy=0;sy<2;sy++){
+
+                        for (int s = 0; s < num_sample; s ++)
+                        {
+                            double r1=2*erand48(Xi), dx=(r1<1 ? sqrt(r1)-1: 1-sqrt(2-r1)); 
+                            double r2=2*erand48(Xi), dy=(r2<1 ? sqrt(r2)-1: 1-sqrt(2-r2));
+                            float u = float(x+ (sx-.5 + dx)/2);
+                            float v = float(y+ (sy-.5 + dy)/2);
+                            Ray camRay = camera->generateRay(Vector2f(u, v));
+                            finalColor += radiance(camRay, 0) / float(4);
+                        }
+                    }
+                }
                 
                 
                 finalColor = finalColor / float(num_sample);
                 image.SetPixel(x, y, finalColor);
             }
         }
-        time_t end_time = time(NULL);
-        printf("rendering finished in %d secs\n", end_time - start_time);
+        
         image.SaveImage(outputFile);
     }
 
 private:
     int num_sample;
-    Vector3f get_color(float x, float y, Camera* camera, int depth_limit=50){
-        Ray camRay = camera->generateRay(Vector2f(x, y));
-        return pathTracing(camRay, camera, 0, depth_limit);
-    }
-    Vector3f pathTracing(Ray& camRay, Camera* camera, int depth, int depth_limit=50, Vector3f total_atten = Vector3f(1,1,1)){
+
+    Vector3f radiance(Ray& camRay, int depth,  Vector3f total_atten = Vector3f(1,1,1))
+    {
+        //基于smallpt实现的pathtracing
+
         Group* baseGroup = sceneParser->getGroup();
         Hit hit;
         bool isIntersect = false;
         if (baseGroup != nullptr)
             isIntersect = baseGroup->intersect(camRay, hit, 0.0001);
-        if (isIntersect){
-            Vector3f finalColor = hit.getMaterial()->Emission();
-            Ray scattered(camRay);
-            Vector3f attenuation;
-            bool scatter_success = hit.getMaterial()->Scatter(camRay, hit, attenuation, scattered);
-            total_atten = total_atten * attenuation;
-            if (total_atten.x() < 1e-3 && total_atten.y() < 1e-3 && total_atten.z() < 1e-3) {
-                return finalColor;
-            }
-            if (depth < depth_limit && scatter_success){
-                return finalColor + attenuation*pathTracing(scattered, camera, depth + 1, depth_limit, total_atten);
-            }
+        
+        if(!isIntersect)
+            return sceneParser->getBackgroundColor(camRay); //直接返回背景色
+
+        Vector3f finalColor = hit.getMaterial()->getSpecularColor();
+
+        Ray scattered(camRay);
+        Vector3f attenuation;
+
+        bool scatter_success = hit.getMaterial()->Scatter(camRay, hit, attenuation, scattered);
+        total_atten = total_atten * attenuation;
+
+        if (total_atten.x() < 1e-3 && total_atten.y() < 1e-3 && total_atten.z() < 1e-3) 
+        {
             return finalColor;
-        } else {
-            return sceneParser->getBackgroundColor(camRay);
         }
+
+        if (depth < 50 && scatter_success)
+        {
+            return finalColor + attenuation*radiance(scattered,  depth + 1, total_atten);
+        }
+
+        return finalColor;
     }
 
 };
@@ -116,7 +125,6 @@ class SPPMIntegrator: public Integrator {
             Group* baseGroup = sceneParser->getGroup();
             light_sources = baseGroup->getLightSources();
             Image image(width, height);
-            time_t start_time = time(NULL);
             for (int i = 0; i < width; i ++)
                 for (int j = 0; j < height; j ++)
                     visible_points.push_back(new Hit()); 
@@ -124,10 +132,10 @@ class SPPMIntegrator: public Integrator {
             omp_set_num_threads(25);
             for (int i = 0; i < num_round; i ++){
                 fprintf(stderr, "sppm round %d / %d \n", i, num_round);
+
+
 #pragma omp parallel for schedule(dynamic, 1) // openMP并行加速
                 for (int x = 0; x < width; x ++){
-                    if (x % 100 == 0)
-                        printf("tracing row %d for visible points with thread %d round %d\n", x, omp_get_thread_num(), i);
                     for (int y = 0; y < height; y ++){
                         float u = float(x + drand48());
                         float v = float(y + drand48());
@@ -138,13 +146,13 @@ class SPPMIntegrator: public Integrator {
                 }
                 buildTree();
                 int avg_photons = num_photon / light_sources.size();
+
+
 #pragma omp parallel for schedule(dynamic, 1) // openMP并行加速
                 for (int x = 0; x < avg_photons; x ++){
-                    if (x % 100000 == 0)
-                        printf("tracing photon %d with thread %d round %d\n", x, omp_get_thread_num(), i);
                     for (int y = 0; y < light_sources.size(); y ++){
                         Ray r = light_sources[y]->generateRandomRay();
-                       photonTracing(r, light_sources[y]->getMaterial()->Emission());
+                       photonTracing(r, light_sources[y]->getMaterial()->getSpecularColor());
                     }
                 }
 
@@ -197,7 +205,7 @@ class SPPMIntegrator: public Integrator {
                 // hit a diffuse material (including a light material)
                 if (strcmp(hit->getMaterial()->name(), "diff") == 0 || strcmp(hit->getMaterial()->name(), "diffuse_light") == 0){
                     hit->Attenuation = total_atten;
-                    hit->LightFlux += total_atten * hit->getMaterial()->Emission();
+                    hit->LightFlux += total_atten * hit->getMaterial()->getSpecularColor();
                     return;
                 }
                 ray = scattered;
@@ -266,10 +274,10 @@ class SPPMIntegrator: public Integrator {
             Camera* camera = sceneParser->getCamera();
             int height = camera->getHeight(), width = camera->getWidth();
             Image image(width, height);
-            for (int u = 0; u < width; ++u)
-                for (int v = 0; v < height; ++v) {
-                    Hit* hit = visible_points[u * height + v];
-                    image.SetPixel(u, v, hit->PhotonFlux / (M_PI * hit->Radius * num_photon * rounds) + hit->LightFlux / rounds);
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++) {
+                    Hit* hit = visible_points[x * height + y];
+                    image.SetPixel(x, y, hit->PhotonFlux / (M_PI * hit->Radius * num_photon * rounds) + hit->LightFlux / rounds);
                 }
             char abs_path[1024];
             strcpy(abs_path, ckpt_dir);

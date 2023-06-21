@@ -30,28 +30,29 @@ public:
     }
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        bool flag = false;
+        bool result = false;
         if (strcmp(accelerator, "kdtree") == 0) {
             for (auto obj: infinities){
-                if (obj->intersect(r, h, tmin)) flag = true;
+                if (obj->intersect(r, h, tmin)) result = true;
             }
-            flag |= KDTreeRoot->intersect(r, h, tmin);
+            
+            result |= KDTreeRoot->intersect(r, h, tmin);
         } else {
             for (auto obj : list)
-            if (obj) flag |= obj->intersect(r, h, tmin);
+            if (obj) result |= obj->intersect(r, h, tmin);
         }
-        return flag;
+        return result;
     }
 
     bool getBox(Box &box) override {
-        bool flag = true;
+        bool result = true;
         Box temp;
         for (auto obj: list) {
             if (!obj->getBox(temp)) return false;
-            if (flag) {
+            if (result) {
                 box = temp;
             } else {
-                flag = false;
+                result = false;
                 box = mergeBox(box, temp);
             }
         }
@@ -79,7 +80,7 @@ public:
     std::vector<Object3D*> getLightSources() {
         std::vector<Object3D*> light_sources;
         for (auto obj: list){
-            if (obj->getMaterial()->Emission() != Vector3f::ZERO){
+            if (obj->getMaterial()->getSpecularColor() != Vector3f::ZERO){
                 light_sources.push_back(obj);
             }
         }

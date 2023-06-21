@@ -238,30 +238,6 @@ src/scene_parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PA1.dir/build.make CMakeFiles/PA1.dir/src/scene_parser.cpp.s
 .PHONY : src/scene_parser.cpp.s
 
-src/texture.o: src/texture.cpp.o
-.PHONY : src/texture.o
-
-# target to build an object file
-src/texture.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/PA1.dir/build.make CMakeFiles/PA1.dir/src/texture.cpp.o
-.PHONY : src/texture.cpp.o
-
-src/texture.i: src/texture.cpp.i
-.PHONY : src/texture.i
-
-# target to preprocess a source file
-src/texture.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/PA1.dir/build.make CMakeFiles/PA1.dir/src/texture.cpp.i
-.PHONY : src/texture.cpp.i
-
-src/texture.s: src/texture.cpp.s
-.PHONY : src/texture.s
-
-# target to generate assembly for a file
-src/texture.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/PA1.dir/build.make CMakeFiles/PA1.dir/src/texture.cpp.s
-.PHONY : src/texture.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -284,9 +260,6 @@ help:
 	@echo "... src/scene_parser.o"
 	@echo "... src/scene_parser.i"
 	@echo "... src/scene_parser.s"
-	@echo "... src/texture.o"
-	@echo "... src/texture.i"
-	@echo "... src/texture.s"
 .PHONY : help
 
 

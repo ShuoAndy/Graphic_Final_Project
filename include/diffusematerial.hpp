@@ -17,14 +17,13 @@ class DiffuseLight: public Material{
         inline bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
             return false;
         }
-        virtual Vector3f Emission() const override {
-            return specularColor;
-        }
+
         char* name(){
             return "diffuse_light";
         }
 };
 
+//漫反射
 class DiffuseMaterial: public Material{
     public:
         DiffuseMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = ""):Material(d_color, s_color, atten, s, texture_name, bump_name){}
@@ -46,6 +45,7 @@ class DiffuseMaterial: public Material{
         }
 };
 
+//反射
 class MetalMaterial: public Material{
     public:
         MetalMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = "", float fuzz = 0):Material(d_color, s_color, atten, s, texture_name, bump_name){ this->fuzz = fuzz > 1 ? 1 : fuzz;}
@@ -68,9 +68,11 @@ class MetalMaterial: public Material{
         }
 };
 
+//电介质
 class DielecMaterial: public Material{
     public:
-        DielecMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = "", float refractive = 0):Material(d_color, s_color, atten, s, texture_name, bump_name){ this->refractive = refractive;}
+        DielecMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = "", float refractive = 0):Material(d_color, s_color, atten, s, texture_name, bump_name)
+        { this->refractive = refractive;}
         inline bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered){
             attenuation = getAttenuation(hit.getU(), hit.getV());
             Vector3f unit = ray.getDirection().normalized();

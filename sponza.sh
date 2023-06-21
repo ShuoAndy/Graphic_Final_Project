@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# build出错停止运行
+set -e
 
 INTEGATOR=sppm
 ACCELERATOR=kdtree

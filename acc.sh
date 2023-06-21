@@ -1,3 +1,6 @@
+# build出错停止运行
+set -e
+
 INTEGATOR=pt
 NUM_SAMPLE=20
 

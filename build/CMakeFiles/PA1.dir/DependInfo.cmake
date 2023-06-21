@@ -12,7 +12,6 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/w/Program/final/src/main.cpp" "CMakeFiles/PA1.dir/src/main.cpp.o" "gcc" "CMakeFiles/PA1.dir/src/main.cpp.o.d"
   "/home/w/Program/final/src/mesh.cpp" "CMakeFiles/PA1.dir/src/mesh.cpp.o" "gcc" "CMakeFiles/PA1.dir/src/mesh.cpp.o.d"
   "/home/w/Program/final/src/scene_parser.cpp" "CMakeFiles/PA1.dir/src/scene_parser.cpp.o" "gcc" "CMakeFiles/PA1.dir/src/scene_parser.cpp.o.d"
-  "/home/w/Program/final/src/texture.cpp" "CMakeFiles/PA1.dir/src/texture.cpp.o" "gcc" "CMakeFiles/PA1.dir/src/texture.cpp.o.d"
   )
 
 # Targets to which this target links.

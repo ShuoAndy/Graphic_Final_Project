@@ -185,6 +185,7 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o: \
  /home/w/Program/final/include/hit.hpp \
  /home/w/Program/final/include/material.hpp \
  /home/w/Program/final/include/texture.h \
+ /home/w/Program/final/include/stb_image.h /usr/include/c++/11/stdlib.h \
  /home/w/Program/final/include/box.hpp /usr/include/c++/11/vector \
  /usr/include/c++/11/bits/stl_uninitialized.h \
  /usr/include/c++/11/bits/stl_vector.h \

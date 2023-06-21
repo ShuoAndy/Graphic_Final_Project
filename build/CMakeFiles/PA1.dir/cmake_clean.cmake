@@ -9,8 +9,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/PA1.dir/src/mesh.cpp.o.d"
   "CMakeFiles/PA1.dir/src/scene_parser.cpp.o"
   "CMakeFiles/PA1.dir/src/scene_parser.cpp.o.d"
-  "CMakeFiles/PA1.dir/src/texture.cpp.o"
-  "CMakeFiles/PA1.dir/src/texture.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

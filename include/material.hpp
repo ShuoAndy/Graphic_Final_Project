@@ -56,7 +56,7 @@ public:
     }
     inline virtual bool Scatter(const Ray &ray, const Hit &hit, Vector3f& attenuation, Ray& scattered)=0;
 
-    virtual Vector3f Emission() const {
+    virtual Vector3f getSpecularColor() const {
         return specularColor;
     }
     
@@ -72,14 +72,14 @@ public:
         return &bump;
     }
     
-    Vector3f diffuseColor;  //漫反射系数
-    Vector3f specularColor; //镜面反射系数
+    Vector3f diffuseColor;  
+    Vector3f specularColor; 
     Vector3f attenuation;   //衰减系数
-    float fuzz;     //模糊度
+    float fuzz;     
     float shininess;    //光泽度
     float refractive;   //折射率
-    Texture texture;    //纹理
-    BumpTexture bump;
+    Texture texture;    //uv纹理
+    BumpTexture bump;   //凹凸纹理
 
     
     Vector3f random_in_unit_sphere(){

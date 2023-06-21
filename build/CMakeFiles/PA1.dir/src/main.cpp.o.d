@@ -189,6 +189,7 @@ CMakeFiles/PA1.dir/src/main.cpp.o: /home/w/Program/final/src/main.cpp \
  /home/w/Program/final/include/hit.hpp \
  /home/w/Program/final/include/material.hpp \
  /home/w/Program/final/include/texture.h \
+ /home/w/Program/final/include/stb_image.h /usr/include/c++/11/stdlib.h \
  /home/w/Program/final/include/box.hpp /usr/include/c++/11/vector \
  /usr/include/c++/11/bits/stl_uninitialized.h \
  /usr/include/c++/11/bits/stl_vector.h \
@@ -202,11 +203,24 @@ CMakeFiles/PA1.dir/src/main.cpp.o: /home/w/Program/final/src/main.cpp \
  /usr/include/c++/11/bits/stl_tempbuf.h \
  /usr/include/c++/11/bits/uniform_int_dist.h /usr/include/c++/11/limits \
  /home/w/Program/final/include/light.hpp \
- /home/w/Program/final/include/integrator.hpp \
+ /home/w/Program/final/include/pt_and_sppm.hpp \
  /home/w/Program/final/include/scene_parser.hpp \
  /home/w/Program/final/include/image.hpp \
  /home/w/Program/final/include/camera.hpp \
  /home/w/Program/final/include/group.hpp \
  /home/w/Program/final/include/light.hpp \
  /home/w/Program/final/include/photonkdtree.hpp \
- /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h /usr/include/c++/11/ctime
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h /usr/include/c++/11/ctime \
+ /home/w/Program/final/include/stb_image.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
+ /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+ /usr/include/linux/limits.h \
+ /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/uio_lim.h /usr/include/c++/11/math.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h

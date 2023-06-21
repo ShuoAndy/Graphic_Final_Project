@@ -1,3 +1,6 @@
+# build出错停止运行
+set -e
+
 ACCELERATOR=kdtree
 
 # If project not ready, generate cmake file.
