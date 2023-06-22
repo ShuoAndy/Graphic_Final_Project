@@ -2,7 +2,7 @@
 set -e
 
 INTEGATOR=pt
-NUM_SAMPLE=500
+NUM_SAMPLE=10
 ACCELERATOR=kdtree
 
 # If project not ready, generate cmake file.

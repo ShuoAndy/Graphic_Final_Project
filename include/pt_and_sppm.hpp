@@ -70,7 +70,7 @@ public:
                 image.SetPixel(x, y, finalColor);
             }
         }
-        
+        printf("rendering finished\n");
         image.SaveImage(outputFile);
     }
 

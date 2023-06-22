@@ -31,7 +31,7 @@ public:
         return o->getMaterial();
     }
 
-     virtual bool intersect(const Ray &r, Hit &h, float tmin) {
+    virtual bool intersect(const Ray &r, Hit &h, float tmin) {
         Vector3f trSource = transformPoint(transform, r.getOrigin());
         Vector3f trDirection = transformDirection(transform, r.getDirection());
         Ray tr(trSource, trDirection);
@@ -41,7 +41,6 @@ public:
         }
         return inter;
     }
-
     
     virtual bool getBox(Box& box) override {
         Box objBox;

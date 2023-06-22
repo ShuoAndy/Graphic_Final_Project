@@ -54,8 +54,8 @@ class XYRectangle: public Object3D {
             if (!material->getBump()->hasBump()) {
                 return n*Vector3f(0, 0, 1);
             }
-            Vector2f grad = material->getBump()->BumpAt(u, v);
-            return Vector3f::cross(Vector3f(1.f,0.f,0.f) + grad[0] * n * Vector3f(0, 0, 1), Vector3f(0,1,0) + grad[1] * n * Vector3f(0, 0, 1)).normalized();
+            Vector2f bump = material->getBump()->BumpAt(u, v);
+            return Vector3f::cross(Vector3f(1.f,0.f,0.f) + bump[0] * n * Vector3f(0, 0, 1), Vector3f(0,1,0) + bump[1] * n * Vector3f(0, 0, 1)).normalized();
         }
     
     private:
@@ -108,8 +108,8 @@ class XZRectangle: public Object3D {
             if (!material->getBump()->hasBump()) {
                 return n*Vector3f(0, 1, 0);
             }
-            Vector2f grad = material->getBump()->BumpAt(u, v);
-            return n * Vector3f::cross(Vector3f(0,0,1) + grad[0] * n * Vector3f(0, 1, 0), Vector3f(1,0,0) + grad[1] * n * Vector3f(0, 1, 0)).normalized();
+            Vector2f bump = material->getBump()->BumpAt(u, v);
+            return n * Vector3f::cross(Vector3f(0,0,1) + bump[0] * n * Vector3f(0, 1, 0), Vector3f(1,0,0) + bump[1] * n * Vector3f(0, 1, 0)).normalized();
         }
     
     private:
@@ -164,8 +164,8 @@ class YZRectangle: public Object3D {
             if (!material->getBump()->hasBump()) {
                 return n*Vector3f(1, 0, 0);
             }
-            Vector2f grad = material->getBump()->BumpAt(u, v);
-            return n * Vector3f::cross(Vector3f(0,1,0) + grad[0] * n * Vector3f(1, 0, 0), Vector3f(0,0,1) + grad[1] * n * Vector3f(1, 0, 0)).normalized();
+            Vector2f bump = material->getBump()->BumpAt(u, v);
+            return n * Vector3f::cross(Vector3f(0,1,0) + bump[0] * n * Vector3f(1, 0, 0), Vector3f(0,0,1) + bump[1] * n * Vector3f(1, 0, 0)).normalized();
         }
     
     private:
