@@ -62,13 +62,11 @@ class BumpTexture: public Texture {
         }
         
         //详见肖光烜学长的report，凹凸贴图“修改的不是物体表面的颜色而是法向量”
-        Vector2f GradAt(float u, float v, float &value) {
+        Vector2f BumpAt(float u, float v) {
+
+            Vector2f bump(10*(getValue(u + 1.0f / width, v) - getValue(u - 1.0f / width, v)), 10*(getValue(u, v + 1.0f / height) - getValue(u, v - 1.0f / height)));
             
-            
-            value = getValue(u, v);
-            float du = 1.0f / width, dv = 1.0f / height;
-            Vector2f grad(10*(getValue(u + du, v) - getValue(u - du, v)), 10*(getValue(u, v + dv) - getValue(u, v - dv)));
-            return grad;
+            return bump;
         }
 
         bool hasBump() {

@@ -1,5 +1,5 @@
 INTEGATOR=pt
-NUM_SAMPLE=20
+NUM_SAMPLE=500
 ACCELERATOR=kdtree
 
 
@@ -18,4 +18,4 @@ cd ..
 
 mkdir -p output
 
-time bin/PA1 testcases/bump.txt output/bump.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR  >> test.log
+time bin/PA1 testcases/bumptexture.txt output/bumptexture.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR  >> test.log

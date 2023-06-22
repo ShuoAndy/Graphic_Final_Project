@@ -51,10 +51,6 @@ public:
     }
 
     bool getBox(Box& box) override {
-        Vector3f norm = normal.normalized();
-        Vector3f max_point = float(10000) * Vector3f(norm.x() < 1 - 1e-6, norm.y() < 1 - 1e-6, norm.z() < 1 - 1e-6) + d * norm;
-        Vector3f min_point =  -float(10000) * Vector3f(norm.x() < 1 - 1e-6, norm.y() < 1 - 1e-6, norm.z() < 1 - 1e-6) + d * norm;
-        box = Box(min_point, max_point);
         return true;
     }
 
@@ -66,9 +62,8 @@ protected:
         if (!material->getBump()->hasBump()) {
             return normal;
         }
-        float value = 0;
-        Vector2f grad = material->getBump()->GradAt(u, v, value);
-        return Vector3f::cross(udim + grad[0] * normal.normalized(), vdim + grad[1] * normal.normalized());
+        Vector2f bump = material->getBump()->BumpAt(u, v);
+        return Vector3f::cross(udim + bump[0] * normal.normalized(), vdim + bump[1] * normal.normalized());
     }
 };
 

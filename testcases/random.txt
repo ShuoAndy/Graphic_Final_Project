@@ -1502,7 +1502,7 @@ Sphere {
 MaterialIndex 972
 Sphere {
  center -10.3093 0.2 -10.366
- radius 0.2
+ radius 1
 }
 MaterialIndex 5
 Sphere {

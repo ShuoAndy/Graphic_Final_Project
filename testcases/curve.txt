@@ -49,8 +49,8 @@ Materials {
     LightMaterial {
         specularColor 1 1 1
     }
-    DiffuseMaterial {
-        texture texture/vase.png
+    DiffuseMaterial { 
+        attenuation 0.75 0.75 0.75
     }
 }
 

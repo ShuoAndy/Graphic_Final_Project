@@ -85,7 +85,7 @@ protected:
 
 };
 
-//实现运动模糊
+//实现运动模糊，详见ray tracing the next week
 //定义一个“运动球”
 
 class moving_sphere : public Sphere
