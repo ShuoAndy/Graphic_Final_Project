@@ -18,4 +18,4 @@ cd ..
 
 mkdir -p output
 mkdir -p output/green_rabit_sppm
-time bin/PA1 testcases/green_rabit.txt output/green_rabit_sppm $ACCELERATOR 3000 sppm  100 1000000 >> test.log
+time bin/PA1 testcases/rabit.txt output/rabit_sppm $ACCELERATOR 3000 sppm  100 1000000 >> test.log

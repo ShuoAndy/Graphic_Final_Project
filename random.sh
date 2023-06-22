@@ -2,7 +2,7 @@
 set -e
 
 INTEGATOR=pt
-NUM_SAMPLE=10
+NUM_SAMPLE=500
 ACCELERATOR=kdtree
 
 

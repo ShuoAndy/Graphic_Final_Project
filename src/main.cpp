@@ -11,7 +11,7 @@
 #include "camera.hpp"
 #include "group.hpp"
 #include "light.hpp"
-#include "pt_and_sppm.hpp"
+#include "pt.hpp"
 
 #include <string>
 #include <cstring>

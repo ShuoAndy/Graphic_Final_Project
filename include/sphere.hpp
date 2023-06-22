@@ -46,7 +46,7 @@ public:
         out_norm =  r.pointAtParameter(t) - this->center;   //计算向外的法向量并标准化
         out_norm.normalize();
         float u = atan2(-out_norm.z(), out_norm.x()) / (2 * M_PI) + 0.5f; //这里的计算详见https://blog.csdn.net/aa20274270/article/details/52709444
-        float v = acos(out_norm.y()) / M_PI;   //u和v分别是方位角和极角
+        float v = acos(-out_norm.y()) / M_PI;   //u和v分别是方位角和极角
 
         if (t < h.getT() && t > tmin)
         {
@@ -125,7 +125,7 @@ public:
         out_norm =  r.pointAtParameter(t) - this->GetCenter(r.time());   //计算向外的法向量并标准化
         out_norm.normalize();
         float u = atan2(-out_norm.z(), out_norm.x()) / (2 * M_PI) + 0.5f; //这里的计算详见https://blog.csdn.net/aa20274270/article/details/52709444
-        float v = acos(out_norm.y()) / M_PI;   //u和v分别是方位角和极角
+        float v = acos(-out_norm.y()) / M_PI;   //u和v分别是方位角和极角
 
         if (t < h.getT() && t > tmin)
         {

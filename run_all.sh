@@ -7,3 +7,4 @@ rm test.log
 ./moving.sh
 ./pt.sh
 ./sppm.sh
+./final.sh

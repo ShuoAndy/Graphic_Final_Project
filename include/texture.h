@@ -33,6 +33,8 @@ class Texture {
         Vector3f ColorAt(float u, float v) {
             if (texture_image == nullptr) return Vector3f::ZERO;
 
+            v=1-v;
+            
             int x = (int)(u * width) % width;
             int y = (int)(v * height) % height;
 

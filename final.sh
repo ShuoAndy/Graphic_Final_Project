@@ -2,7 +2,7 @@
 set -e
 
 INTEGATOR=pt
-NUM_SAMPLE=500
+NUM_SAMPLE=1000
 ACCELERATOR=kdtree
 
 
@@ -21,4 +21,4 @@ cd ..
 
 mkdir -p output
 
-time bin/PA1 testcases/rabit.txt output/rabit_pt.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
+time bin/PA1 testcases/final.txt output/final.bmp $ACCELERATOR $NUM_SAMPLE $INTEGATOR >> test.log
