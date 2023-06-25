@@ -45,7 +45,7 @@ class DiffuseMaterial: public Material{
         }
 };
 
-//反射
+//金属材质
 class MetalMaterial: public Material{
     public:
         MetalMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = "", float fuzz = 0):Material(d_color, s_color, atten, s, texture_name, bump_name){ this->fuzz = fuzz > 1 ? 1 : fuzz;}
@@ -68,7 +68,7 @@ class MetalMaterial: public Material{
         }
 };
 
-//电介质
+//电介质，透射
 class DielecMaterial: public Material{
     public:
         DielecMaterial(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char* texture_name = "", const char* bump_name = "", float refractive = 0):Material(d_color, s_color, atten, s, texture_name, bump_name)

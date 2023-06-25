@@ -18,7 +18,7 @@ public:
         this->width = imgW;
         this->height = imgH;
         this->time0 = _time0;
-        this->time1 = -time1;
+        this->time1 = _time1;
     }
 
     // Generate rays for each screen-space coordinate

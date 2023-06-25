@@ -32,31 +32,47 @@ class RevSurface : public Object3D {
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         // (PA2 optional TODO): implement this for the ray-tracing routine using G-N iteration.
         float t, theta, mu;
-        if (!getInitIntersect(r, t) || t > h.t) return false;
+
+        if (!getInitIntersect(r, t) || t > h.t) 
+            return false;
+        
         Vector3f pt(r.origin + r.direction * t);
+
         theta = atan2(-pt.z(), pt.x()) + M_PI;
         mu = (pCurve->ymax - pt.y()) / (pCurve->ymax - pCurve->ymin);
-        Vector3f normal, point;
-        if (!NG(r, t, theta, mu, normal)) {
+        Vector3f normal, point; //曲线交点
+        if (!Newton_iteration(r, t, theta, mu, normal, point)) {
             return false;
         }
-        if (isnan(mu) || isnan(theta) || isnan(t)) return false;
-        if (isinf(mu) || isinf(theta) || isinf(t)) return false;
-        if (t < tmin || mu < pCurve->mu_min || mu > pCurve->mu_max || t > h.getT()) return false;
+        if (!isnormal(mu) || !isnormal(theta) || !isnormal(t)) 
+            return false;
+        
+        if (t < tmin || mu < pCurve->mu_min || mu > pCurve->mu_max || t > h.getT()) 
+            return false;
 
         h.set(t, theta / (2 * M_PI), mu, material, normal.normalized(), r);
         return true;
     }
 
-    bool NG(const Ray &r, float &t, float &theta, float &mu, Vector3f &normal) {
-        Vector3f dmu, dtheta;
+    bool Newton_iteration(const Ray &r, float &t, float &theta, float &mu, 
+    Vector3f &normal, Vector3f &point) //利用牛顿迭代法求解，详见https://zhuanlan.zhihu.com/p/240077462
+    {
+        Vector3f dmu, dtheta; //求导
         
         for (int i = 0; i < steps; ++i) {
 
-            theta = ClampTheta(theta);
-            mu = ClampMu(mu);
+            if (theta < 0.0) 
+                theta += 2 * M_PI;
 
-            Vector3f point;
+            if (theta >= 2 * M_PI) 
+                theta = fmod(theta, 2 * M_PI);
+
+            if (mu >= pCurve->mu_max)
+                 mu = pCurve->mu_max - FLT_EPSILON;
+
+            if (mu <= pCurve->mu_min) 
+                mu = pCurve->mu_min + FLT_EPSILON;
+
             Quat4f rot;
             rot.setAxisAngle(theta, Vector3f::UP);
             Matrix3f rotMat = Matrix3f::rotation(rot);
@@ -77,19 +93,6 @@ class RevSurface : public Object3D {
 
         return false;
     }
-
-    float ClampTheta(float theta) {
-        if (theta < 0.0) theta += 2 * M_PI;
-        if (theta >= 2 * M_PI) theta = fmod(theta, 2 * M_PI);
-        return theta;
-    }
-
-    float ClampMu(float mu) {
-        if (mu >= pCurve->mu_max) mu = pCurve->mu_max - FLT_EPSILON;
-        if (mu <= pCurve->mu_min) mu = pCurve->mu_min + FLT_EPSILON;
-        return mu;
-    }
-
 
     virtual bool getBox(Box &box) override {
         box = this->box;

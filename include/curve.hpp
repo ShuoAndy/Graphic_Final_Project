@@ -111,7 +111,6 @@ public:
     CurvePoint getSinglePoint(float mu, int k, std::vector<float> knots, std::vector<float> upknots) {
         CurvePoint pt;
         int bpos = upper_bound(knots.begin(), knots.end(), mu) - knots.begin() - 1;
-        //if (upknots[0] != mu) bpos = max(0l, lower_bound(upknots.begin(), upknots.end(), mu) - upknots.begin() - 1);
         std::vector<float> s(k + 2);
         std::vector<float> ds(k + 1, 1);
         s[k] = 1;

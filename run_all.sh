@@ -6,5 +6,4 @@ rm test.log
 ./curve.sh
 ./moving.sh
 ./pt.sh
-./sppm.sh
 ./final.sh

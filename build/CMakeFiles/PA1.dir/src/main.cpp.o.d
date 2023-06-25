@@ -203,13 +203,12 @@ CMakeFiles/PA1.dir/src/main.cpp.o: /home/w/Program/final/src/main.cpp \
  /usr/include/c++/11/bits/stl_tempbuf.h \
  /usr/include/c++/11/bits/uniform_int_dist.h /usr/include/c++/11/limits \
  /home/w/Program/final/include/light.hpp \
- /home/w/Program/final/include/pt_and_sppm.hpp \
+ /home/w/Program/final/include/pt.hpp \
  /home/w/Program/final/include/scene_parser.hpp \
  /home/w/Program/final/include/image.hpp \
  /home/w/Program/final/include/camera.hpp \
  /home/w/Program/final/include/group.hpp \
  /home/w/Program/final/include/light.hpp \
- /home/w/Program/final/include/photonkdtree.hpp \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h /usr/include/c++/11/ctime \
  /home/w/Program/final/include/stb_image.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \

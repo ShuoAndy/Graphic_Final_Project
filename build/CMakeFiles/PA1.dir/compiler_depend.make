@@ -460,13 +460,12 @@ CMakeFiles/PA1.dir/src/main.cpp.o: ../src/main.cpp \
   /usr/include/c++/11/bits/uniform_int_dist.h \
   /usr/include/c++/11/limits \
   ../include/light.hpp \
-  ../include/pt_and_sppm.hpp \
+  ../include/pt.hpp \
   ../include/scene_parser.hpp \
   ../include/image.hpp \
   ../include/camera.hpp \
   ../include/group.hpp \
   ../include/light.hpp \
-  ../include/photonkdtree.hpp \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/omp.h \
   /usr/include/c++/11/ctime \
   ../include/stb_image.h \
@@ -1206,10 +1205,6 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o: ../src/scene_parser.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/endian.h:
 
-/usr/include/linux/limits.h:
-
-/usr/include/c++/11/bits/basic_string.h:
-
 /usr/include/x86_64-linux-gnu/bits/types.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
@@ -1330,13 +1325,13 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o: ../src/scene_parser.cpp \
 
 /usr/include/stdint.h:
 
+/usr/include/c++/11/bits/basic_string.h:
+
+/usr/include/linux/limits.h:
+
 /usr/include/c++/11/bits/localefwd.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++locale.h:
-
-../include/pt_and_sppm.hpp:
-
-../include/photonkdtree.hpp:
 
 /usr/include/c++/11/clocale:
 
@@ -1549,5 +1544,7 @@ CMakeFiles/PA1.dir/src/scene_parser.cpp.o: ../src/scene_parser.cpp \
 /usr/include/c++/11/limits:
 
 ../include/light.hpp:
+
+../include/pt.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/posix1_lim.h:

@@ -78,8 +78,8 @@ public:
     float fuzz;     
     float shininess;    //光泽度
     float refractive;   //折射率
-    Texture texture;    //uv纹理
-    BumpTexture bump;   //凹凸纹理
+    Texture texture;    //纹理贴图
+    BumpTexture bump;   //凹凸贴图
 
     
     Vector3f random_in_unit_sphere(){
